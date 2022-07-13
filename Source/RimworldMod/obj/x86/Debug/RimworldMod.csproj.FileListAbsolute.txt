@@ -1,0 +1,12 @@
+C:\Games\RimWorld\Mods\2105531392 Save Our Ship Creation Kit\Assemblies\SoSBuilder.dll
+C:\Games\RimWorld\Mods\2105531392 Save Our Ship Creation Kit\Assemblies\SoSBuilder.pdb
+C:\Games\RimWorld\Mods\2105531392 Save Our Ship Creation Kit\Source\RimworldMod\obj\x86\Debug\RimworldMod.csproj.CoreCompileInputs.cache
+C:\Games\RimWorld\Mods\2105531392 Save Our Ship Creation Kit\Source\RimworldMod\obj\x86\Debug\SoSBuilder.dll
+C:\Games\RimWorld\Mods\2105531392 Save Our Ship Creation Kit\Source\RimworldMod\obj\x86\Debug\SoSBuilder.pdb
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Save Our Ship Creation Kit\Assemblies\SoSBuilder.dll
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Save Our Ship Creation Kit\Assemblies\SoSBuilder.pdb
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Save Our Ship Creation Kit\Source\RimworldMod\obj\x86\Debug\RimworldMod.csproj.AssemblyReference.cache
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Save Our Ship Creation Kit\Source\RimworldMod\obj\x86\Debug\RimworldMod.csproj.CoreCompileInputs.cache
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Save Our Ship Creation Kit\Source\RimworldMod\obj\x86\Debug\SoSBuilder.dll
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Save Our Ship Creation Kit\Source\RimworldMod\obj\x86\Debug\SoSBuilder.pdb
+C:\Games\RimWorld\Mods\2105531392 Save Our Ship Creation Kit\Source\RimworldMod\obj\x86\Debug\RimworldMod.csproj.AssemblyReference.cache

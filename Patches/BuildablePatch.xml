@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+		<Operation Class="PatchOperationAdd">
+			<xpath>/Defs/ThingDef[defName = "ShipHullTileMech" or defName = "Ship_BeamMech" or defName = "Ship_BeamMech_Unpowered" or defName = "ShipAirlockMech" or defName = "ShipInside_SolarGeneratorMech" or defName = "ShipInside_PassiveCoolerMechanoid" or defName = "ShipInside_PassiveVentMechanoid" or defName = "Ship_Beam_Wrecked" or defName = "ShipAirlockWrecked" or defName = "ShipHullTileWrecked"]</xpath>
+			<value><designationCategory>ShipDesign</designationCategory></value>
+		</Operation>
+</Patch>

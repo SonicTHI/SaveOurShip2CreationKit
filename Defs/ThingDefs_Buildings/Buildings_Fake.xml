@@ -1,0 +1,892 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+	<!-- mech -->
+	<DesignatorDropdownGroupDef>
+		<defName>Ship_Corners_Mech</defName>
+	</DesignatorDropdownGroupDef>
+	<ThingDef ParentName="ShipCornerBase" Name="ShipCornerMech" Abstract="True">
+		<description>Angled armor for a ship's outer hull.</description>
+		<designatorDropdown>Ship_Corners_Mech</designatorDropdown>
+		<designationCategory>ShipDesign</designationCategory>
+	</ThingDef>
+	<!-- rect -->
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartRect</defName>
+		<label>begin rectangle</label>
+		<description>Start drawing a rectangular area of hull.</description>
+		<thingClass>Building_ShipRect</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_Start</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartRectUnpEnd</defName>
+		<label>end rectangle (unpowered)</label>
+		<description>Finish drawing a rectangular area of hull.</description>
+		<thingClass>Building_ShipRect</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartRectEnd</defName>
+		<label>end rectangle</label>
+		<description>Finish drawing a rectangular area of hull.</description>
+		<thingClass>Building_ShipRect</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartRectWreckEnd</defName>
+		<label>end rectangle wreckage</label>
+		<description>Finish drawing a rectangular area of hull.</description>
+		<thingClass>Building_ShipRect</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>MechPartRectUnpEnd</defName>
+		<label>end rectangle mech (unpowered)</label>
+		<description>Finish drawing a rectangular area of mech hull.</description>
+		<thingClass>Building_ShipRect</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>MechPartRectEnd</defName>
+		<label>end rectangle mech</label>
+		<description>Finish drawing a rectangular area of mech hull.</description>
+		<thingClass>Building_ShipRect</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<!-- circle -->
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartCircle</defName>
+		<label>begin circle</label>
+		<description>Start drawing a circular area of hull.</description>
+		<thingClass>Building_ShipCircle</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Circle_Start</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartCircleUnpEnd</defName>
+		<label>end circle (unpowered)</label>
+		<description>Finish drawing a circular area of hull.</description>
+		<thingClass>Building_ShipCircle</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Circle_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartCircleEnd</defName>
+		<label>end circle</label>
+		<description>Finish drawing a circular area of hull.</description>
+		<thingClass>Building_ShipCircle</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Circle_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartCircleWreckEnd</defName>
+		<label>end circle wreckage</label>
+		<description>Finish drawing a circular area of hull.</description>
+		<thingClass>Building_ShipCircle</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Circle_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>MechPartCircleUnpEnd</defName>
+		<label>end circle mech (unpowered)</label>
+		<description>Finish drawing a circular area of mech hull.</description>
+		<thingClass>Building_ShipCircle</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Circle_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>MechPartCircleEnd</defName>
+		<label>end circle mech</label>
+		<description>Finish drawing a circular area of mech hull.</description>
+		<thingClass>Building_ShipCircle</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Circle_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<!-- cargo -->
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartRegion</defName>
+		<label>begin cargo region</label>
+		<description>Start drawing a cargo region.</description>
+		<thingClass>Building_ShipRegion</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Region_Start</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartRegionEnd</defName>
+		<label>end cargo region</label>
+		<description>Finish drawing a cargo region.</description>
+		<thingClass>Building_ShipRegion</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Region_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<!-- turrets -->
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartTurretSmall</defName>
+		<label>random small turret</label>
+		<description>A small laser, plasma, or kinetic turret</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/TurretRandomSmall</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(2,2)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(2,2)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartTurretLarge</defName>
+		<label>random large turret</label>
+		<description>A large laser, plasma, or kinetic turret</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/TurretRandom</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(3,3)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(3,3)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartTurretSpinal</defName>
+		<label>random spinal barrel</label>
+		<description>A laser, plasma, or kinetic spinal gun barrel</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/TurretRandomSpineBarrel</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(5,4)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(5,4)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<!-- pawns -->
+	<ThingDef ParentName="BuildingBase">
+		<defName>CasketFilled</defName>
+		<label>occupied cryptosleep casket</label>
+		<description>A pawn in cryptosleep goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/HostilePawnCasket</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,2)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,2)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>PawnSpawnerGeneric</defName>
+		<label>generic pawn spawner</label>
+		<description>Choose a PawnKindDef for this to spawn</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/PawnKindDef</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+			<li Class="CompProperties_NameMe"/>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>SpaceCrew</defName>
+		<label>ship crew</label>
+		<description>A crew member goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/PlacePawnCrew</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>SpaceCrewMarine</defName>
+		<label>ship crew: marine</label>
+		<description>A marine goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/PlacePawnMarine</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>SpaceCrewMarineHeavy</defName>
+		<label>ship crew: heavy marine</label>
+		<description>A heavy marine goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/PlacePawnHeavyMarine</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>Mech_Centipede_SPAWNER</defName>
+		<label>centipede</label>
+		<description>A centipede goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/Centipede</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>Mech_Lancer_SPAWNER</defName>
+		<label>lancer</label>
+		<description>A lancer goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/Lancer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>Mech_Scyther_SPAWNER</defName>
+		<label>scyther</label>
+		<description>A scyther goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/Scyther</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>Mech_Pikeman_SPAWNER</defName>
+		<label>pikeman</label>
+		<description>A pikeman goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/Pikeman</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>Mech_Random</defName>
+		<label>random mech</label>
+		<description>A random mech goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/RandomMech</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>Astromite_SPAWNER</defName>
+		<label>astromite</label>
+		<description>An astromite goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/SmallBug</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>Stellapede_SPAWNER</defName>
+		<label>stellapede</label>
+		<description>A stellapede goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/MediumBug</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>Cosmopillar_SPAWNER</defName>
+		<label>cosmopillar</label>
+		<description>A cosmopillar goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/LargeBug</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>SpaceBug_Random</defName>
+		<label>random space bug</label>
+		<description>A random space insect goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/RandomBug</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>SpaceHive_SPAWNER</defName>
+		<label>space hive</label>
+		<description>A space hive goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/HiveBug</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<size>(1,1)</size>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<shipPart>true</shipPart>
+		</building>
+		<comps>
+		</comps>
+		<rotatable>false</rotatable>
+	</ThingDef>
+</Defs>
