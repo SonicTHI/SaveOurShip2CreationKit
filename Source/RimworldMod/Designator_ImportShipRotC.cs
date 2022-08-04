@@ -23,7 +23,7 @@ namespace RimWorld
         public Designator_ImportShipRotC()
         {
             defaultLabel = "Import Ship Rotated 90° CCW";
-            defaultDesc = "Click anywhere on the map to activate.\nWARNING: Non rotatable buildings  will not be placed correctly!";
+            defaultDesc = "Click anywhere on the map to activate.\nWARNING: Non rotatable, non even sided buildings  will be discarded!";
             icon = ContentFinder<Texture2D>.Get("UI/Load_XML");
             soundDragSustain = SoundDefOf.Designate_DragStandard;
             soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
@@ -58,13 +58,22 @@ namespace RimWorld
             ImportedShip.GetComponent<ShipHeatMapComp>().IsGraveyard = true;
             ((WorldObjectOrbitingShip)ImportedShip.Parent).radius = 150;
             ((WorldObjectOrbitingShip)ImportedShip.Parent).theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).theta - Rand.RangeInclusive(1,10)* 0.01f;
+            IntVec3 c = ImportedShip.Center;
+            if (shipDef.saveSysVer == 2)
+                c = new IntVec3(shipDef.offsetX, 0, shipDef.offsetZ);
             SoSBuilder.shipDictionary.Add(ImportedShip, shipDef.defName);
 
-            IntVec3 c = ImportedShip.Center;
             ThingDef hullPlateDef = ThingDef.Named("ShipHullTile");
             foreach (ShipShape shape in shipDef.parts)
             {
-                if (shape.shapeOrDef.Equals("Cargo"))
+                if (shape.shapeOrDef.Equals("PawnSpawnerGeneric"))
+                {
+                    ThingDef def = ThingDef.Named("PawnSpawnerGeneric");
+                    Thing thing = ThingMaker.MakeThing(def);
+                    GenSpawn.Spawn(thing, new IntVec3(c.x - shape.z, 0, c.z + shape.z), ImportedShip);
+                    thing.TryGetComp<CompNameMe>().pawnKindDef = shape.stuff;
+                }
+                else if (shape.shapeOrDef.Equals("Cargo"))
                 {
                     SoSBuilder.lastRegionPlaced = null;
                     ThingDef def = ThingDef.Named("ShipPartRegion");
@@ -72,13 +81,6 @@ namespace RimWorld
                     GenSpawn.Spawn(thing, new IntVec3(c.x - shape.z - shape.height + 1, 0, c.z + shape.x), ImportedShip);
                     ((Building_ShipRegion)thing).width = shape.height;
                     ((Building_ShipRegion)thing).height = shape.width;
-                }
-                else if (shape.shapeOrDef.Equals("PawnSpawnerGeneric"))
-                {
-                    ThingDef def = ThingDef.Named("PawnSpawnerGeneric");
-                    Thing thing = ThingMaker.MakeThing(def);
-                    GenSpawn.Spawn(thing, new IntVec3(c.x - shape.z, 0, c.z + shape.z), ImportedShip);
-                    thing.TryGetComp<CompNameMe>().pawnKindDef = shape.stuff;
                 }
                 if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
                 {
@@ -129,14 +131,16 @@ namespace RimWorld
                 }
                 else if (DefDatabase<TerrainDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
                 {
-                    ImportedShip.terrainGrid.SetTerrain(new IntVec3(ImportedShip.Size.x - shape.z, 0, shape.x), DefDatabase<TerrainDef>.GetNamed(shape.shapeOrDef));
+                    IntVec3 pos = new IntVec3(shape.x, 0, shape.z);
+                    if (shipDef.saveSysVer == 2)
+                        pos = new IntVec3(c.x + shape.x, 0, c.z + shape.z);
+                    ImportedShip.terrainGrid.SetTerrain(new IntVec3(ImportedShip.Size.x - pos.z, 0, pos.x), DefDatabase<TerrainDef>.GetNamed(shape.shapeOrDef));
                 }
             }
             Building core = (Building)ThingMaker.MakeThing(ThingDef.Named(shipDef.core.shapeOrDef)); 
             core.SetFaction(Faction.OfPlayer);
             Rot4 corerot= shipDef.core.rot.Rotated(RotationDirection.Counterclockwise);
             GenSpawn.Spawn(core, new IntVec3(c.x - shipDef.core.z, 0, c.z + shipDef.core.x), ImportedShip, corerot);
-            ((Building_ShipBridge)core).ShipName = shipDef.defName;
             foreach (Building b in ImportedShip.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial))
             {
                 //Building b = t as Building;
@@ -147,6 +151,8 @@ namespace RimWorld
                     CompPowerTrader trader = b.TryGetComp<CompPowerTrader>();
                     trader.PowerOn = true;
                 }
+                if (b is Building_ShipBridge)
+                    ((Building_ShipBridge)b).ShipName = shipDef.defName;
             }
             ImportedShip.mapDrawer.RegenerateEverythingNow();
             ImportedShip.regionAndRoomUpdater.RebuildAllRegionsAndRooms();

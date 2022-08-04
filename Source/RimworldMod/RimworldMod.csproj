@@ -41,6 +41,7 @@
     <Compile Include="CompNameMe.cs" />
     <Compile Include="CompProperties_NameMe.cs" />
     <Compile Include="Designator_ExportShipNew.cs" />
+    <Compile Include="Designator_ExportShipReNew.cs" />
     <Compile Include="Designator_ExportShipRe.cs" />
     <Compile Include="Designator_ExportShipOld.cs" />
     <Compile Include="Designator_ImportShipRotC.cs" />

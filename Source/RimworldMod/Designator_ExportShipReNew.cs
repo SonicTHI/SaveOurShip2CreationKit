@@ -11,28 +11,35 @@ using SaveOurShip2;
 
 namespace RimWorld
 {
-    class Designator_ExportShipNew : Designator
+    class Designator_ExportShipReNew : Designator
     {
         public override AcceptanceReport CanDesignateCell(IntVec3 loc)
         {
             return true;
         }
 
-        public Designator_ExportShipNew()
+        public Designator_ExportShipReNew()
         {
-            defaultLabel = "Export Ship";
-            defaultDesc = "Save this ship to an XML file. You will need to set the name and tags manually. Click anywhere on the map to activate.";
+            defaultLabel = "ReSave Ship";
+            defaultDesc = "Resave this ship to an XML file with the same name and tags it was imported with. Click anywhere on the map to activate.";
             icon = ContentFinder<Texture2D>.Get("UI/Save_XML");
             soundDragSustain = SoundDefOf.Designate_DragStandard;
             soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
             useMouseIcon = true;
             soundSucceeded = SoundDefOf.Designate_Deconstruct;
+            //disabled = !SoSBuilder.shipDictionary.Keys.Contains(Find.CurrentMap);
         }
 
-        //new save system from min x/z
+        //new resave system from min x/z
         public override void DesignateSingleCell(IntVec3 loc)
         {
-            if(!this.Map.IsSpace())
+            Map m = Find.CurrentMap;
+            if (!SoSBuilder.shipDictionary.Keys.Contains(m))
+            {
+                Messages.Message("Could not resave the ship, info either missing or corrupt.", null, MessageTypeDefOf.NegativeEvent);
+                return;
+            }
+            if (!Find.CurrentMap.Biome.defName.Equals("OuterSpaceBiome"))
             {
                 Messages.Message("Not on space map", MessageTypeDefOf.RejectInput);
                 return;
@@ -65,7 +72,7 @@ namespace RimWorld
                         combatPoints += b.TryGetComp<CompShipHeat>().Props.threat;
                     else if (b.def == ThingDef.Named("ShipSpinalAmplifier"))
                         combatPoints += 5;
-                    else if (b.def == ThingDef.Named("ShipPartTurretSmall")) 
+                    else if (b.def == ThingDef.Named("ShipPartTurretSmall"))
                     {
                         combatPoints += 10;
                         randomTurretPoints += 10;
@@ -132,7 +139,7 @@ namespace RimWorld
                 }
                 else
                 {
-                    shape.shapeOrDef=t.def.defName;
+                    shape.shapeOrDef = t.def.defName;
                     if (t.def.MadeFromStuff)
                     {
                         shape.stuff = t.Stuff.defName;
@@ -154,7 +161,7 @@ namespace RimWorld
                 shape.z = t.Position.z - minZ;
                 shape.rot = t.Rotation;
 
-                if(!symbolTableBackwards.ContainsKey(shape))
+                if (!symbolTableBackwards.ContainsKey(shape))
                 {
                     symbolTable.Add(charPointer, shape);
                     symbolTableBackwards.Add(shape, charPointer);
@@ -166,7 +173,7 @@ namespace RimWorld
                 posrot.x = shape.x;
                 posrot.z = shape.z;
                 posrot.rot = shape.rot;
-                posrot.shape = symbolTableBackwards[shape]+"";
+                posrot.shape = symbolTableBackwards[shape] + "";
                 shipStructure.Add(posrot);
             }
 
@@ -210,31 +217,33 @@ namespace RimWorld
             SafeSaver.Save(filename, "Defs", () =>
             {
                 Scribe.EnterNode("EnemyShipDef");
-                Scribe_Values.Look<string>(ref shipCore.ShipName, "defName");
+                EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.GetNamed(SoSBuilder.shipDictionary[m]);
+                Scribe_Values.Look<string>(ref shipDef.defName, "defName");
+                Scribe_Values.Look<string>(ref shipDef.label, "label");
                 Scribe_Values.Look<int>(ref saveSysVer, "saveSysVer", 1);
                 Scribe_Values.Look<int>(ref minX, "offsetX", 0);
                 Scribe_Values.Look<int>(ref minZ, "offsetZ", 0);
                 Scribe_Values.Look<int>(ref maxX, "sizeX", 0);
                 Scribe_Values.Look<int>(ref maxZ, "sizeZ", 0);
-                string placeholder = "[INSERT IN-GAME NAME HERE]";
-                Scribe_Values.Look<string>(ref placeholder, "label");
-                int cargoPlaceholder = 0;
+
+
+
                 Scribe_Values.Look<int>(ref combatPoints, "combatPoints", 0);
                 Scribe_Values.Look<int>(ref randomTurretPoints, "randomTurretPoints", 0);
-                Scribe_Values.Look<int>(ref cargoPlaceholder, "cargoValue", 0);
-                bool temp = false;
-                Scribe_Values.Look<bool>(ref temp, "neverRandom", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "neverAttacks", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "spaceSite", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "imperialShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "pirateShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "bountyShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "mechanoidShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "fighterShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "carrierShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "tradeShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "startingShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "startingDungeon", forceSave: true);
+                Scribe_Values.Look<int>(ref shipDef.cargoValue, "cargoValue", 0);
+
+                Scribe_Values.Look<bool>(ref shipDef.neverRandom, "neverRandom");
+                Scribe_Values.Look<bool>(ref shipDef.neverAttacks, "neverAttacks");
+                Scribe_Values.Look<bool>(ref shipDef.spaceSite, "spaceSite");
+                Scribe_Values.Look<bool>(ref shipDef.imperialShip, "imperialShip");
+                Scribe_Values.Look<bool>(ref shipDef.pirateShip, "pirateShip");
+                Scribe_Values.Look<bool>(ref shipDef.bountyShip, "bountyShip");
+                Scribe_Values.Look<bool>(ref shipDef.mechanoidShip, "mechanoidShip");
+                Scribe_Values.Look<bool>(ref shipDef.fighterShip, "fighterShip");
+                Scribe_Values.Look<bool>(ref shipDef.carrierShip, "carrierShip");
+                Scribe_Values.Look<bool>(ref shipDef.tradeShip, "tradeShip");
+                Scribe_Values.Look<bool>(ref shipDef.startingShip, "startingShip");
+                Scribe_Values.Look<bool>(ref shipDef.startingDungeon, "startingDungeon");
                 Scribe.EnterNode("core");
                 Scribe_Values.Look<string>(ref shipCore.def.defName, "shapeOrDef");
                 int cx = shipCore.Position.x - minX;
@@ -258,7 +267,7 @@ namespace RimWorld
                 Scribe_Values.Look<string>(ref bigString, "bigString");
                 Scribe.ExitNode();
             });
-            Messages.Message("Saved ship as: " + shipCore.ShipName + ".xml", shipCore, MessageTypeDefOf.PositiveEvent);
+            Messages.Message("Resaved ship as: " + shipCore.ShipName + ".xml", shipCore, MessageTypeDefOf.PositiveEvent);
         }
     }
 }

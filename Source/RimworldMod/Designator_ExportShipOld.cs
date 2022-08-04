@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using SaveOurShip2;
 
 namespace RimWorld
 {
@@ -48,12 +49,27 @@ namespace RimWorld
             }
             int combatPoints = 0;
             int randomTurretPoints = 0;
-            int massPoints = 0;
+            int ShipMass = 0;
+            int minX = this.Map.Size.x;
+            int minZ = this.Map.Size.z;
+            int maxX = 0;
+            int maxZ = 0;
+            int saveSysVer = 1;
             foreach (Thing b in Find.CurrentMap.spawnedThings.Where(b => b is Building))
             {
-                if (b.def != ThingDef.Named("ShipHullTile"))
+                if (b.Position.x < minX)
+                    minX = b.Position.x;
+                if (b.Position.z < minZ)
+                    minZ = b.Position.z;
+                if (b.Position.x > maxX)
+                    maxX = b.Position.x;
+                if (b.Position.z > maxZ)
+                    maxZ = b.Position.z;
+                if (b.def == ShipInteriorMod2.hullPlateDef || b.def == ShipInteriorMod2.mechHullPlateDef || b.def == ShipInteriorMod2.archoHullPlateDef)
+                    ShipMass += 1;
+                else
                 {
-                    massPoints += (b.def.size.x * b.def.size.z) * 3;
+                    ShipMass += (b.def.size.x * b.def.size.z) * 3;
                     if (b.TryGetComp<CompShipHeat>() != null)
                         combatPoints += b.TryGetComp<CompShipHeat>().Props.threat;
                     else if (b.def == ThingDef.Named("ShipSpinalAmplifier"))
@@ -71,13 +87,26 @@ namespace RimWorld
                     else if (b.def == ThingDef.Named("ShipPartTurretSpinal"))
                         combatPoints += 100;
                 }
-                else if (b.def == ThingDef.Named("ShipHullTile"))
-                    massPoints += 1;
+                if (b is Building_ShipBridge bridge)
+                    shipCore = bridge;
             }
-            combatPoints += massPoints / 100;
+            if (shipCore == null)
+                Messages.Message("Warning: no ship core found! Only use this file if you know what you are doing.", MessageTypeDefOf.RejectInput);
+            else if (ShipUtility.ShipBuildingsAttachedTo(shipCore).Count < Find.CurrentMap.spawnedThings.Where(b => b is Building).Count())
+            {
+                Messages.Message("Warning: found unattached buildings or multiple ships! Only use this file if you know what you are doing.", MessageTypeDefOf.RejectInput);
+            }
+            else
+                saveSysVer = 2;
+            if (shipCore.ShipName == null)
+            {
+                Messages.Message("Warning: no ship name set! You can set it manually in the exported XML", MessageTypeDefOf.RejectInput);
+            }
 
-            int xCenter = Find.CurrentMap.Size.x / 2;
-            int zCenter = Find.CurrentMap.Size.z / 2;
+            maxX -= minX;
+            maxZ -= minZ;
+            combatPoints += ShipMass / 100;
+
             string path = Path.Combine(GenFilePaths.SaveDataFolderPath, "ExportedShips");
             DirectoryInfo dir = new DirectoryInfo(path);
             if (!dir.Exists)
@@ -87,11 +116,16 @@ namespace RimWorld
             {
                 Scribe.EnterNode("EnemyShipDef");
                 Scribe_Values.Look<string>(ref shipCore.ShipName,"defName");
+                Scribe_Values.Look<int>(ref saveSysVer, "saveSysVer", 1);
+                Scribe_Values.Look<int>(ref minX, "offsetX", 0);
+                Scribe_Values.Look<int>(ref minZ, "offsetZ", 0);
+                Scribe_Values.Look<int>(ref maxX, "sizeX", 0);
+                Scribe_Values.Look<int>(ref maxZ, "sizeZ", 0);
                 string placeholder = "[INSERT IN-GAME NAME HERE]";
                 Scribe_Values.Look<string>(ref placeholder, "label");
+                int cargoPlaceholder = 0;
                 Scribe_Values.Look<int>(ref combatPoints, "combatPoints",0);
                 Scribe_Values.Look<int>(ref randomTurretPoints, "randomTurretPoints", 0);
-                int cargoPlaceholder = 0;
                 Scribe_Values.Look<int>(ref cargoPlaceholder, "cargoValue",0);
                 Scribe.EnterNode("parts");
                 HashSet<IntVec3> mechBugfix = new HashSet<IntVec3>();
@@ -108,19 +142,6 @@ namespace RimWorld
                         mechBugfix.Add(t.Position);
                     }
                     Scribe.EnterNode("li");
-                    /*if (t is Building_ShipCircle)
-                    {
-                        Scribe_Values.Look<int>(ref ((Building_ShipCircle)t).radius, "width");
-                        string name = "Circle";
-                        Scribe_Values.Look<string>(ref name, "shapeOrDef");
-                    }
-                    else if (t is Building_ShipRect)
-                    {
-                        Scribe_Values.Look<int>(ref ((Building_ShipRect)t).width, "width");
-                        Scribe_Values.Look<int>(ref ((Building_ShipRect)t).height, "height");
-                        string name = "Rect";
-                        Scribe_Values.Look<string>(ref name, "shapeOrDef");
-                    }*/
                     if (t is Building_ShipRegion)
                     {
                         Scribe_Values.Look<int>(ref ((Building_ShipRegion)t).width, "width");
@@ -154,9 +175,9 @@ namespace RimWorld
                         if (t.def.defName.Contains("_SPAWNER"))
                             Log.Message("Spawner " + t.def.defName);
                     }
-                    int x = t.Position.x - xCenter;
+                    int x = t.Position.x - minX;
                     Scribe_Values.Look<int>(ref x, "x");
-                    int z = t.Position.z - zCenter;
+                    int z = t.Position.z - minZ;
                     Scribe_Values.Look<int>(ref z, "z");
                     Rot4 rot = t.Rotation;
                     Scribe_Values.Look<Rot4>(ref rot, "rot");
@@ -170,9 +191,9 @@ namespace RimWorld
                         Scribe.EnterNode("li");
                         string name = def.defName;
                         Scribe_Values.Look<string>(ref name, "shapeOrDef");
-                        int x = cell.x;
+                        int x = cell.x - minX;
                         Scribe_Values.Look<int>(ref x, "x");
-                        int z = cell.z;
+                        int z = cell.z - minZ;
                         Scribe_Values.Look<int>(ref z, "z");
                         Scribe.ExitNode();
                     }
@@ -180,9 +201,9 @@ namespace RimWorld
                 Scribe.ExitNode();
                 Scribe.EnterNode("core");
                 Scribe_Values.Look<string>(ref shipCore.def.defName, "shapeOrDef");
-                int cx = shipCore.Position.x - xCenter;
+                int cx = shipCore.Position.x - minX;
                 Scribe_Values.Look<int>(ref cx, "x");
-                int cz = shipCore.Position.z - zCenter;
+                int cz = shipCore.Position.z - minZ;
                 Scribe_Values.Look<int>(ref cz, "z");
                 Rot4 crot = shipCore.Rotation;
                 Scribe_Values.Look<Rot4>(ref crot, "rot");

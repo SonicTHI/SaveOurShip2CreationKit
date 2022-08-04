@@ -9,8 +9,8 @@
       <li>Designator_NewShipMap</li>
       <li>Designator_ImportShip</li>
       <li>Designator_ImportShipRotC</li>
-      <li>Designator_ExportShip</li>
-      <li>Designator_ExportShipRe</li>
+      <li>Designator_ExportShipNew</li>
+      <li>Designator_ExportShipReNew</li>
       <li>Designator_ExportShipOld</li>
     </specialDesignatorClasses>
   </DesignationCategoryDef>

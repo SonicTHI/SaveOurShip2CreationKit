@@ -59,6 +59,8 @@ namespace RimWorld
             ((WorldObjectOrbitingShip)ImportedShip.Parent).radius = 150;
             ((WorldObjectOrbitingShip)ImportedShip.Parent).theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).theta - Rand.RangeInclusive(1, 10) * 0.01f;
             IntVec3 c = ImportedShip.Center;
+            if (shipDef.saveSysVer == 2)
+                c = new IntVec3(shipDef.offsetX, 0, shipDef.offsetZ);
             SoSBuilder.shipDictionary.Add(ImportedShip, shipDef.defName);
 
             ThingDef hullPlateDef = ThingDef.Named("ShipHullTile");
@@ -149,7 +151,10 @@ namespace RimWorld
                 }
                 else if (DefDatabase<TerrainDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
                 {
-                    ImportedShip.terrainGrid.SetTerrain(new IntVec3(shape.x, 0, shape.z), DefDatabase<TerrainDef>.GetNamed(shape.shapeOrDef));
+                    IntVec3 pos = new IntVec3(shape.x, 0, shape.z);
+                    if (shipDef.saveSysVer == 2)
+                        pos = new IntVec3(c.x + shape.x, 0, c.z + shape.z);
+                    ImportedShip.terrainGrid.SetTerrain(pos, DefDatabase<TerrainDef>.GetNamed(shape.shapeOrDef));
                 }
             }
             Building core = (Building)ThingMaker.MakeThing(ThingDef.Named(shipDef.core.shapeOrDef)); 
