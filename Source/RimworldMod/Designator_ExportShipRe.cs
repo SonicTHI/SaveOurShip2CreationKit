@@ -99,7 +99,7 @@ namespace RimWorld
 
             foreach (Thing t in Find.CurrentMap.spawnedThings)
             {
-                if (t is Pawn || t == shipCore)// || SoSBuilder.thingsNotToSave.Contains(t))
+                if (SoSBuilder.ExportToIgnore(t, shipCore))
                 {
                     continue;
                 }
@@ -111,10 +111,10 @@ namespace RimWorld
                 }
 
                 ShipShape shape = new ShipShape();
-                if (t is Building_ShipRegion)
+                if (t is Building_ShipRegion r)
                 {
-                    shape.width = ((Building_ShipRegion)t).width;
-                    shape.height = ((Building_ShipRegion)t).height;
+                    shape.width = r.width;
+                    shape.height = r.height;
                     shape.shapeOrDef = "Cargo";
                 }
                 else

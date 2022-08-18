@@ -1,4 +1,5 @@
-﻿using RimworldMod;
+﻿using RimWorld.Planet;
+using RimworldMod;
 using SaveOurShip2;
 using System;
 using System.Collections.Generic;
@@ -56,6 +57,7 @@ namespace RimWorld
         {
             Map ImportedShip = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
             ImportedShip.GetComponent<ShipHeatMapComp>().IsGraveyard = true;
+            ImportedShip.GetComponent<ShipHeatMapComp>().ShipCombatOriginMap = ((MapParent)Find.WorldObjects.AllWorldObjects.Where(ob => ob.def.defName.Equals("ShipOrbiting")).FirstOrDefault()).Map;
             ((WorldObjectOrbitingShip)ImportedShip.Parent).radius = 150;
             ((WorldObjectOrbitingShip)ImportedShip.Parent).theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).theta - Rand.RangeInclusive(1, 10) * 0.01f;
             IntVec3 c = ImportedShip.Center;
@@ -63,27 +65,10 @@ namespace RimWorld
                 c = new IntVec3(shipDef.offsetX, 0, shipDef.offsetZ);
             SoSBuilder.shipDictionary.Add(ImportedShip, shipDef.defName);
 
-            ThingDef hullPlateDef = ThingDef.Named("ShipHullTile");
             //List<ShipShape> partsToGenerate = new List<ShipShape>();
             foreach (ShipShape shape in shipDef.parts)
             {
-                if (shape.shapeOrDef.Equals("Circle"))
-                {
-                    List<IntVec3> border = new List<IntVec3>();
-                    List<IntVec3> interior = new List<IntVec3>();
-                    ShipInteriorMod2.CircleUtility(c.x + shape.x, c.z + shape.z, shape.width, ref border, ref interior);
-                    GenerateHull(border, interior, Faction.OfPlayer, ImportedShip);
-                    //cellsToFog.AddRange(interior);
-                }
-                else if (shape.shapeOrDef.Equals("Rect"))
-                {
-                    List<IntVec3> border = new List<IntVec3>();
-                    List<IntVec3> interior = new List<IntVec3>();
-                    ShipInteriorMod2.RectangleUtility(c.x + shape.x, c.z + shape.z, shape.width, shape.height, ref border, ref interior);
-                    GenerateHull(border, interior, Faction.OfPlayer, ImportedShip);
-                    //cellsToFog.AddRange(interior);
-                }
-                else if (shape.shapeOrDef.Equals("PawnSpawnerGeneric"))
+                if (shape.shapeOrDef.Equals("PawnSpawnerGeneric"))
                 {
                     ThingDef def = ThingDef.Named("PawnSpawnerGeneric");
                     Thing thing = ThingMaker.MakeThing(def);
@@ -117,6 +102,8 @@ namespace RimWorld
                     ThingDef def = ThingDef.Named(shape.shapeOrDef);
                     if (ImportedShip.listerThings.AllThings.Where(t => t.Position.x == shape.x && t.Position.z == shape.z) != def)
                     {
+                        if (SoSBuilder.ImportToIgnore(def))
+                            continue;
                         if (def.MadeFromStuff)
                         {
                             if (shape.stuff != null)
@@ -129,12 +116,12 @@ namespace RimWorld
 
                         if (thing.TryGetComp<CompColorable>() != null && shape.color != Color.clear)
                             thing.SetColor(shape.color);
-                        if (thing.def.CanHaveFaction && thing.def != hullPlateDef)
+                        if (thing.def.CanHaveFaction && thing.def != ShipInteriorMod2.hullPlateDef)
                             thing.SetFaction(Faction.OfPlayer);
                         if (thing.TryGetComp<CompPowerBattery>() != null)
                             thing.TryGetComp<CompPowerBattery>().AddEnergy(thing.TryGetComp<CompPowerBattery>().AmountCanAccept);
-                        if (thing.TryGetComp<CompRefuelable>() != null)
-                            thing.TryGetComp<CompRefuelable>().Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
+                        //if (thing.TryGetComp<CompRefuelable>() != null)
+                        //    thing.TryGetComp<CompRefuelable>().Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
                         if (thing.TryGetComp<CompShipCombatShield>() != null)
                         {
                             thing.TryGetComp<CompShipCombatShield>().radiusSet = 40;
@@ -144,7 +131,9 @@ namespace RimWorld
                         }
                         if (thing.def.stackLimit > 1)
                             thing.stackCount = (int)Math.Min(25, thing.def.stackLimit);
-                        GenSpawn.Spawn(thing, new IntVec3(c.x + shape.x, 0, c.z + shape.z), ImportedShip, shape.rot);
+                        if (thing.def == ShipInteriorMod2.hullPlateDef && new IntVec3(c.x + shape.x, 0, c.z + shape.z).GetThingList(ImportedShip).Any(t => t.def == ShipInteriorMod2.hullPlateDef)) { } //clean multiple hull spawns
+                        else
+                            GenSpawn.Spawn(thing, new IntVec3(c.x + shape.x, 0, c.z + shape.z), ImportedShip, shape.rot);
                         //if (shape.shapeOrDef.Equals("ShipAirlock") || shape.shapeOrDef.Equals("ShipHullTile") || shape.shapeOrDef.Equals("ShipHullTileMech"))
                         //cellsToFog.Add(thing.Position);
                     }
@@ -163,16 +152,13 @@ namespace RimWorld
             GenSpawn.Spawn(core, new IntVec3(c.x + shipDef.core.x, 0, c.z + shipDef.core.z), ImportedShip, corerot);
             foreach (Building b in ImportedShip.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial))
             {
-                //Building b = t as Building;
-                //if (b == null)
-                    //continue; 
-                if (b.TryGetComp<CompPowerTrader>() != null)
+                CompPowerTrader trader = b.TryGetComp<CompPowerTrader>();
+                if (trader != null)
                 {
-                    CompPowerTrader trader = b.TryGetComp<CompPowerTrader>();
                     trader.PowerOn = true;
                 }
-                if (b is Building_ShipBridge)
-                    ((Building_ShipBridge)b).ShipName = shipDef.defName;
+                if (b is Building_ShipBridge bridge)
+                    bridge.ShipName = shipDef.defName;
             }
             ImportedShip.mapDrawer.RegenerateEverythingNow();
             ImportedShip.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
@@ -183,24 +169,6 @@ namespace RimWorld
                     room.Temperature = 21f;
             }
             CameraJumper.TryJump(c, ImportedShip);
-        }
-		
-		private static void GenerateHull(List<IntVec3> border, List<IntVec3> interior, Faction fac, Map importedShip)
-        {
-            foreach (IntVec3 vec in border)
-            {
-                if (!GenSpawn.WouldWipeAnythingWith(vec, Rot4.South, ThingDef.Named("Ship_Beam"), importedShip, (Thing x) => x.def.category == ThingCategory.Building) && !vec.GetThingList(importedShip).Where(t => t.def == ThingDef.Named("ShipHullTile") || t.def == ThingDef.Named("ShipHullTileMech")).Any())
-                {
-                    Thing wall = ThingMaker.MakeThing(ThingDef.Named("Ship_Beam"));
-                    wall.SetFaction(fac);
-                    GenSpawn.Spawn(wall, vec, importedShip);
-                }
-            }
-            foreach (IntVec3 vec in interior)
-            {
-                Thing floor = ThingMaker.MakeThing(ThingDef.Named("ShipHullTile"));
-                GenSpawn.Spawn(floor, vec, importedShip);
-            }
         }
     }
 }

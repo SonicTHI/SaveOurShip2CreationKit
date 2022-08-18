@@ -131,7 +131,7 @@ namespace RimWorld
                 HashSet<IntVec3> mechBugfix = new HashSet<IntVec3>();
                 foreach(Thing t in Find.CurrentMap.spawnedThings)
                 {
-                    if (t is Pawn || t == shipCore)// || SoSBuilder.thingsNotToSave.Contains(t))
+                    if (SoSBuilder.ExportToIgnore(t, shipCore))
                     {
                         continue;
                     }

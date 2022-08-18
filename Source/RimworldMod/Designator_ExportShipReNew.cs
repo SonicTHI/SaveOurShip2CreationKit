@@ -119,7 +119,7 @@ namespace RimWorld
 
             foreach (Thing t in Find.CurrentMap.spawnedThings)
             {
-                if (t is Pawn || t == shipCore)// || SoSBuilder.thingsNotToSave.Contains(t))
+                if (SoSBuilder.ExportToIgnore(t, shipCore))
                 {
                     continue;
                 }
@@ -131,10 +131,10 @@ namespace RimWorld
                 }
 
                 ShipShape shape = new ShipShape();
-                if (t is Building_ShipRegion)
+                if (t is Building_ShipRegion r)
                 {
-                    shape.width = ((Building_ShipRegion)t).width;
-                    shape.height = ((Building_ShipRegion)t).height;
+                    shape.width = r.width;
+                    shape.height = r.height;
                     shape.shapeOrDef = "Cargo";
                 }
                 else
@@ -219,14 +219,12 @@ namespace RimWorld
                 Scribe.EnterNode("EnemyShipDef");
                 EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.GetNamed(SoSBuilder.shipDictionary[m]);
                 Scribe_Values.Look<string>(ref shipDef.defName, "defName");
-                Scribe_Values.Look<string>(ref shipDef.label, "label");
                 Scribe_Values.Look<int>(ref saveSysVer, "saveSysVer", 1);
                 Scribe_Values.Look<int>(ref minX, "offsetX", 0);
                 Scribe_Values.Look<int>(ref minZ, "offsetZ", 0);
                 Scribe_Values.Look<int>(ref maxX, "sizeX", 0);
                 Scribe_Values.Look<int>(ref maxZ, "sizeZ", 0);
-
-
+                Scribe_Values.Look<string>(ref shipDef.label, "label");
 
                 Scribe_Values.Look<int>(ref combatPoints, "combatPoints", 0);
                 Scribe_Values.Look<int>(ref randomTurretPoints, "randomTurretPoints", 0);

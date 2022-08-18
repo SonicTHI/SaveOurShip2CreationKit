@@ -1,4 +1,5 @@
-﻿using RimworldMod;
+﻿using RimWorld.Planet;
+using RimworldMod;
 using SaveOurShip2;
 using System;
 using System.Collections.Generic;
@@ -56,6 +57,7 @@ namespace RimWorld
         {
             Map ImportedShip = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
             ImportedShip.GetComponent<ShipHeatMapComp>().IsGraveyard = true;
+            ImportedShip.GetComponent<ShipHeatMapComp>().ShipCombatOriginMap = ((MapParent)Find.WorldObjects.AllWorldObjects.Where(ob => ob.def.defName.Equals("ShipOrbiting")).FirstOrDefault()).Map;
             ((WorldObjectOrbitingShip)ImportedShip.Parent).radius = 150;
             ((WorldObjectOrbitingShip)ImportedShip.Parent).theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).theta - Rand.RangeInclusive(1,10)* 0.01f;
             IntVec3 c = ImportedShip.Center;
@@ -63,7 +65,6 @@ namespace RimWorld
                 c = new IntVec3(shipDef.offsetX, 0, shipDef.offsetZ);
             SoSBuilder.shipDictionary.Add(ImportedShip, shipDef.defName);
 
-            ThingDef hullPlateDef = ThingDef.Named("ShipHullTile");
             foreach (ShipShape shape in shipDef.parts)
             {
                 if (shape.shapeOrDef.Equals("PawnSpawnerGeneric"))
@@ -88,6 +89,8 @@ namespace RimWorld
                     ThingDef def = ThingDef.Named(shape.shapeOrDef);
                     if (ImportedShip.listerThings.AllThings.Where(t => t.Position.x == shape.x && t.Position.z == shape.z) != def)
                     {
+                        if (SoSBuilder.ImportToIgnore(def))
+                            continue;
                         Rot4 rota = shape.rot;
                         int adjz = shape.x;
                         int adjx = shape.z;
@@ -111,12 +114,12 @@ namespace RimWorld
 
                         if (thing.TryGetComp<CompColorable>() != null && shape.color != Color.clear)
                             thing.SetColor(shape.color);
-                        if (thing.def.CanHaveFaction && thing.def != hullPlateDef)
+                        if (thing.def.CanHaveFaction && thing.def != ShipInteriorMod2.hullPlateDef)
                             thing.SetFaction(Faction.OfPlayer);
                         if (thing.TryGetComp<CompPowerBattery>() != null)
                             thing.TryGetComp<CompPowerBattery>().AddEnergy(thing.TryGetComp<CompPowerBattery>().AmountCanAccept);
-                        if (thing.TryGetComp<CompRefuelable>() != null)
-                            thing.TryGetComp<CompRefuelable>().Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
+                        //if (thing.TryGetComp<CompRefuelable>() != null)
+                        //    thing.TryGetComp<CompRefuelable>().Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
                         if (thing.TryGetComp<CompShipCombatShield>() != null)
                         {
                             thing.TryGetComp<CompShipCombatShield>().radiusSet = 40;
@@ -126,7 +129,9 @@ namespace RimWorld
                         }
                         if (thing.def.stackLimit > 1)
                             thing.stackCount = (int)Math.Min(25, thing.def.stackLimit);
-                        GenSpawn.Spawn(thing, new IntVec3(c.x - adjx, 0, c.z + adjz), ImportedShip, rota);
+                        if (thing.def == ShipInteriorMod2.hullPlateDef && new IntVec3(c.x + shape.x, 0, c.z + shape.z).GetThingList(ImportedShip).Any(t => t.def == ShipInteriorMod2.hullPlateDef)) { } //clean multiple hull spawns
+                        else
+                            GenSpawn.Spawn(thing, new IntVec3(c.x - adjx, 0, c.z + adjz), ImportedShip, rota);
                     }
                 }
                 else if (DefDatabase<TerrainDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
@@ -143,16 +148,13 @@ namespace RimWorld
             GenSpawn.Spawn(core, new IntVec3(c.x - shipDef.core.z, 0, c.z + shipDef.core.x), ImportedShip, corerot);
             foreach (Building b in ImportedShip.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial))
             {
-                //Building b = t as Building;
-                //if (b == null)
-                    //continue; 
-                if (b.TryGetComp<CompPowerTrader>() != null)
+                CompPowerTrader trader = b.TryGetComp<CompPowerTrader>();
+                if (trader != null)
                 {
-                    CompPowerTrader trader = b.TryGetComp<CompPowerTrader>();
                     trader.PowerOn = true;
                 }
-                if (b is Building_ShipBridge)
-                    ((Building_ShipBridge)b).ShipName = shipDef.defName;
+                if (b is Building_ShipBridge bridge)
+                    bridge.ShipName = shipDef.defName;
             }
             ImportedShip.mapDrawer.RegenerateEverythingNow();
             ImportedShip.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
