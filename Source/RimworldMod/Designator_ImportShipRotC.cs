@@ -120,16 +120,17 @@ namespace RimWorld
                             thing.TryGetComp<CompPowerBattery>().AddEnergy(thing.TryGetComp<CompPowerBattery>().AmountCanAccept);
                         //if (thing.TryGetComp<CompRefuelable>() != null)
                         //    thing.TryGetComp<CompRefuelable>().Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
-                        if (thing.TryGetComp<CompShipCombatShield>() != null)
+                        var compShield = thing.TryGetComp<CompShipCombatShield>();
+                        if (compShield != null)
                         {
-                            thing.TryGetComp<CompShipCombatShield>().radiusSet = 40;
-                            thing.TryGetComp<CompShipCombatShield>().radius = 40;
-                            thing.TryGetComp<CompShipCombatShield>().radiusSet = shape.radius;
-                            thing.TryGetComp<CompShipCombatShield>().radius = shape.radius;
+                            compShield.radiusSet = 40;
+                            compShield.radius = 40;
+                            compShield.radiusSet = shape.radius;
+                            compShield.radius = shape.radius;
                         }
                         if (thing.def.stackLimit > 1)
                             thing.stackCount = (int)Math.Min(25, thing.def.stackLimit);
-                        if (thing.def == ShipInteriorMod2.hullPlateDef && new IntVec3(c.x + shape.x, 0, c.z + shape.z).GetThingList(ImportedShip).Any(t => t.def == ShipInteriorMod2.hullPlateDef)) { } //clean multiple hull spawns
+                        if (thing.def == ShipInteriorMod2.hullPlateDef && new IntVec3(c.x - adjx, 0, c.z + adjz).GetThingList(ImportedShip).Any(t => t.def == ShipInteriorMod2.hullPlateDef)) { } //clean multiple hull spawns
                         else
                             GenSpawn.Spawn(thing, new IntVec3(c.x - adjx, 0, c.z + adjz), ImportedShip, rota);
                     }
