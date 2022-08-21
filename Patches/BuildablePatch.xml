@@ -3,8 +3,12 @@
 	<Operation Class="PatchOperationSequence">
 		<operations>
 			<li Class="PatchOperationAdd">
-				<xpath>/Defs/ThingDef[defName = "ShipHullTileMech" or defName = "Ship_BeamMech" or defName = "Ship_BeamMech_Unpowered" or defName = "ShipAirlockMech" or defName = "ShipInside_SolarGeneratorMech" or defName = "ShipInside_PassiveCoolerMechanoid" or defName = "ShipInside_PassiveVentMechanoid" or defName = "Ship_Beam_Wrecked" or defName = "ShipAirlockWrecked" or defName = "ShipHullTileWrecked"]</xpath>
+				<xpath>/Defs/ThingDef[@Name="ShipCornerMech" or defName = "ShipHullTileMech" or defName = "Ship_BeamMech" or defName = "Ship_BeamMech_Unpowered" or defName = "ShipAirlockMech" or defName = "ShipInside_SolarGeneratorMech" or defName = "ShipInside_PassiveVentMechanoid" or defName = "Ship_Beam_Wrecked" or defName = "ShipAirlockWrecked" or defName = "ShipHullTileWrecked"]</xpath>
 				<value><designationCategory>ShipDesign</designationCategory></value>
+			</li>
+			<li Class="PatchOperationAdd">
+				<xpath>/Defs/ThingDef[@Name="ShipCornerMech or defName = "ShipHullTileMech" or defName = "Ship_BeamMech"]</xpath>
+				<value><designatorDropdown>Ship_Beams_Mech</designatorDropdown></value>
 			</li>
 			<!-- add other things here to be buildable with the editor -->
 			<li Class="PatchOperationAdd">

@@ -2,13 +2,8 @@
 <Defs>
 	<!-- mech -->
 	<DesignatorDropdownGroupDef>
-		<defName>Ship_Corners_Mech</defName>
+		<defName>Ship_Beams_Mech</defName>
 	</DesignatorDropdownGroupDef>
-	<ThingDef ParentName="ShipCornerBase" Name="ShipCornerMech" Abstract="True">
-		<description>Angled armor for a ship's outer hull.</description>
-		<designatorDropdown>Ship_Corners_Mech</designatorDropdown>
-		<designationCategory>ShipDesign</designationCategory>
-	</ThingDef>
 	<!-- rect -->
 	<ThingDef ParentName="BuildingBase">
 		<defName>ShipPartRect</defName>
