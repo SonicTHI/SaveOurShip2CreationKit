@@ -7,7 +7,7 @@
 				<value><designationCategory>ShipDesign</designationCategory></value>
 			</li>
 			<li Class="PatchOperationAdd">
-				<xpath>/Defs/ThingDef[@Name="ShipCornerMech or defName = "ShipHullTileMech" or defName = "Ship_BeamMech"]</xpath>
+				<xpath>/Defs/ThingDef[@Name="ShipCornerMech" or defName = "ShipHullTileMech" or defName = "Ship_BeamMech"]</xpath>
 				<value><designatorDropdown>Ship_Beams_Mech</designatorDropdown></value>
 			</li>
 			<!-- add other things here to be buildable with the editor -->
