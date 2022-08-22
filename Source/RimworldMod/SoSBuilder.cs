@@ -51,7 +51,7 @@ namespace RimworldMod
         }
         public static bool ExportToIgnore(Thing t, Building_ShipBridge shipCore)
         {
-            if (t is Pawn || t == shipCore || t.def.defName.StartsWith("Lighting_MURWallLight_Glower"))
+            if (t is Pawn || t == shipCore || t.def.defName.StartsWith("Lighting_MURWallLight_Glower") || t.def.defName.Equals("Lighting_MURWallSunLight_Glower"))
             {
                 return true;
             }
@@ -60,7 +60,7 @@ namespace RimworldMod
         //cleanup for bad exports + temp for rework
         public static bool ImportToIgnore(ThingDef def)
         {
-            if (def.defName.StartsWith("Lighting_MURWallLight_Glower") || def.defName.StartsWith("StandingLamp") || def.defName.Equals("Heater"))
+            if (def.defName.StartsWith("Lighting_MURWallLight_Glower") || def.defName.Equals("Lighting_MURWallSunLight_Glower") || def.defName.StartsWith("StandingLamp") || def.defName.Equals("SunLamp") || def.defName.Equals("Heater"))
             {
                 return true;
             }
