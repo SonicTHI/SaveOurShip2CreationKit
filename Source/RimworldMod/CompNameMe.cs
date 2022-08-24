@@ -33,7 +33,7 @@ namespace RimWorld
 
         public override string CompInspectStringExtra()
         {
-            return base.CompInspectStringExtra()+"\nPawn kind: "+pawnKindDef;
+            return base.CompInspectStringExtra() + "Pawn kind: " + pawnKindDef;
         }
 
         public override void PostExposeData()

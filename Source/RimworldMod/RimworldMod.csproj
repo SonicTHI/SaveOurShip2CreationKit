@@ -38,8 +38,11 @@
     <Compile Include="Building_ShipRegion.cs" />
     <Compile Include="Building_ShipRect.cs" />
     <Compile Include="Building_ShipCircle.cs" />
+    <Compile Include="CompNameMeShip.cs" />
     <Compile Include="CompNameMe.cs" />
+    <Compile Include="CompProperties_NameMeShip.cs" />
     <Compile Include="CompProperties_NameMe.cs" />
+    <Compile Include="Designator_ExportFleet.cs" />
     <Compile Include="Designator_ExportShipNew.cs" />
     <Compile Include="Designator_ExportShipReNew.cs" />
     <Compile Include="Designator_ExportShipRe.cs" />

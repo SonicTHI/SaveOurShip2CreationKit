@@ -31,7 +31,7 @@ namespace RimWorld
 
         public override void DesignateSingleCell(IntVec3 loc)
         {
-            if(!Find.CurrentMap.Biome.defName.Equals("OuterSpaceBiome"))
+            if (!Find.CurrentMap.IsSpace())
             {
                 Messages.Message("Not on space map", MessageTypeDefOf.RejectInput);
                 return;

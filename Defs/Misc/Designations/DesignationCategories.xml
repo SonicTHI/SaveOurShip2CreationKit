@@ -12,6 +12,7 @@
       <li>Designator_ExportShipNew</li>
       <li>Designator_ExportShipReNew</li>
       <li>Designator_ExportShipOld</li>
+      <li>Designator_ExportFleet</li>
     </specialDesignatorClasses>
   </DesignationCategoryDef>
   
