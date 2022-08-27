@@ -29,6 +29,9 @@ namespace RimWorld
                 return;
             }
             comp.enemyShipDef = name;
+
+            if (comp.ShipPartShipEnd != null && !comp.ShipPartShipEnd.Destroyed)
+                comp.ShipPartShipEnd.Destroy(DestroyMode.Vanish);
             //spawn an end marker
             EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.AllDefs.FirstOrDefault(s => s.defName.Equals(name));
             IntVec3 offset = comp.parent.Position;
@@ -38,19 +41,26 @@ namespace RimWorld
             thing.SetFaction(Faction.OfPlayer);
             comp.ShipPartShipEnd = GenSpawn.Spawn(thing, offset, comp.parent.Map);
             comp.ShipPartShipEnd.TryGetComp<CompNameMeShip>().enemyShipDef = name;
+            comp.x = shipDef.sizeX;
+            comp.z = shipDef.sizeZ;
         }
     }
+    [StaticConstructorOnStartup]
     public class CompNameMeShip : ThingComp
     {
+        private static Graphic shipGraphic = GraphicDatabase.Get(typeof(Graphic_Single), "UI/Capture_Ship_Icon", ShaderDatabase.MoteGlow, new Vector2(1, 1f), Color.white, Color.white);
         public string enemyShipDef;
         public Thing ShipPartShipEnd;
+        public bool Start = false;
+        public int x = 0;
+        public int z = 0;
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
             foreach (Gizmo gizmo in base.CompGetGizmosExtra())
             {
                 yield return gizmo;
             }
-            if (this.parent.def.defName.Equals("ShipPartShip"))
+            if (Start)
             {
                 Command_Action rename = new Command_Action
                 {
@@ -65,13 +75,24 @@ namespace RimWorld
                 yield return rename;
             }
         }
+        public override void PostDraw()
+        {
+            base.PostDraw();
+            if (Start)
+            {
+                shipGraphic.drawSize = new Vector2(x, z);
+                shipGraphic.Draw(new Vector3(parent.DrawPos.x + x/2, parent.DrawPos.y + 1f, parent.DrawPos.z + z/2), parent.Rotation, parent);
+            }
+        }
         public override void PostSpawnSetup(bool respawningAfterLoad)
         {
             base.PostSpawnSetup(respawningAfterLoad);
+            if (this.parent.def.defName.Equals("ShipPartShip"))
+                Start = true;
         }
         public override void PostDeSpawn(Map map)
         {
-            if (ShipPartShipEnd != null)
+            if (ShipPartShipEnd != null && !ShipPartShipEnd.Destroyed)
                 ShipPartShipEnd.Destroy(DestroyMode.Vanish);
             base.PostDeSpawn(map);
         }

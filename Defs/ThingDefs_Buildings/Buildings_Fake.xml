@@ -20,12 +20,18 @@
 		</building>
 		<rotatable>false</rotatable>
 	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase" Name="ShipFakeBaseEdifice" Abstract="True">
+		<building>
+			<isEdifice>true</isEdifice>
+		</building>
+	</ThingDef>
 	
 	<!-- ship -->
 	<ThingDef ParentName="ShipFakeBase">
 		<defName>ShipPartShip</defName>
 		<label>ship spawner</label>
 		<description>Choose a EnemyShipDef for this to spawn</description>
+		<drawerType>MapMeshAndRealTime</drawerType>
 		<graphicData>
 			<texPath>Things/Building/Ship/Rect_Start</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -223,7 +229,7 @@
 		<size>(1,1)</size>
 	</ThingDef>
 	<!-- turrets -->
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>ShipPartTurretSmall</defName>
 		<label>random small turret</label>
 		<description>A small laser, plasma, or kinetic turret</description>
@@ -234,7 +240,7 @@
 		</graphicData>
 		<size>(2,2)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>ShipPartTurretLarge</defName>
 		<label>random large turret</label>
 		<description>A large laser, plasma, or kinetic turret</description>
@@ -245,7 +251,7 @@
 		</graphicData>
 		<size>(3,3)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>ShipPartTurretSpinal</defName>
 		<label>random spinal barrel</label>
 		<description>A laser, plasma, or kinetic spinal gun barrel</description>
@@ -258,7 +264,7 @@
 		<rotatable>true</rotatable>
 	</ThingDef>
 	<!-- pawns -->
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>CasketFilled</defName>
 		<label>occupied cryptosleep casket</label>
 		<description>A pawn in cryptosleep goes here</description>
@@ -270,7 +276,7 @@
 		<size>(1,2)</size>
 		<rotatable>true</rotatable>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>PawnSpawnerGeneric</defName>
 		<label>generic pawn spawner</label>
 		<description>Choose a PawnKindDef for this to spawn</description>
@@ -284,7 +290,7 @@
 			<li Class="CompProperties_NameMe"/>
 		</comps>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>SpaceCrew</defName>
 		<label>ship crew</label>
 		<description>A crew member goes here</description>
@@ -295,7 +301,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>SpaceCrewMarine</defName>
 		<label>ship crew: marine</label>
 		<description>A marine goes here</description>
@@ -306,7 +312,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>SpaceCrewMarineHeavy</defName>
 		<label>ship crew: heavy marine</label>
 		<description>A heavy marine goes here</description>
@@ -317,7 +323,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>Mech_Centipede_SPAWNER</defName>
 		<label>centipede</label>
 		<description>A centipede goes here</description>
@@ -328,7 +334,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>Mech_Lancer_SPAWNER</defName>
 		<label>lancer</label>
 		<description>A lancer goes here</description>
@@ -350,7 +356,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>Mech_Pikeman_SPAWNER</defName>
 		<label>pikeman</label>
 		<description>A pikeman goes here</description>
@@ -361,7 +367,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>Mech_Random</defName>
 		<label>random mech</label>
 		<description>A random mech goes here</description>
@@ -372,7 +378,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>Astromite_SPAWNER</defName>
 		<label>astromite</label>
 		<description>An astromite goes here</description>
@@ -383,7 +389,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>Stellapede_SPAWNER</defName>
 		<label>stellapede</label>
 		<description>A stellapede goes here</description>
@@ -394,7 +400,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>Cosmopillar_SPAWNER</defName>
 		<label>cosmopillar</label>
 		<description>A cosmopillar goes here</description>
@@ -405,7 +411,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>SpaceBug_Random</defName>
 		<label>random space bug</label>
 		<description>A random space insect goes here</description>
@@ -416,7 +422,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>SpaceHive_SPAWNER</defName>
 		<label>space hive</label>
 		<description>A space hive goes here</description>

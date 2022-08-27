@@ -45,7 +45,6 @@ namespace RimWorld
             int minZ = this.Map.Size.z;
             int maxX = 0;
             int maxZ = 0;
-            int saveSysVer = 1;
             foreach (Thing b in Find.CurrentMap.spawnedThings.Where(b => b is Building))
             {
                 if (b.Position.x < minX)
@@ -82,14 +81,12 @@ namespace RimWorld
                     shipCore = bridge;
             }
             if (shipCore == null)
-                Messages.Message("Warning: no ship core found! Only use this file if you know what you are doing.", MessageTypeDefOf.RejectInput);
+                Messages.Message("Warning: no ship core found! Only use this file as spaceSite!", MessageTypeDefOf.RejectInput);
             else if (ShipUtility.ShipBuildingsAttachedTo(shipCore).Count < Find.CurrentMap.spawnedThings.Where(b => b is Building).Count())
             {
-                Messages.Message("Warning: found unattached buildings or multiple ships! Only use this file if you know what you are doing.", MessageTypeDefOf.RejectInput);
+                Messages.Message("Warning: found unattached buildings or multiple ships! Only use this file as spaceSite, startingShip or startingDungeon!", MessageTypeDefOf.RejectInput);
             }
-            else
-                saveSysVer = 2;
-            if (shipCore.ShipName == null)
+            else if (shipCore.ShipName == null)
             {
                 Messages.Message("Warning: no ship name set! You can set it manually in the exported XML", MessageTypeDefOf.RejectInput);
             }
@@ -211,6 +208,7 @@ namespace RimWorld
             {
                 Scribe.EnterNode("EnemyShipDef");
                 Scribe_Values.Look<string>(ref shipCore.ShipName, "defName");
+                int saveSysVer = 2;
                 Scribe_Values.Look<int>(ref saveSysVer, "saveSysVer", 1);
                 Scribe_Values.Look<int>(ref minX, "offsetX", 0);
                 Scribe_Values.Look<int>(ref minZ, "offsetZ", 0);
