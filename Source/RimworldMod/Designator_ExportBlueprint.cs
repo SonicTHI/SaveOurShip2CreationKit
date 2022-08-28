@@ -50,7 +50,6 @@ namespace RimWorld
                     shipDef = DefDatabase<EnemyShipDef>.AllDefs.Where(s => s.defName.Equals(b.ShipName)).FirstOrDefault();
                     bridge = b;
                     defName = "ShipBlueprint" + shipDef.defName;
-                    label = "ship blueprint (" + shipDef.defName + ")";
                     shipDefName = shipDef.defName;
                 }
                 else
@@ -149,6 +148,7 @@ namespace RimWorld
             {
                 Scribe.EnterNode("ThingDef");
                     Scribe_Values.Look<string>(ref defName, "defName");
+                    label = "[INSERT IN-GAME NAME HERE]";
                     Scribe_Values.Look<string>(ref label, "label");
                     Scribe_Values.Look<string>(ref description, "description");
                     Scribe.EnterNode("statBases");
