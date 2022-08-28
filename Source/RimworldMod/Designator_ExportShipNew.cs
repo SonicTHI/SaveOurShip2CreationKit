@@ -81,7 +81,9 @@ namespace RimWorld
                     shipCore = bridge;
             }
             if (shipCore == null)
-                Messages.Message("Warning: no ship core found! Only use this file as spaceSite!", MessageTypeDefOf.RejectInput);
+            {
+                Messages.Message("Warning: no ship core found! Tags set to neverAttacks, spaceSite!", MessageTypeDefOf.RejectInput);
+            }
             else if (ShipUtility.ShipBuildingsAttachedTo(shipCore).Count < Find.CurrentMap.spawnedThings.Where(b => b is Building).Count())
             {
                 Messages.Message("Warning: found unattached buildings or multiple ships! Only use this file as spaceSite, startingShip or startingDungeon!", MessageTypeDefOf.RejectInput);
@@ -91,15 +93,18 @@ namespace RimWorld
                 Messages.Message("Warning: no ship name set! You can set it manually in the exported XML", MessageTypeDefOf.RejectInput);
             }
 
-            maxX -= minX;
-            maxZ -= minZ;
-            combatPoints += ShipMass / 100;
-
             string path = Path.Combine(GenFilePaths.SaveDataFolderPath, "ExportedShips");
             DirectoryInfo dir = new DirectoryInfo(path);
             if (!dir.Exists)
                 dir.Create();
-            string filename = Path.Combine(path, shipCore.ShipName + ".xml");
+            string shipName = "siteTemp";
+            if (shipCore != null)
+                shipName = shipCore.ShipName;
+            string filename = Path.Combine(path, shipName + ".xml");
+
+            maxX -= minX;
+            maxZ -= minZ;
+            combatPoints += ShipMass / 100;
 
             char charPointer = '?';
             Dictionary<char, ShipShape> symbolTable = new Dictionary<char, ShipShape>();
@@ -207,56 +212,63 @@ namespace RimWorld
             SafeSaver.Save(filename, "Defs", () =>
             {
                 Scribe.EnterNode("EnemyShipDef");
-                Scribe_Values.Look<string>(ref shipCore.ShipName, "defName");
-                int saveSysVer = 2;
-                Scribe_Values.Look<int>(ref saveSysVer, "saveSysVer", 1);
-                Scribe_Values.Look<int>(ref minX, "offsetX", 0);
-                Scribe_Values.Look<int>(ref minZ, "offsetZ", 0);
-                Scribe_Values.Look<int>(ref maxX, "sizeX", 0);
-                Scribe_Values.Look<int>(ref maxZ, "sizeZ", 0);
-                string placeholder = "[INSERT IN-GAME NAME HERE]";
-                Scribe_Values.Look<string>(ref placeholder, "label");
-                int cargoPlaceholder = 0;
-                Scribe_Values.Look<int>(ref combatPoints, "combatPoints", 0);
-                Scribe_Values.Look<int>(ref randomTurretPoints, "randomTurretPoints", 0);
-                Scribe_Values.Look<int>(ref cargoPlaceholder, "cargoValue", 0);
-                bool temp = false;
-                Scribe_Values.Look<bool>(ref temp, "neverRandom", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "neverAttacks", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "spaceSite", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "imperialShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "pirateShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "bountyShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "mechanoidShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "fighterShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "carrierShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "tradeShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "startingShip", forceSave: true);
-                Scribe_Values.Look<bool>(ref temp, "startingDungeon", forceSave: true);
-                Scribe.EnterNode("core");
-                Scribe_Values.Look<string>(ref shipCore.def.defName, "shapeOrDef");
-                int cx = shipCore.Position.x - minX;
-                Scribe_Values.Look<int>(ref cx, "x");
-                int cz = shipCore.Position.z - minZ;
-                Scribe_Values.Look<int>(ref cz, "z");
-                Rot4 crot = shipCore.Rotation;
-                Scribe_Values.Look<Rot4>(ref crot, "rot");
-                Scribe.ExitNode();
-                Scribe.EnterNode("symbolTable");
-                foreach (char key in symbolTable.Keys)
-                {
-                    Scribe.EnterNode("li");
-                    char realKey = key;
-                    Scribe_Values.Look<char>(ref realKey, "key"); ;
-                    ShipShape realShape = symbolTable[key];
-                    Scribe_Deep.Look<ShipShape>(ref realShape, "value");
+                    Scribe_Values.Look<string>(ref shipName, "defName");
+                    int saveSysVer = 2;
+                    Scribe_Values.Look<int>(ref saveSysVer, "saveSysVer", 1);
+                    Scribe_Values.Look<int>(ref minX, "offsetX", 0);
+                    Scribe_Values.Look<int>(ref minZ, "offsetZ", 0);
+                    Scribe_Values.Look<int>(ref maxX, "sizeX", 0);
+                    Scribe_Values.Look<int>(ref maxZ, "sizeZ", 0);
+                    string placeholder = "[INSERT IN-GAME NAME HERE]";
+                    Scribe_Values.Look<string>(ref placeholder, "label");
+                    int cargoPlaceholder = 0;
+                    Scribe_Values.Look<int>(ref combatPoints, "combatPoints", 0);
+                    Scribe_Values.Look<int>(ref randomTurretPoints, "randomTurretPoints", 0);
+                    Scribe_Values.Look<int>(ref cargoPlaceholder, "cargoValue", 0);
+                    bool temp = false;
+                    if (shipCore != null)
+                    {
+                        Scribe_Values.Look<bool>(ref temp, "neverRandom", forceSave: true);
+                        Scribe_Values.Look<bool>(ref temp, "neverAttacks", forceSave: true);
+                        Scribe_Values.Look<bool>(ref temp, "spaceSite", forceSave: true);
+                        Scribe_Values.Look<bool>(ref temp, "imperialShip", forceSave: true);
+                        Scribe_Values.Look<bool>(ref temp, "pirateShip", forceSave: true);
+                        Scribe_Values.Look<bool>(ref temp, "bountyShip", forceSave: true);
+                        Scribe_Values.Look<bool>(ref temp, "mechanoidShip", forceSave: true);
+                        Scribe_Values.Look<bool>(ref temp, "tradeShip", forceSave: true);
+                        Scribe_Values.Look<bool>(ref temp, "startingShip", forceSave: true);
+                        Scribe_Values.Look<bool>(ref temp, "startingDungeon", forceSave: true);
+                        Scribe.EnterNode("core");
+                            Scribe_Values.Look<string>(ref shipCore.def.defName, "shapeOrDef");
+                            int cx = shipCore.Position.x - minX;
+                            Scribe_Values.Look<int>(ref cx, "x");
+                            int cz = shipCore.Position.z - minZ;
+                            Scribe_Values.Look<int>(ref cz, "z");
+                            Rot4 crot = shipCore.Rotation;
+                            Scribe_Values.Look<Rot4>(ref crot, "rot");
+                        Scribe.ExitNode();
+                    }
+                    else
+                    {
+                        bool tempTrue = true;
+                        Scribe_Values.Look<bool>(ref tempTrue, "neverAttacks", forceSave: true);
+                        Scribe_Values.Look<bool>(ref tempTrue, "spaceSite", forceSave: true);
+                    }
+                    Scribe.EnterNode("symbolTable");
+                        foreach (char key in symbolTable.Keys)
+                        {
+                            Scribe.EnterNode("li");
+                            char realKey = key;
+                            Scribe_Values.Look<char>(ref realKey, "key"); ;
+                            ShipShape realShape = symbolTable[key];
+                            Scribe_Deep.Look<ShipShape>(ref realShape, "value");
+                            Scribe.ExitNode();
+                        }
                     Scribe.ExitNode();
-                }
-                Scribe.ExitNode();
-                Scribe_Values.Look<string>(ref bigString, "bigString");
+                    Scribe_Values.Look<string>(ref bigString, "bigString");
                 Scribe.ExitNode();
             });
-            Messages.Message("Saved ship as: " + shipCore.ShipName + ".xml", shipCore, MessageTypeDefOf.PositiveEvent);
+            Messages.Message("Saved ship as: " + shipName + ".xml", shipCore, MessageTypeDefOf.PositiveEvent);
         }
     }
 }

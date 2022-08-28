@@ -60,7 +60,7 @@ namespace RimworldMod
         //cleanup for bad exports + temp for rework
         public static bool ImportToIgnore(ThingDef def)
         {
-            if (def.defName.StartsWith("Lighting_MURWallLight_Glower") || def.defName.Equals("Lighting_MURWallSunLight_Glower") || def.defName.StartsWith("StandingLamp") || def.defName.Equals("SunLamp") || def.defName.Equals("Heater"))
+            if (def.defName.StartsWith("Lighting_MURWallLight_Glower") || def.defName.Equals("Lighting_MURWallSunLight_Glower") || def.defName.StartsWith("StandingLamp") || def.defName.Equals("Heater"))
             {
                 return true;
             }

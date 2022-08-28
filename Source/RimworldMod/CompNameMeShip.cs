@@ -48,7 +48,7 @@ namespace RimWorld
     [StaticConstructorOnStartup]
     public class CompNameMeShip : ThingComp
     {
-        private static Graphic shipGraphic = GraphicDatabase.Get(typeof(Graphic_Single), "UI/Capture_Ship_Icon", ShaderDatabase.MoteGlow, new Vector2(1, 1f), Color.white, Color.white);
+        private static Graphic shipGraphic = GraphicDatabase.Get(typeof(Graphic_Single), "UI/FleetShipPosition", ShaderDatabase.MoteGlow, new Vector2(1, 1f), Color.white, Color.white);
         public string enemyShipDef;
         public Thing ShipPartShipEnd;
         public bool Start = false;

@@ -261,6 +261,10 @@
 			<drawSize>(5,4)</drawSize>
 		</graphicData>
 		<size>(5,4)</size>
+		<passability>Impassable</passability>
+		<blockWind>true</blockWind>
+		<fillPercent>1</fillPercent>
+		<blockLight>true</blockLight>
 		<rotatable>true</rotatable>
 	</ThingDef>
 	<!-- pawns -->

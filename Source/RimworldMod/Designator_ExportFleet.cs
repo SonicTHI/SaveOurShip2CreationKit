@@ -71,7 +71,7 @@ namespace RimWorld
             DirectoryInfo dir = new DirectoryInfo(path);
             if (!dir.Exists)
                 dir.Create();
-            string filename = Path.Combine(path, "newfleet.xml");
+            string filename = Path.Combine(path, "fleetTemp.xml");
             string newfleet = "[INSERT UNIQUE NAME HERE]";
             int saveSysVer = 2;
 
@@ -85,22 +85,22 @@ namespace RimWorld
                 Scribe_Values.Look<string>(ref placeholder, "label");
                 Scribe_Values.Look<int>(ref combatPoints, "combatPoints", 0);
                 Scribe.EnterNode("ships");
-                foreach (OffsetShip ship in ships)
-                {
-                    Scribe.EnterNode("li");
-                    string name = ship.ship;
-                    Scribe_Values.Look<string>(ref name, "ship");
-                    int offsetX = ship.offsetX;
-                    Scribe_Values.Look<int>(ref offsetX, "offsetX");
-                    int offsetZ = ship.offsetZ;
-                    Scribe_Values.Look<int>(ref offsetZ, "offsetZ");
+                    foreach (OffsetShip ship in ships)
+                    {
+                        Scribe.EnterNode("li");
+                        string name = ship.ship;
+                        Scribe_Values.Look<string>(ref name, "ship");
+                        int offsetX = ship.offsetX;
+                        Scribe_Values.Look<int>(ref offsetX, "offsetX");
+                        int offsetZ = ship.offsetZ;
+                        Scribe_Values.Look<int>(ref offsetZ, "offsetZ");
+                        Scribe.ExitNode();
+                    }
                     Scribe.ExitNode();
-                }
-                Scribe.ExitNode();
                 Scribe.EnterNode("parts");
                 Scribe.ExitNode();
             });
-            Messages.Message("Saved fleet as: newfleet.xml", MessageTypeDefOf.PositiveEvent);
+            Messages.Message("Saved fleet in temp file: fleetTemp.xml", MessageTypeDefOf.PositiveEvent);
         }
     }
 }
