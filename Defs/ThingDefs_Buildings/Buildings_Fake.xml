@@ -266,6 +266,9 @@
 		<fillPercent>1</fillPercent>
 		<blockLight>true</blockLight>
 		<rotatable>true</rotatable>
+		<building>
+			<shipPart>true</shipPart>
+		</building>
 	</ThingDef>
 	<!-- pawns -->
 	<ThingDef ParentName="ShipFakeBaseEdifice">
