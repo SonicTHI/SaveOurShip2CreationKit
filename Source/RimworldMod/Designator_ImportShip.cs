@@ -50,6 +50,8 @@ namespace RimWorld
             if (name == ship || string.IsNullOrEmpty(name))
                 return;
             EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.GetNamed(name);
+            if (shipDef == null)
+                return;
             GenerateShip(shipDef);
         }
 
@@ -65,7 +67,6 @@ namespace RimWorld
                 c = new IntVec3(shipDef.offsetX, 0, shipDef.offsetZ);
             SoSBuilder.shipDictionary.Add(ImportedShip, shipDef.defName);
 
-            //List<ShipShape> partsToGenerate = new List<ShipShape>();
             foreach (ShipShape shape in shipDef.parts)
             {
                 if (shape.shapeOrDef.Equals("PawnSpawnerGeneric"))
@@ -74,19 +75,7 @@ namespace RimWorld
                     Thing thing = ThingMaker.MakeThing(def);
                     GenSpawn.Spawn(thing, new IntVec3(c.x + shape.x, 0, c.z + shape.z), ImportedShip);
                     thing.TryGetComp<CompNameMe>().pawnKindDef = shape.stuff;
-                }/*
-                else if (DefDatabase<ImportedShipPartDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
-                {
-                    partsToGenerate.Add(shape);
                 }
-                else if (DefDatabase<PawnKindDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
-                {
-                    PawnGenerationRequest req = new PawnGenerationRequest(DefDatabase<PawnKindDef>.GetNamed(shape.shapeOrDef), Faction.OfAncientsHostile);
-                    Pawn pawn = PawnGenerator.GeneratePawn(req);
-                    if(defendShip!=null)
-                        defendShip.AddPawn(pawn);
-                    GenSpawn.Spawn(pawn, new IntVec3(c.x + shape.x, 0, c.z + shape.z), ImportedShip);
-                }*/
                 else if (shape.shapeOrDef.Equals("Cargo"))
                 {
                     SoSBuilder.lastRegionPlaced = null;
@@ -120,8 +109,8 @@ namespace RimWorld
                             thing.SetFaction(Faction.OfPlayer);
                         if (thing.TryGetComp<CompPowerBattery>() != null)
                             thing.TryGetComp<CompPowerBattery>().AddEnergy(thing.TryGetComp<CompPowerBattery>().AmountCanAccept);
-                        //if (thing.TryGetComp<CompRefuelable>() != null)
-                        //    thing.TryGetComp<CompRefuelable>().Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
+                        if (thing.TryGetComp<CompRefuelable>() != null)
+                            thing.TryGetComp<CompRefuelable>().Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
                         var compShield = thing.TryGetComp<CompShipCombatShield>();
                         if (compShield != null)
                         {
@@ -135,8 +124,6 @@ namespace RimWorld
                         if ((thing.def == ShipInteriorMod2.hullPlateDef || thing.def == ShipInteriorMod2.mechHullPlateDef || thing.def == ShipInteriorMod2.archoHullPlateDef) && new IntVec3(c.x + shape.x, 0, c.z + shape.z).GetThingList(ImportedShip).Any(t => t.def == ShipInteriorMod2.hullPlateDef || t.def == ShipInteriorMod2.mechHullPlateDef || t.def == ShipInteriorMod2.archoHullPlateDef)) { } //clean multiple hull spawns
                         else
                             GenSpawn.Spawn(thing, new IntVec3(c.x + shape.x, 0, c.z + shape.z), ImportedShip, shape.rot);
-                        //if (shape.shapeOrDef.Equals("ShipAirlock") || shape.shapeOrDef.Equals("ShipHullTile") || shape.shapeOrDef.Equals("ShipHullTileMech"))
-                        //cellsToFog.Add(thing.Position);
                     }
                 }
                 else if (DefDatabase<TerrainDef>.GetNamedSilentFail(shape.shapeOrDef) != null)

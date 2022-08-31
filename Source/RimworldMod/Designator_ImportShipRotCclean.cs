@@ -13,7 +13,7 @@ using Verse;
 namespace RimWorld
 {
 
-    class Designator_ImportShipRotC : Designator
+    class Designator_ImportShipRotCclean : Designator
     {
         public static List<EnemyShipDef> shipDefsAll = new List<EnemyShipDef>();
 
@@ -21,10 +21,10 @@ namespace RimWorld
         {
             return true;
         }
-        public Designator_ImportShipRotC()
+        public Designator_ImportShipRotCclean()
         {
-            defaultLabel = "Import Ship Rotated 90° CCW";
-            defaultDesc = "Click anywhere on the map to activate.\nWARNING: Non rotatable, non even sided buildings will be discarded!";
+            defaultLabel = "Import Ship Rotated 90° CCW, cleaned";
+            defaultDesc = "Click anywhere on the map to activate.\nWARNING: Non rotatable, non even sided buildings  will be discarded!";
             icon = ContentFinder<Texture2D>.Get("UI/Load_XML");
             soundDragSustain = SoundDefOf.Designate_DragStandard;
             soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
@@ -33,14 +33,14 @@ namespace RimWorld
         }
         public override void DesignateSingleCell(IntVec3 loc)
         {
-            Find.WindowStack.Add(new Dialog_LoadShipRotC("shipdeftoloadrotl"));
+            Find.WindowStack.Add(new Dialog_LoadShipRotCclean("shipdeftoloadrotl"));
         }
     }
-    public class Dialog_LoadShipRotC : Dialog_Rename
+    public class Dialog_LoadShipRotCclean : Dialog_Rename
     {
         private string ship= "shipdeftoloadrotl";
         //public static Map ImportedShip;
-        public Dialog_LoadShipRotC(string ship)
+        public Dialog_LoadShipRotCclean(string ship)
         {
             curName = ship;
         }
@@ -91,8 +91,10 @@ namespace RimWorld
                     ThingDef def = ThingDef.Named(shape.shapeOrDef);
                     if (ImportedShip.listerThings.AllThings.Where(t => t.Position.x == shape.x && t.Position.z == shape.z) != def)
                     {
-                        if (SoSBuilder.ImportToIgnore(def))
+                        if (!(def.defName.StartsWith("Ship_Corner") || def.defName.StartsWith("Ship_Beam") || def.defName.StartsWith("Ship_Engine")))
+                        {
                             continue;
+                        }
                         Rot4 rota = shape.rot;
                         int adjz = shape.x;
                         int adjx = shape.z;
@@ -120,21 +122,9 @@ namespace RimWorld
                             thing.SetFaction(Faction.OfPlayer);
                         if (thing.TryGetComp<CompPowerBattery>() != null)
                             thing.TryGetComp<CompPowerBattery>().AddEnergy(thing.TryGetComp<CompPowerBattery>().AmountCanAccept);
-                        if (thing.TryGetComp<CompRefuelable>() != null)
-                            thing.TryGetComp<CompRefuelable>().Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
-                        var compShield = thing.TryGetComp<CompShipCombatShield>();
-                        if (compShield != null)
-                        {
-                            compShield.radiusSet = 40;
-                            compShield.radius = 40;
-                            compShield.radiusSet = shape.radius;
-                            compShield.radius = shape.radius;
-                        }
-                        if (thing.def.stackLimit > 1)
-                            thing.stackCount = (int)Math.Min(25, thing.def.stackLimit);
-                        if ((thing.def == ShipInteriorMod2.hullPlateDef || thing.def == ShipInteriorMod2.mechHullPlateDef || thing.def == ShipInteriorMod2.archoHullPlateDef) && new IntVec3(c.x - adjx, 0, c.z + adjz).GetThingList(ImportedShip).Any(t => t.def == ShipInteriorMod2.hullPlateDef || t.def == ShipInteriorMod2.mechHullPlateDef || t.def == ShipInteriorMod2.archoHullPlateDef)) { } //clean multiple hull spawns
-                        else
-                            GenSpawn.Spawn(thing, new IntVec3(c.x - adjx, 0, c.z + adjz), ImportedShip, rota);
+                        //if (thing.TryGetComp<CompRefuelable>() != null)
+                        //    thing.TryGetComp<CompRefuelable>().Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
+                        GenSpawn.Spawn(thing, new IntVec3(c.x - adjx, 0, c.z + adjz), ImportedShip, rota);
                     }
                 }
                 else if (DefDatabase<TerrainDef>.GetNamedSilentFail(shape.shapeOrDef) != null)

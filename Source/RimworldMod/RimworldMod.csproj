@@ -48,6 +48,7 @@
     <Compile Include="Designator_ExportShipReNew.cs" />
     <Compile Include="Designator_ExportShipRe.cs" />
     <Compile Include="Designator_ExportShipOld.cs" />
+    <Compile Include="Designator_ImportShipRotCclean.cs" />
     <Compile Include="Designator_ImportShipRotC.cs" />
     <Compile Include="Designator_ImportShip.cs" />
     <Compile Include="Designator_NewShipMap.cs" />
