@@ -85,7 +85,7 @@ namespace RimWorld
                     ((Building_ShipRegion)thing).width = shape.height;
                     ((Building_ShipRegion)thing).height = shape.width;
                 }
-                if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
+                else if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
                 {
                     Thing thing;
                     ThingDef def = ThingDef.Named(shape.shapeOrDef);
@@ -101,7 +101,7 @@ namespace RimWorld
                         else if (def.rotatable == false && def.size.z != def.size.x)//skip non rot, non even
                             continue;
                         //pos
-                        if (def.size.z == 2 && def.size.x == 2 && rota.AsByte == 0)
+                        if (def.size.z % 2 == 0 && def.size.x % 2 == 0 && rota.AsByte == 0)
                             adjx += 1;
 
                         if (def.MadeFromStuff)

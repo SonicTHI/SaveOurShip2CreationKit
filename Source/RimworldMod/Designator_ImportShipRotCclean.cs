@@ -85,7 +85,7 @@ namespace RimWorld
                     ((Building_ShipRegion)thing).width = shape.height;
                     ((Building_ShipRegion)thing).height = shape.width;
                 }
-                if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
+                else if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
                 {
                     Thing thing;
                     ThingDef def = ThingDef.Named(shape.shapeOrDef);
