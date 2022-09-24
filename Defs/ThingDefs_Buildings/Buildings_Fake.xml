@@ -42,20 +42,23 @@
 			<li Class="CompProperties_NameMeShip"/>
 		</comps>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
-		<defName>ShipPartShipEnd</defName>
-		<label>ship spawner end</label>
-		<description>Max size of spawned ship</description>
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartFake</defName>
+		<label>ship</label>
+		<description>Fleet ship ghost</description>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
 		<graphicData>
-			<texPath>Things/Building/Ship/Rect_End</texPath>
+			<texPath>Things/Building/BuildingFrame/Tile</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
 			<drawSize>(1,1)</drawSize>
 		</graphicData>
-		<designationCategory></designationCategory>
 		<size>(1,1)</size>
-		<comps>
-			<li Class="CompProperties_NameMeShip"/>
-		</comps>
+		<rotatable>false</rotatable>
 	</ThingDef>
 	<!-- rect -->
 	<ThingDef ParentName="ShipFakeBase">

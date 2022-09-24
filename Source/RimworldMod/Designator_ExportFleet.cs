@@ -55,7 +55,7 @@ namespace RimWorld
                     ship.offsetZ = b.Position.z;
                     ships.Add(ship);
                 }
-                else if (b.def.defName.Equals("ShipPartShipEnd")) { }
+                else if (b.def.defName.Equals("ShipPartFake")) { }
                 else
                 {
                     Messages.Message("ERROR: found things other than fleet spawns, aborting export!", MessageTypeDefOf.RejectInput);

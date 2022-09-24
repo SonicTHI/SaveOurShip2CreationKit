@@ -28,77 +28,114 @@ namespace RimWorld
                 Messages.Message("ERROR: invalid EnemyShipDef!", MessageTypeDefOf.RejectInput);
                 return;
             }
-            comp.enemyShipDef = name;
-
-            if (comp.ShipPartShipEnd != null && !comp.ShipPartShipEnd.Destroyed)
-                comp.ShipPartShipEnd.Destroy(DestroyMode.Vanish);
-            //spawn an end marker
+            //spawn ghost
+            bool failed = false;
             EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.AllDefs.FirstOrDefault(s => s.defName.Equals(name));
-            IntVec3 offset = comp.parent.Position;
-            offset.x += shipDef.sizeX;
-            offset.z += shipDef.sizeZ;
-            Thing thing = ThingMaker.MakeThing(ThingDef.Named("ShipPartShipEnd"));
-            thing.SetFaction(Faction.OfPlayer);
-            comp.ShipPartShipEnd = GenSpawn.Spawn(thing, offset, comp.parent.Map);
-            comp.ShipPartShipEnd.TryGetComp<CompNameMeShip>().enemyShipDef = name;
-            comp.x = shipDef.sizeX;
-            comp.z = shipDef.sizeZ;
+            foreach (ShipShape shape in shipDef.parts)
+            {
+                if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
+                {
+                    if (comp.parent.Position.x + shape.x > 239 || comp.parent.Position.z + shape.z > 239)
+                    {
+                        failed = true;
+                        break;
+                    }
+                    Thing thing;
+                    ThingDef def = ThingDef.Named(shape.shapeOrDef);
+                    if (def.building != null && def.building.shipPart && comp.parent.Map.listerThings.AllThings.Where(t => t.Position.x == shape.x && t.Position.z == shape.z) != ThingDef.Named("ShipPartFake"))
+                    {
+                        if (def.size.x == 1 && def.size.z == 1)
+                        {
+                            thing = ThingMaker.MakeThing(ThingDef.Named("ShipPartFake"));
+                            GenSpawn.Spawn(thing, new IntVec3(comp.parent.Position.x + shape.x, 0, comp.parent.Position.z + shape.z), comp.parent.Map, shape.rot);
+                            comp.parts.Add(thing);
+                            continue;
+                        }
+                        for (int i = 0; i < def.size.x; i++)
+                        {
+                            for (int j = 0; j < def.size.z; j++)
+                            {
+                                int adjx = 0;
+                                int adjz = 0;
+                                if (shape.rot == Rot4.North || shape.rot == Rot4.South)
+                                {
+                                    adjx = i - (def.size.x / 2);
+                                    adjz = j - (def.size.z / 2);
+                                    if (shape.rot == Rot4.North && def.size.z % 2 == 0)
+                                        adjz += 1;
+                                }
+                                else
+                                {
+                                    adjx = j - (def.size.x / 2);
+                                    adjz = i - (def.size.z / 2);
+                                    if (def.size.x != def.size.z)
+                                    {
+                                        adjx -= 1;
+                                        adjz += 1;
+                                    }
+                                    if (shape.rot == Rot4.East && def.size.z % 2 == 0)
+                                        adjx += 1;
+                                }
+                                int x = comp.parent.Position.x + shape.x + adjx;
+                                int z = comp.parent.Position.z + shape.z + adjz;
+                                if (comp.parent.Map.listerThings.AllThings.Where(t => t.Position.x == x && t.Position.z == z) != ThingDef.Named("ShipPartFake"))
+                                {
+                                    thing = ThingMaker.MakeThing(ThingDef.Named("ShipPartFake"));
+                                    GenSpawn.Spawn(thing, new IntVec3(x, 0, z), comp.parent.Map, shape.rot);
+                                    comp.parts.Add(thing);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (failed)
+            {
+                foreach (Thing t in comp.parts)
+                {
+                    if (!t.Destroyed)
+                        t.Destroy();
+                }
+                Messages.Message("ERROR: ship out of bounds!", MessageTypeDefOf.RejectInput);
+            }
+            else
+                comp.enemyShipDef = name;
         }
     }
-    [StaticConstructorOnStartup]
     public class CompNameMeShip : ThingComp
     {
-        private static Graphic shipGraphic = GraphicDatabase.Get(typeof(Graphic_Single), "UI/FleetShipPosition", ShaderDatabase.MoteGlow, new Vector2(1, 1f), Color.white, Color.white);
         public string enemyShipDef;
-        public Thing ShipPartShipEnd;
-        public bool Start = false;
-        public int x = 0;
-        public int z = 0;
+        public List<Thing> parts = new List<Thing>();
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
             foreach (Gizmo gizmo in base.CompGetGizmosExtra())
             {
                 yield return gizmo;
             }
-            if (Start)
+            Command_Action rename = new Command_Action
             {
-                Command_Action rename = new Command_Action
+                action = delegate
                 {
-                    action = delegate
-                    {
-                        Find.WindowStack.Add(new Dialog_NameShip(this));
-                    },
-                    defaultLabel = "Set enemyShipDef",
-                    defaultDesc = "Select which ship to spawn",
-                    icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone")
-                };
-                yield return rename;
-            }
-        }
-        public override void PostDraw()
-        {
-            base.PostDraw();
-            if (Start)
-            {
-                shipGraphic.drawSize = new Vector2(x, z);
-                shipGraphic.Draw(new Vector3(parent.DrawPos.x + x/2, parent.DrawPos.y + 1f, parent.DrawPos.z + z/2), parent.Rotation, parent);
-            }
-        }
-        public override void PostSpawnSetup(bool respawningAfterLoad)
-        {
-            base.PostSpawnSetup(respawningAfterLoad);
-            if (this.parent.def.defName.Equals("ShipPartShip"))
-                Start = true;
+                    Find.WindowStack.Add(new Dialog_NameShip(this));
+                },
+                defaultLabel = "Set enemyShipDef",
+                defaultDesc = "Select which ship to spawn",
+                icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone")
+            };
+            yield return rename;
         }
         public override void PostDeSpawn(Map map)
         {
-            if (ShipPartShipEnd != null && !ShipPartShipEnd.Destroyed)
-                ShipPartShipEnd.Destroy(DestroyMode.Vanish);
+            foreach (Thing t in parts)
+            {
+                if (!t.Destroyed)
+                    t.Destroy();
+            }
             base.PostDeSpawn(map);
         }
         public override string CompInspectStringExtra()
         {
-            return base.CompInspectStringExtra()+"Shipdef: "+ enemyShipDef+".";
+            return base.CompInspectStringExtra()+"Shipdef: "+ enemyShipDef + "\nPos: " + this.parent.Position;
         }
         public override void PostExposeData()
         {
