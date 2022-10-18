@@ -68,7 +68,7 @@ namespace RimWorld
                                 {
                                     adjx = j - (def.size.x / 2);
                                     adjz = i - (def.size.z / 2);
-                                    if (def.size.x != def.size.z)
+                                    if (def.size.x != def.size.z && def.size.z != 4)
                                     {
                                         adjx -= 1;
                                         adjz += 1;
