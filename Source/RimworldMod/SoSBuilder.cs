@@ -75,6 +75,7 @@ namespace RimworldMod
         public static void SaveThatShip(ReverseDesignatorDatabase __instance)
         {
             List<Designator> desList = (List<Designator>)typeof(ReverseDesignatorDatabase).GetField("desList", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(__instance);
+            desList.Add(new Designator_ExportShip());
             desList.Add(new Designator_NewShipMap());
             desList.Add(new Designator_ImportShip());
             desList.Add(new Designator_ImportShipRotC());
