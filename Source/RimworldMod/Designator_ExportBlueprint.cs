@@ -170,9 +170,5 @@ namespace RimWorld
             });
             Messages.Message("Saved bluprint in temp file: blueprintTemp.xml", MessageTypeDefOf.PositiveEvent);
         }
-
-        public void RecalcStats(Building_ShipBridge b)
-        {
-        }
     }
 }

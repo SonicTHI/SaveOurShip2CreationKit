@@ -68,26 +68,6 @@ namespace RimworldMod
         }
     }
 
-    [HarmonyPatch(typeof(ReverseDesignatorDatabase), "InitDesignators")]
-    public class AddSaveDesignator
-    {
-        [HarmonyPostfix]
-        public static void SaveThatShip(ReverseDesignatorDatabase __instance)
-        {
-            List<Designator> desList = (List<Designator>)typeof(ReverseDesignatorDatabase).GetField("desList", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(__instance);
-            desList.Add(new Designator_ExportShip());
-            desList.Add(new Designator_NewShipMap());
-            desList.Add(new Designator_ImportShip());
-            desList.Add(new Designator_ImportShipRotC());
-            desList.Add(new Designator_ImportShipRotCclean());
-            desList.Add(new Designator_ExportShipNew());
-            desList.Add(new Designator_ExportShipReNew());
-            desList.Add(new Designator_ExportShipOld());
-            desList.Add(new Designator_ExportBlueprint());
-            desList.Add(new Designator_ExportFleet());
-        }
-    }
-
     [HarmonyPatch(typeof(LetterStack), "LettersOnGUI")]
     public static class ShipCKWarning
     {

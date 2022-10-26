@@ -1,21 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Defs>
-
-  <DesignationCategoryDef>
-    <defName>ShipDesign</defName>
-    <label>ship design</label>
-    <order>51</order>
-    <specialDesignatorClasses>
-      <li>Designator_NewShipMap</li>
-      <li>Designator_ImportShip</li>
-      <li>Designator_ImportShipRotC</li>
-      <li>Designator_ImportShipRotCclean</li>
-      <li>Designator_ExportShipNew</li>
-      <li>Designator_ExportShipReNew</li>
-      <li>Designator_ExportShipOld</li>
-      <li>Designator_ExportBlueprint</li>
-      <li>Designator_ExportFleet</li>
-    </specialDesignatorClasses>
-  </DesignationCategoryDef>
-  
+	<DesignationCategoryDef>
+		<defName>ShipDesign</defName>
+		<label>ship design</label>
+		<order>51</order>
+		<specialDesignatorClasses>
+			<li>Designator_NewShipMap</li>
+			<li>Designator_ImportShip</li>
+			<li>Designator_ImportShipRotC</li>
+			<li>Designator_ImportShipRotCclean</li>
+			<li>Designator_ExportShipNew</li>
+			<li>Designator_ExportShipReNew</li>
+			<li>Designator_ExportShipOld</li>
+			<li>Designator_ExportBlueprint</li>
+			<li>Designator_ExportFleet</li>
+		</specialDesignatorClasses>
+	</DesignationCategoryDef>
 </Defs>

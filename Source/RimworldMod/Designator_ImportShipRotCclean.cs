@@ -15,8 +15,6 @@ namespace RimWorld
 
     class Designator_ImportShipRotCclean : Designator
     {
-        public static List<EnemyShipDef> shipDefsAll = new List<EnemyShipDef>();
-
         public override AcceptanceReport CanDesignateCell(IntVec3 loc)
         {
             return true;
