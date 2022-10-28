@@ -72,7 +72,7 @@ namespace RimWorld
             Dictionary<string, int> weaponList = new Dictionary<string, int>();
             foreach (Building b in cachedShipParts)
             {
-                if (b.def == ShipInteriorMod2.hullPlateDef || b.def == ShipInteriorMod2.archoHullPlateDef || b.def == ShipInteriorMod2.mechHullPlateDef)
+                if (b.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false)
                     mass += 1;
                 else
                 {

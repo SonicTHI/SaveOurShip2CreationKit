@@ -109,17 +109,20 @@ namespace RimWorld
                             thing.TryGetComp<CompPowerBattery>().AddEnergy(thing.TryGetComp<CompPowerBattery>().AmountCanAccept);
                         if (thing.TryGetComp<CompRefuelable>() != null)
                             thing.TryGetComp<CompRefuelable>().Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
-                        var compShield = thing.TryGetComp<CompShipCombatShield>();
-                        if (compShield != null)
+                        var shieldComp = thing.TryGetComp<CompShipCombatShield>();
+                        if (shieldComp != null)
                         {
-                            compShield.radiusSet = 40;
-                            compShield.radius = 40;
-                            compShield.radiusSet = shape.radius;
-                            compShield.radius = shape.radius;
+                            shieldComp.radiusSet = 40;
+                            shieldComp.radius = 40;
+                            if (shape.radius != 0)
+                            {
+                                shieldComp.radiusSet = shape.radius;
+                                shieldComp.radius = shape.radius;
+                            }
                         }
                         if (thing.def.stackLimit > 1)
                             thing.stackCount = (int)Math.Min(25, thing.def.stackLimit);
-                        if ((thing.def == ShipInteriorMod2.hullPlateDef || thing.def == ShipInteriorMod2.mechHullPlateDef || thing.def == ShipInteriorMod2.archoHullPlateDef) && new IntVec3(c.x + shape.x, 0, c.z + shape.z).GetThingList(ImportedShip).Any(t => t.def == ShipInteriorMod2.hullPlateDef || t.def == ShipInteriorMod2.mechHullPlateDef || t.def == ShipInteriorMod2.archoHullPlateDef)) { } //clean multiple hull spawns
+                        if ((thing.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false) && new IntVec3(c.x + shape.x, 0, c.z + shape.z).GetThingList(ImportedShip).Any(t => t.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false)) { } //clean multiple hull spawns
                         else
                             GenSpawn.Spawn(thing, new IntVec3(c.x + shape.x, 0, c.z + shape.z), ImportedShip, shape.rot);
                     }

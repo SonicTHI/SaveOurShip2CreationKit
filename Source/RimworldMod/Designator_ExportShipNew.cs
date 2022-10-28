@@ -55,7 +55,7 @@ namespace RimWorld
                     maxX = b.Position.x;
                 if (b.Position.z > maxZ)
                     maxZ = b.Position.z;
-                if (b.def == ShipInteriorMod2.hullPlateDef || b.def == ShipInteriorMod2.mechHullPlateDef || b.def == ShipInteriorMod2.archoHullPlateDef)
+                if (b.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false)
                     ShipMass += 1;
                 else
                 {

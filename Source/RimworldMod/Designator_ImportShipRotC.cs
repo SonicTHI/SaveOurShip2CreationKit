@@ -130,7 +130,7 @@ namespace RimWorld
                         }
                         if (thing.def.stackLimit > 1)
                             thing.stackCount = (int)Math.Min(25, thing.def.stackLimit);
-                        if ((thing.def == ShipInteriorMod2.hullPlateDef || thing.def == ShipInteriorMod2.mechHullPlateDef || thing.def == ShipInteriorMod2.archoHullPlateDef) && new IntVec3(c.x - adjx, 0, c.z + adjz).GetThingList(ImportedShip).Any(t => t.def == ShipInteriorMod2.hullPlateDef || t.def == ShipInteriorMod2.mechHullPlateDef || t.def == ShipInteriorMod2.archoHullPlateDef)) { } //clean multiple hull spawns
+                        if ((thing.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false) && new IntVec3(c.x - adjx, 0, c.z + adjz).GetThingList(ImportedShip).Any(t => t.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false)) { } //clean multiple hull spawns
                         else
                             GenSpawn.Spawn(thing, new IntVec3(c.x - adjx, 0, c.z + adjz), ImportedShip, rota);
                     }
