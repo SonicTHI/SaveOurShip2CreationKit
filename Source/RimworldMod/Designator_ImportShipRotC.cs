@@ -143,10 +143,13 @@ namespace RimWorld
                     ImportedShip.terrainGrid.SetTerrain(new IntVec3(ImportedShip.Size.x - pos.z, 0, pos.x), DefDatabase<TerrainDef>.GetNamed(shape.shapeOrDef));
                 }
             }
-            Building core = (Building)ThingMaker.MakeThing(ThingDef.Named(shipDef.core.shapeOrDef)); 
-            core.SetFaction(Faction.OfPlayer);
-            Rot4 corerot= shipDef.core.rot.Rotated(RotationDirection.Counterclockwise);
-            GenSpawn.Spawn(core, new IntVec3(c.x - shipDef.core.z, 0, c.z + shipDef.core.x), ImportedShip, corerot);
+            if (!shipDef.core.shapeOrDef.NullOrEmpty())
+            {
+                Building core = (Building)ThingMaker.MakeThing(ThingDef.Named(shipDef.core.shapeOrDef));
+                core.SetFaction(Faction.OfPlayer);
+                Rot4 corerot = shipDef.core.rot.Rotated(RotationDirection.Counterclockwise);
+                GenSpawn.Spawn(core, new IntVec3(c.x - shipDef.core.z, 0, c.z + shipDef.core.x), ImportedShip, corerot);
+            }
             foreach (Building b in ImportedShip.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial))
             {
                 CompPowerTrader trader = b.TryGetComp<CompPowerTrader>();

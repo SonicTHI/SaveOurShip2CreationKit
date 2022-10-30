@@ -333,10 +333,11 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
+	<!-- mechs -->
 	<ThingDef ParentName="ShipFakeBaseEdifice">
-		<defName>Mech_Centipede_SPAWNER</defName>
+		<defName>Mech_CentipedeGunner_SPAWNER</defName>
 		<label>centipede</label>
-		<description>A centipede goes here</description>
+		<description>A centipede gunner goes here</description>
 		<graphicData>
 			<texPath>Things/Building/Ship/Centipede</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
@@ -355,7 +356,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
-	<ThingDef ParentName="ShipFakeBase">
+	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>Mech_Scyther_SPAWNER</defName>
 		<label>scyther</label>
 		<description>A scyther goes here</description>
@@ -388,6 +389,7 @@
 		</graphicData>
 		<size>(1,1)</size>
 	</ThingDef>
+	<!-- bugs -->
 	<ThingDef ParentName="ShipFakeBaseEdifice">
 		<defName>Astromite_SPAWNER</defName>
 		<label>astromite</label>
