@@ -21,7 +21,7 @@ namespace RimWorld
         public Designator_ExportBlueprint()
         {
             defaultLabel = "Export Blueprint";
-            defaultDesc = "EXport target ship as a blueprint. Ship must already be present in an active mod!";
+            defaultDesc = "Export target ship as a blueprint. Ship must already be present in an active mod!";
             icon = ContentFinder<Texture2D>.Get("UI/Save_XML");
             soundDragSustain = SoundDefOf.Designate_DragStandard;
             soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
@@ -49,7 +49,7 @@ namespace RimWorld
                 {
                     shipDef = DefDatabase<EnemyShipDef>.AllDefs.Where(s => s.defName.Equals(b.ShipName)).FirstOrDefault();
                     bridge = b;
-                    defName = "ShipBlueprint" + shipDef.defName;
+                    defName = "Ship" + shipDef.defName;
                     shipDefName = shipDef.defName;
                 }
                 else
@@ -60,7 +60,7 @@ namespace RimWorld
             }
             if (bridge == null)
             {
-                Messages.Message("No bridge found", MessageTypeDefOf.RejectInput);
+                Messages.Message("Click on ship bridge", MessageTypeDefOf.RejectInput);
                 return;
             }
             int threat = 0;
@@ -109,6 +109,8 @@ namespace RimWorld
                     else
                         costList[mat.thingDef] += mat.count;
                 }
+                if (b.def.researchPrerequisites.NullOrEmpty())
+                    continue;
                 foreach (ResearchProjectDef res in b.def.researchPrerequisites)
                 {
                     if (!researchList.Contains(res))
@@ -117,11 +119,15 @@ namespace RimWorld
             }
             thrust *= 500f / Mathf.Pow(cachedShipParts.Count, 1.1f);
             threat += mass / 100;
-            description = "Class: " + shipDef.label + "\\n";
+            description = "Class: " + shipDef.label + "\\n[DESCRIPTION HERE]\\n\\n";
             description += "Mass: " + mass + "\\n";
             description += "T/W ratio: " + thrust.ToString("F3") + "\\n";
             description += "Combat rating: " + threat + "\\n";
             description += "\\nWeapons: " + "\\n";
+            if (weaponList.NullOrEmpty())
+            {
+                description += "none";
+            }
             foreach (string s in weaponList.Keys)
             {
                 description += weaponList[s] + "x " + s + "\\n";
@@ -148,7 +154,7 @@ namespace RimWorld
             {
                 Scribe.EnterNode("ThingDef");
                     Scribe_Values.Look<string>(ref defName, "defName");
-                    label = "[INSERT IN-GAME NAME HERE]";
+                    label = "ship blueprint ([NAME HERE])";
                     Scribe_Values.Look<string>(ref label, "label");
                     Scribe_Values.Look<string>(ref description, "description");
                     Scribe.EnterNode("statBases");

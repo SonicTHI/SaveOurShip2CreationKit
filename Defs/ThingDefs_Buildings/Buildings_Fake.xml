@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Defs>
 	<!-- mech -->
-	<DesignatorDropdownGroupDef>
+	<!--DesignatorDropdownGroupDef>
 		<defName>Ship_Beams_Mech</defName>
-	</DesignatorDropdownGroupDef>
+	</DesignatorDropdownGroupDef-->
 	<ThingDef ParentName="BuildingBase" Name="ShipFakeBase" Abstract="True">
 		<altitudeLayer>FloorEmplacement</altitudeLayer>
 		<statBases>
