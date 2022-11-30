@@ -14,7 +14,10 @@ namespace RimWorld
     {
         public override AcceptanceReport CanDesignateCell(IntVec3 loc)
         {
-            return true;
+            if (Find.CurrentMap.IsSpace())
+                return true;
+            Messages.Message("Ship editor works only on space maps!", MessageTypeDefOf.RejectInput);
+            return false;
         }
 
         public Designator_NewShipMap()

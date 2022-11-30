@@ -17,12 +17,15 @@ namespace RimWorld
     {
         public override AcceptanceReport CanDesignateCell(IntVec3 loc)
         {
-            return true;
+            if (Find.CurrentMap.IsSpace())
+                return true;
+            Messages.Message("Ship editor works only on space maps!", MessageTypeDefOf.RejectInput);
+            return false;
         }
         public Designator_ImportShipRotCclean()
         {
             defaultLabel = "Import Ship Rotated 90° CCW, cleaned";
-            defaultDesc = "Click anywhere on the map to activate.\nWARNING: Non rotatable, non even sided buildings  will be discarded!";
+            defaultDesc = "Click anywhere on the map to activate.\nWill discard anything but walls and engines.";
             icon = ContentFinder<Texture2D>.Get("UI/Load_XML");
             soundDragSustain = SoundDefOf.Designate_DragStandard;
             soundDragChanged = SoundDefOf.Designate_DragStandard_Changed;
