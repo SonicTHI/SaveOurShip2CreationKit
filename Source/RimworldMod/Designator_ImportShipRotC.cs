@@ -65,7 +65,7 @@ namespace RimWorld
             ((WorldObjectOrbitingShip)ImportedShip.Parent).theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).theta - Rand.RangeInclusive(1,10)* 0.01f;
             IntVec3 c = ImportedShip.Center;
             if (shipDef.saveSysVer == 2)
-                c = new IntVec3(shipDef.offsetX, 0, shipDef.offsetZ);
+                c = new IntVec3(ImportedShip.Size.x - shipDef.offsetZ, 0, shipDef.offsetX);
             SoSBuilder.shipDictionary.Add(ImportedShip, shipDef.defName);
 
             foreach (ShipShape shape in shipDef.parts)
@@ -123,13 +123,16 @@ namespace RimWorld
                             thing.TryGetComp<CompPowerBattery>().AddEnergy(thing.TryGetComp<CompPowerBattery>().AmountCanAccept);
                         if (thing.TryGetComp<CompRefuelable>() != null)
                             thing.TryGetComp<CompRefuelable>().Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
-                        var compShield = thing.TryGetComp<CompShipCombatShield>();
-                        if (compShield != null)
+                        var shieldComp = thing.TryGetComp<CompShipCombatShield>();
+                        if (shieldComp != null)
                         {
-                            compShield.radiusSet = 40;
-                            compShield.radius = 40;
-                            compShield.radiusSet = shape.radius;
-                            compShield.radius = shape.radius;
+                            shieldComp.radiusSet = 40;
+                            shieldComp.radius = 40;
+                            if (shape.radius != 0)
+                            {
+                                shieldComp.radiusSet = shape.radius;
+                                shieldComp.radius = shape.radius;
+                            }
                         }
                         if (thing.def.stackLimit > 1)
                             thing.stackCount = (int)Math.Min(25, thing.def.stackLimit);
@@ -140,10 +143,10 @@ namespace RimWorld
                 }
                 else if (DefDatabase<TerrainDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
                 {
-                    IntVec3 pos = new IntVec3(shape.x, 0, shape.z);
+                    IntVec3 pos = new IntVec3(ImportedShip.Size.x - shape.z, 0, shape.x);
                     if (shipDef.saveSysVer == 2)
-                        pos = new IntVec3(c.x + shape.x, 0, c.z + shape.z);
-                    ImportedShip.terrainGrid.SetTerrain(new IntVec3(ImportedShip.Size.x - pos.z, 0, pos.x), DefDatabase<TerrainDef>.GetNamed(shape.shapeOrDef));
+                        pos = new IntVec3(c.x - shape.z, 0, c.z + shape.x);
+                    ImportedShip.terrainGrid.SetTerrain(pos, DefDatabase<TerrainDef>.GetNamed(shape.shapeOrDef));
                 }
             }
             if (!shipDef.core.shapeOrDef.NullOrEmpty())
