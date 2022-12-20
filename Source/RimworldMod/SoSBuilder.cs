@@ -67,6 +67,18 @@ namespace RimworldMod
             return false;
         }
     }
+    public struct ShipPosRotShape
+    {
+        public int x;
+        public int z;
+        public Rot4 rot;
+        public string shape;
+
+        public override int GetHashCode()
+        {
+            return (x + "," + z + "," + rot).GetHashCode();
+        }
+    }
 
     [HarmonyPatch(typeof(LetterStack), "LettersOnGUI")]
     public static class ShipCKWarning

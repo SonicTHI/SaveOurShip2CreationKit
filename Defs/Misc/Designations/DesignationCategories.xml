@@ -9,11 +9,10 @@
 			<li>Designator_ImportShip</li>
 			<li>Designator_ImportShipRotC</li>
 			<li>Designator_ImportShipRotCclean</li>
-			<li>Designator_ExportShipNew</li>
-			<li>Designator_ExportShipReNew</li>
-			<li>Designator_ExportShipOld</li>
-			<li>Designator_ExportBlueprint</li>
+			<li>Designator_ExportShip</li>
+			<li>Designator_ExportShipRe</li>
 			<li>Designator_ExportFleet</li>
+			<li>Designator_ExportBlueprint</li>
 		</specialDesignatorClasses>
 	</DesignationCategoryDef>
 </Defs>

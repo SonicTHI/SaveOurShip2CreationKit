@@ -11,14 +11,14 @@ using SaveOurShip2;
 
 namespace RimWorld
 {
-    class Designator_ExportShipOld : Designator
+    class Designator_ExportShipLegacy : Designator
     {
         public override AcceptanceReport CanDesignateCell(IntVec3 loc)
         {
             return true;
         }
 
-        public Designator_ExportShipOld()
+        public Designator_ExportShipLegacy()
         {
             defaultLabel = "Export Ship (legacy version)";
             defaultDesc = "Save this ship to an XML file only if you plan to edit it manually. Click anywhere on the map to activate.";
