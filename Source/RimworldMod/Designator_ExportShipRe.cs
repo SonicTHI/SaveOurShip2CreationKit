@@ -51,6 +51,7 @@ namespace RimWorld
             int minZ = this.Map.Size.z;
             int maxX = 0;
             int maxZ = 0;
+            bool neverFleet = false;
             foreach (Thing b in Find.CurrentMap.spawnedThings.Where(b => b is Building))
             {
                 if (b.Position.x < minX)
@@ -82,9 +83,15 @@ namespace RimWorld
                     }
                     else if (b.def == ThingDef.Named("ShipPartTurretSpinal"))
                         combatPoints += 100;
+                    else if (b.TryGetComp<CompEngineTrail>() != null && b.Rotation != Rot4.West)
+                        neverFleet = true;
                 }
                 if (b is Building_ShipBridge bridge)
                     shipCore = bridge;
+            }
+            if (neverFleet)
+            {
+                Messages.Message("Warning: ship not facing west! Can not be used in random fleets!", MessageTypeDefOf.RejectInput);
             }
             if (shipCore == null)
             {
@@ -238,6 +245,7 @@ namespace RimWorld
 						Scribe_Values.Look<bool>(ref shipDef.neverRandom, "neverRandom");
 						Scribe_Values.Look<bool>(ref shipDef.neverAttacks, "neverAttacks");
                         Scribe_Values.Look<bool>(ref shipDef.neverWreck, "neverWreck");
+                        Scribe_Values.Look<bool>(ref neverFleet, "neverFleet");
                         Scribe_Values.Look<bool>(ref shipDef.startingShip, "startingShip");
 						Scribe_Values.Look<bool>(ref shipDef.startingDungeon, "startingDungeon");
                         Scribe_Values.Look<bool>(ref shipDef.spaceSite, "spaceSite");

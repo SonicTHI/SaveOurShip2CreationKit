@@ -45,6 +45,7 @@ namespace RimWorld
             int minZ = this.Map.Size.z;
             int maxX = 0;
             int maxZ = 0;
+            bool neverFleet = false;
             foreach (Thing b in Find.CurrentMap.spawnedThings.Where(b => b is Building))
             {
                 if (b.Position.x < minX)
@@ -64,7 +65,7 @@ namespace RimWorld
                         combatPoints += b.TryGetComp<CompShipHeat>().Props.threat;
                     else if (b.def == ThingDef.Named("ShipSpinalAmplifier"))
                         combatPoints += 5;
-                    else if (b.def == ThingDef.Named("ShipPartTurretSmall")) 
+                    else if (b.def == ThingDef.Named("ShipPartTurretSmall"))
                     {
                         combatPoints += 10;
                         randomTurretPoints += 10;
@@ -76,9 +77,15 @@ namespace RimWorld
                     }
                     else if (b.def == ThingDef.Named("ShipPartTurretSpinal"))
                         combatPoints += 100;
+                    else if (b.TryGetComp<CompEngineTrail>() != null && b.Rotation != Rot4.West)
+                        neverFleet = true;
                 }
                 if (b is Building_ShipBridge bridge)
                     shipCore = bridge;
+            }
+            if (neverFleet)
+            {
+                Messages.Message("Warning: ship not facing west! Can not be used in random fleets!", MessageTypeDefOf.RejectInput);
             }
             if (shipCore == null)
             {
@@ -232,6 +239,7 @@ namespace RimWorld
                         Scribe_Values.Look<bool>(ref temp, "neverRandom", forceSave: true);
                         Scribe_Values.Look<bool>(ref temp, "neverAttacks", forceSave: true);
                         Scribe_Values.Look<bool>(ref temp, "neverWreck", forceSave: true);
+                        Scribe_Values.Look<bool>(ref neverFleet, "neverFleet", forceSave: true);
                         Scribe_Values.Look<bool>(ref temp, "startingShip", forceSave: true);
                         Scribe_Values.Look<bool>(ref temp, "startingDungeon", forceSave: true);
                         Scribe_Values.Look<bool>(ref temp, "spaceSite", forceSave: true);
