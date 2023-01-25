@@ -117,7 +117,7 @@ namespace RimWorld
 
                         if (thing.TryGetComp<CompColorable>() != null && shape.color != Color.clear)
                             thing.SetColor(shape.color);
-                        if (thing.def.CanHaveFaction && thing.def != ShipInteriorMod2.hullPlateDef)
+                        if (thing.def.CanHaveFaction && thing.def != ResourceBank.ThingDefOf.ShipHullTile)
                             thing.SetFaction(Faction.OfPlayer);
                         if (thing.TryGetComp<CompPowerBattery>() != null)
                             thing.TryGetComp<CompPowerBattery>().AddEnergy(thing.TryGetComp<CompPowerBattery>().AmountCanAccept);
@@ -169,7 +169,7 @@ namespace RimWorld
             ImportedShip.mapDrawer.RegenerateEverythingNow();
             ImportedShip.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
             ImportedShip.temperatureCache.ResetTemperatureCache();
-            if (ImportedShip.Biome == ShipInteriorMod2.OuterSpaceBiome)
+            if (ImportedShip.Biome == ResourceBank.BiomeDefOf.OuterSpaceBiome)
             {
                 foreach (Room room in ImportedShip.regionGrid.allRooms)
                     room.Temperature = 21f;

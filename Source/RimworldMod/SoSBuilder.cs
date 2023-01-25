@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using HugsLib;
 using RimWorld;
 using Verse;
-using HarmonyLib;
 using UnityEngine;
+using HarmonyLib;
 
 namespace RimworldMod
 {
-    public class SoSBuilder : ModBase
+    public class SoSBuilder : Mod
     {
         public static Building_ShipCircle lastCirclePlaced;
         public static Building_ShipRect lastRectPlaced;
@@ -17,16 +16,10 @@ namespace RimworldMod
 
         public static Dictionary<Map, string> shipDictionary = new Dictionary<Map, string>();
 
-        public override string ModIdentifier
+        public SoSBuilder(ModContentPack content) : base(content)
         {
-            get
-            {
-                return "SoSBuilder";
-            }
-        }
-
-        public SoSBuilder()
-        {
+            var harmony = new Harmony("SoSBuilder");
+            harmony.PatchAll();
         }
 
         public static void GenerateHull(List<IntVec3> border, List<IntVec3> interior, Map map, ThingDef hull, ThingDef floor)

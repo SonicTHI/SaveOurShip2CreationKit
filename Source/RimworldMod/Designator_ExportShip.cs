@@ -183,7 +183,7 @@ namespace RimWorld
             foreach (IntVec3 cell in Find.CurrentMap.AllCells)
             {
                 TerrainDef def = Find.CurrentMap.terrainGrid.TerrainAt(cell);
-                if (def.defName != "EmptySpace" && def != ShipInteriorMod2.hullFloorDef && def != ShipInteriorMod2.mechHullFloorDef && def != ShipInteriorMod2.archoHullFloorDef)
+                if (def.defName != "EmptySpace" && def != ResourceBank.TerrainDefOf.FakeFloorInsideShip && def != ResourceBank.TerrainDefOf.FakeFloorInsideShipMech && def != ResourceBank.TerrainDefOf.FakeFloorInsideShipArchotech)
                 {
                     ShipShape shape = new ShipShape();
                     shape.shapeOrDef = def.defName;

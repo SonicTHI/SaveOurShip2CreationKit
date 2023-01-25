@@ -119,7 +119,7 @@ namespace RimWorld
 
                         if (thing.TryGetComp<CompColorable>() != null && shape.color != Color.clear)
                             thing.SetColor(shape.color);
-                        if (thing.def.CanHaveFaction && thing.def != ShipInteriorMod2.hullPlateDef)
+                        if (thing.def.CanHaveFaction && thing.def != ResourceBank.ThingDefOf.ShipHullTile)
                             thing.SetFaction(Faction.OfPlayer);
                         GenSpawn.Spawn(thing, new IntVec3(c.x - adjx, 0, c.z + adjz), ImportedShip, rota);
                     }
