@@ -4,16 +4,16 @@
 		<success>Normal</success>
 		<operations>
 			<li Class="PatchOperationAdd">
-				<xpath>/Defs/ThingDef[defName = "Ship_Beam_Wrecked" or defName = "ShipAirlockWrecked" or defName = "ShipHullTileWrecked"]</xpath>
+				<xpath>Defs/ThingDef[defName = "Ship_Beam_Wrecked" or defName = "ShipAirlockWrecked" or defName = "ShipHullTileWrecked"]</xpath>
 				<value><designationCategory>ShipDesign</designationCategory></value>
 			</li>
 			<!-- add other things here to be buildable with the editor -->
 			<li Class="PatchOperationAdd">
-				<xpath>/Defs/ThingDef[defName = "MegascreenTelevision"]</xpath>
+				<xpath>Defs/ThingDef[defName = "MegascreenTelevision"]</xpath>
 				<value><designationCategory>Joy</designationCategory></value>
 			</li>
 			<li Class="PatchOperationAdd">
-				<xpath>/Defs/ThingDef[defName = "PawnSpawnerStart"]</xpath>
+				<xpath>Defs/ThingDef[defName = "PawnSpawnerStart"]</xpath>
 				<value><designationCategory>ShipDesign</designationCategory></value>
 			</li>
 		</operations>
@@ -23,11 +23,11 @@
 		<success>Always</success>
 		<operations>
 			<li Class="PatchOperationTest">
-				<xpath>/Defs/ThingDef[@Name="ShipCornerMech"]/designationCategory</xpath>
+				<xpath>Defs/ThingDef[@Name="ShipCornerMech"]/designationCategory</xpath>
 				<success>Invert</success>
 			</li>
 			<li Class="PatchOperationAdd">
-				<xpath>/Defs/ThingDef[@Name="ShipCornerMech" or defName = "Ship_BeamMech_Unpowered" or defName = "Ship_BeamMech" or  defName="ShipAirlockMech" or defName="ShipHullTileMech" or defName="ShipInside_SolarGeneratorMech" or defName="ShipInside_PassiveVentMechanoid"]</xpath>
+				<xpath>Defs/ThingDef[@Name="ShipCornerMech" or defName = "Ship_BeamMech_Unpowered" or defName = "Ship_BeamMech" or  defName="ShipAirlockMech" or defName="ShipHullTileMech" or defName="ShipInside_SolarGeneratorMech" or defName="ShipInside_PassiveVentMechanoid"]</xpath>
 				<value><designationCategory>Ship</designationCategory></value>
 			</li>
 		</operations>
