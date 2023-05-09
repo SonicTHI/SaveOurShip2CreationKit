@@ -58,15 +58,18 @@ namespace RimWorld
 
         public static void GenerateShip(EnemyShipDef shipDef)
         {
-            Map ImportedShip = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
-            ImportedShip.GetComponent<ShipHeatMapComp>().IsGraveyard = true;
-            ImportedShip.GetComponent<ShipHeatMapComp>().ShipCombatOriginMap = ((MapParent)Find.WorldObjects.AllWorldObjects.Where(ob => ob.def.defName.Equals("ShipOrbiting")).FirstOrDefault()).Map;
-            ((WorldObjectOrbitingShip)ImportedShip.Parent).radius = 150;
-            ((WorldObjectOrbitingShip)ImportedShip.Parent).theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).theta - Rand.RangeInclusive(1,10)* 0.01f;
-            IntVec3 c = ImportedShip.Center;
+            Map map = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
+            map.GetComponent<ShipHeatMapComp>().IsGraveyard = true;
+            map.GetComponent<ShipHeatMapComp>().ShipCombatOriginMap = ((MapParent)Find.WorldObjects.AllWorldObjects.Where(ob => ob.def.defName.Equals("ShipOrbiting")).FirstOrDefault()).Map;
+            ((WorldObjectOrbitingShip)map.Parent).radius = 150;
+            ((WorldObjectOrbitingShip)map.Parent).theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).theta - Rand.RangeInclusive(1,10)* 0.01f;
+            IntVec3 c = map.Center;
             if (shipDef.saveSysVer == 2)
-                c = new IntVec3(ImportedShip.Size.x - shipDef.offsetZ, 0, shipDef.offsetX);
-            SoSBuilder.shipDictionary.Add(ImportedShip, shipDef.defName);
+                c = new IntVec3(map.Size.x - shipDef.offsetZ, 0, shipDef.offsetX);
+            SoSBuilder.shipDictionary.Add(map, shipDef.defName);
+
+            Dictionary<IntVec3, Color> spawnLights = new Dictionary<IntVec3, Color>();
+            Dictionary<IntVec3, Color> spawnSunLights = new Dictionary<IntVec3, Color>();
 
             foreach (ShipShape shape in shipDef.parts)
             {
@@ -74,7 +77,7 @@ namespace RimWorld
                 {
                     ThingDef def = ThingDef.Named("PawnSpawnerGeneric");
                     Thing thing = ThingMaker.MakeThing(def);
-                    GenSpawn.Spawn(thing, new IntVec3(c.x - shape.z, 0, c.z + shape.z), ImportedShip);
+                    GenSpawn.Spawn(thing, new IntVec3(c.x - shape.z, 0, c.z + shape.z), map);
                     thing.TryGetComp<CompNameMe>().pawnKindDef = shape.stuff;
                 }
                 else if (shape.shapeOrDef.Equals("Cargo"))
@@ -82,15 +85,23 @@ namespace RimWorld
                     SoSBuilder.lastRegionPlaced = null;
                     ThingDef def = ThingDef.Named("ShipPartRegion");
                     Thing thing = ThingMaker.MakeThing(def);
-                    GenSpawn.Spawn(thing, new IntVec3(c.x - shape.z - shape.height + 1, 0, c.z + shape.x), ImportedShip);
+                    GenSpawn.Spawn(thing, new IntVec3(c.x - shape.z - shape.height + 1, 0, c.z + shape.x), map);
                     ((Building_ShipRegion)thing).width = shape.height;
                     ((Building_ShipRegion)thing).height = shape.width;
+                }
+                else if (shape.shapeOrDef == "SoSLightEnabler")
+                {
+                    spawnLights.Add(new IntVec3(c.x - shape.z, 0, c.z + shape.z), shape.color != Color.clear ? shape.color : Color.white);
+                }
+                else if (shape.shapeOrDef == "SoSSunLightEnabler")
+                {
+                    spawnSunLights.Add(new IntVec3(c.x - shape.z, 0, c.z + shape.z), shape.color != Color.clear ? shape.color : Color.white);
                 }
                 else if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
                 {
                     Thing thing;
                     ThingDef def = ThingDef.Named(shape.shapeOrDef);
-                    if (ImportedShip.listerThings.AllThings.Where(t => t.Position.x == shape.x && t.Position.z == shape.z) != def)
+                    if (map.listerThings.AllThings.Where(t => t.Position.x == shape.x && t.Position.z == shape.z) != def)
                     {
                         if (SoSBuilder.ImportToIgnore(def))
                             continue;
@@ -136,17 +147,17 @@ namespace RimWorld
                         }
                         if (thing.def.stackLimit > 1)
                             thing.stackCount = (int)Math.Min(25, thing.def.stackLimit);
-                        if ((thing.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false) && new IntVec3(c.x - adjx, 0, c.z + adjz).GetThingList(ImportedShip).Any(t => t.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false)) { } //clean multiple hull spawns
+                        if ((thing.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false) && new IntVec3(c.x - adjx, 0, c.z + adjz).GetThingList(map).Any(t => t.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false)) { } //clean multiple hull spawns
                         else
-                            GenSpawn.Spawn(thing, new IntVec3(c.x - adjx, 0, c.z + adjz), ImportedShip, rota);
+                            GenSpawn.Spawn(thing, new IntVec3(c.x - adjx, 0, c.z + adjz), map, rota);
                     }
                 }
                 else if (DefDatabase<TerrainDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
                 {
-                    IntVec3 pos = new IntVec3(ImportedShip.Size.x - shape.z, 0, shape.x);
+                    IntVec3 pos = new IntVec3(map.Size.x - shape.z, 0, shape.x);
                     if (shipDef.saveSysVer == 2)
                         pos = new IntVec3(c.x - shape.z, 0, c.z + shape.x);
-                    ImportedShip.terrainGrid.SetTerrain(pos, DefDatabase<TerrainDef>.GetNamed(shape.shapeOrDef));
+                    map.terrainGrid.SetTerrain(pos, DefDatabase<TerrainDef>.GetNamed(shape.shapeOrDef));
                 }
             }
             if (!shipDef.core.shapeOrDef.NullOrEmpty())
@@ -154,9 +165,9 @@ namespace RimWorld
                 Building core = (Building)ThingMaker.MakeThing(ThingDef.Named(shipDef.core.shapeOrDef));
                 core.SetFaction(Faction.OfPlayer);
                 Rot4 corerot = shipDef.core.rot.Rotated(RotationDirection.Counterclockwise);
-                GenSpawn.Spawn(core, new IntVec3(c.x - shipDef.core.z, 0, c.z + shipDef.core.x), ImportedShip, corerot);
+                GenSpawn.Spawn(core, new IntVec3(c.x - shipDef.core.z, 0, c.z + shipDef.core.x), map, corerot);
             }
-            foreach (Building b in ImportedShip.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial))
+            foreach (Building b in map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial))
             {
                 CompPowerTrader trader = b.TryGetComp<CompPowerTrader>();
                 if (trader != null)
@@ -166,15 +177,17 @@ namespace RimWorld
                 if (b is Building_ShipBridge bridge)
                     bridge.ShipName = shipDef.defName;
             }
-            ImportedShip.mapDrawer.RegenerateEverythingNow();
-            ImportedShip.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
-            ImportedShip.temperatureCache.ResetTemperatureCache();
-            if (ImportedShip.Biome == ResourceBank.BiomeDefOf.OuterSpaceBiome)
+            ShipInteriorMod2.SpawnLights(map, spawnLights, false);
+            ShipInteriorMod2.SpawnLights(map, spawnSunLights, true);
+            map.mapDrawer.RegenerateEverythingNow();
+            map.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
+            map.temperatureCache.ResetTemperatureCache();
+            if (map.Biome == ResourceBank.BiomeDefOf.OuterSpaceBiome)
             {
-                foreach (Room room in ImportedShip.regionGrid.allRooms)
+                foreach (Room room in map.regionGrid.allRooms)
                     room.Temperature = 21f;
             }
-            CameraJumper.TryJump(c, ImportedShip);
+            CameraJumper.TryJump(c, map);
         }
     }
 }

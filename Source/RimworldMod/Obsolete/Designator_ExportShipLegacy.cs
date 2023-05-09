@@ -1,4 +1,4 @@
-﻿using RimworldMod;
+﻿/*using RimworldMod;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -135,7 +135,7 @@ namespace RimWorld
                     {
                         continue;
                     }
-                    if(t.TryGetComp<CompRoofMe>()!=null && t.TryGetComp<CompRoofMe>().Props.mechanoid)
+                    if(t.TryGetComp<CompSoShipPart>()!=null && t.TryGetComp<CompSoShipPart>().Props.mechanoid)
                     {
                         if (!t.def.building.isEdifice&&mechBugfix.Contains(t.Position))
                             continue;
@@ -214,3 +214,4 @@ namespace RimWorld
         }
     }
 }
+*/

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 using SaveOurShip2;
+using System.Security.Cryptography;
 
 namespace RimWorld
 {
@@ -123,22 +124,23 @@ namespace RimWorld
             Dictionary<char, ShipShape> symbolTable = new Dictionary<char, ShipShape>();
             Dictionary<ShipShape, char> symbolTableBackwards = new Dictionary<ShipShape, char>();
             List<ShipPosRotShape> shipStructure = new List<ShipPosRotShape>();
-            HashSet<IntVec3> mechBugfix = new HashSet<IntVec3>();
+            //HashSet<IntVec3> mechBugfix = new HashSet<IntVec3>(); //not sure what this was used for
 
-            foreach (Thing t in Find.CurrentMap.spawnedThings)
+            foreach (Thing t in Find.CurrentMap.spawnedThings) //save things
             {
                 if (SoSBuilder.ExportToIgnore(t, shipCore))
                 {
                     continue;
                 }
-                if (t.TryGetComp<CompRoofMe>() != null && t.TryGetComp<CompRoofMe>().Props.mechanoid)
+                /*if (t.TryGetComp<CompSoShipPart>() != null && t.TryGetComp<CompSoShipPart>().Props.mechanoid)
                 {
                     if (!t.def.building.isEdifice && mechBugfix.Contains(t.Position))
                         continue;
                     mechBugfix.Add(t.Position);
-                }
+                }*/
 
                 ShipShape shape = new ShipShape();
+
                 if (t is Building_ShipRegion r)
                 {
                     shape.width = r.width;
@@ -161,7 +163,7 @@ namespace RimWorld
                         shape.radius = t.TryGetComp<CompShipCombatShield>().radiusSet;
                     }
                     var compCol = t.TryGetComp<CompColorable>();
-                    if (compCol != null && compCol.Color != null && compCol.Color != Color.white && !(t.def.defName.StartsWith("ShipSpinal") || t.def.defName.Equals("Lighting_MURWallLight")))
+                    if (compCol != null && compCol.Color != null && compCol.Color != Color.white && !t.def.defName.StartsWith("ShipSpinal"))
                     {
                         shape.color = t.TryGetComp<CompColorable>().Color;
                     }
@@ -186,7 +188,40 @@ namespace RimWorld
                 shipStructure.Add(posrot);
             }
 
-            foreach (IntVec3 cell in Find.CurrentMap.AllCells)
+            foreach (Thing t in Find.CurrentMap.spawnedThings.Where(b => b is Building)) //save lights
+            {
+                var partComp = t.TryGetComp<CompSoShipPart>();
+                if (partComp != null && partComp.Props.canLight && partComp.hasLight)
+                {
+                    ShipShape shape = new ShipShape();
+                    shape.shapeOrDef = "SoSLightEnabler";
+                    shape.x = t.Position.x - minX;
+                    shape.z = t.Position.z - minZ;
+                    shape.rot = partComp.lightRot;
+                    shape.captain = partComp.sunLight;
+                    shape.color = partComp.lightColor.ToColor;
+
+                    if (partComp != null && partComp.Props.canLight && partComp.hasLight)
+                    {
+                        if (!symbolTableBackwards.ContainsKey(shape))
+                        {
+                            symbolTable.Add(charPointer, shape);
+                            symbolTableBackwards.Add(shape, charPointer);
+                            charPointer = (char)(((int)charPointer) + 1);
+                            if (charPointer == '|')
+                                charPointer = (char)(((int)charPointer) + 1);
+                        }
+                        ShipPosRotShape posrot = new ShipPosRotShape();
+                        posrot.x = shape.x;
+                        posrot.z = shape.z;
+                        posrot.rot = shape.rot;
+                        posrot.shape = symbolTableBackwards[shape] + "";
+                        shipStructure.Add(posrot);
+                    }
+                }
+            }
+
+            foreach (IntVec3 cell in Find.CurrentMap.AllCells) //save terrain
             {
                 TerrainDef def = Find.CurrentMap.terrainGrid.TerrainAt(cell);
                 if (def.defName != "EmptySpace" && def != ResourceBank.TerrainDefOf.FakeFloorInsideShip && def != ResourceBank.TerrainDefOf.FakeFloorInsideShipMech && def != ResourceBank.TerrainDefOf.FakeFloorInsideShipArchotech)
