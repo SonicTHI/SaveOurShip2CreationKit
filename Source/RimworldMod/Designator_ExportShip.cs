@@ -189,8 +189,8 @@ namespace RimWorld
                     shape.shapeOrDef = "SoSLightEnabler";
                     shape.x = t.Position.x - minX;
                     shape.z = t.Position.z - minZ;
-                    shape.rot = partComp.lightRot;
-                    shape.captain = partComp.sunLight;
+                    shape.rot = new Rot4(partComp.lightRot);
+                    shape.alt = partComp.sunLight;
                     shape.color = partComp.lightColor.ToColor;
 
                     if (partComp != null && partComp.Props.canLight && partComp.hasLight)

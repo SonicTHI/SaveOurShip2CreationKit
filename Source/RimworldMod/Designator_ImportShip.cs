@@ -69,8 +69,7 @@ namespace RimWorld
                 c = new IntVec3(shipDef.offsetX, 0, shipDef.offsetZ);
             SoSBuilder.shipDictionary.Add(map, shipDef.defName);
 
-            Dictionary<IntVec3, Color> spawnLights = new Dictionary<IntVec3, Color>();
-            Dictionary<IntVec3, Color> spawnSunLights = new Dictionary<IntVec3, Color>();
+            Dictionary<IntVec3, Tuple<int, ColorInt, bool>> spawnLights = new Dictionary<IntVec3, Tuple<int, ColorInt, bool>>();
 
             foreach (ShipShape shape in shipDef.parts)
             {
@@ -93,11 +92,7 @@ namespace RimWorld
                 }
                 else if (shape.shapeOrDef == "SoSLightEnabler")
                 {
-                    spawnLights.Add(adjPos, shape.color != Color.clear ? shape.color : Color.white);
-                }
-                else if (shape.shapeOrDef == "SoSSunLightEnabler")
-                {
-                    spawnSunLights.Add(adjPos, shape.color != Color.clear ? shape.color : Color.white);
+                    spawnLights.Add(adjPos, new Tuple<int, ColorInt, bool>(shape.rot.AsInt, ColorIntUtility.AsColorInt(shape.color != Color.clear ? shape.color : Color.white), shape.alt));
                 }
                 else if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
                 {
@@ -138,9 +133,7 @@ namespace RimWorld
                         }
                         if (thing.def.stackLimit > 1)
                             thing.stackCount = (int)Math.Min(25, thing.def.stackLimit);
-                        if ((thing.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false) && adjPos.GetThingList(map).Any(t => t.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false)) { } //clean multiple hull spawns
-                        else
-                            GenSpawn.Spawn(thing, adjPos, map, shape.rot);
+                        GenSpawn.Spawn(thing, adjPos, map, shape.rot);
                     }
                 }
                 else if (DefDatabase<TerrainDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
@@ -168,10 +161,9 @@ namespace RimWorld
                 if (b is Building_ShipBridge bridge)
                     bridge.ShipName = shipDef.defName;
             }
-            ShipInteriorMod2.SpawnLights(map, spawnLights, false);
-            ShipInteriorMod2.SpawnLights(map, spawnSunLights, true);
-            map.mapDrawer.RegenerateEverythingNow();
+            ShipInteriorMod2.SpawnLights(map, spawnLights);
             map.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
+            map.mapDrawer.RegenerateEverythingNow();
             map.temperatureCache.ResetTemperatureCache();
             if (map.Biome == ResourceBank.BiomeDefOf.OuterSpaceBiome)
             {

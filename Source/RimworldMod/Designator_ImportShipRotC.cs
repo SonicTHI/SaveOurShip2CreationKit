@@ -68,8 +68,7 @@ namespace RimWorld
                 c = new IntVec3(map.Size.x - shipDef.offsetZ, 0, shipDef.offsetX);
             SoSBuilder.shipDictionary.Add(map, shipDef.defName);
 
-            Dictionary<IntVec3, Color> spawnLights = new Dictionary<IntVec3, Color>();
-            Dictionary<IntVec3, Color> spawnSunLights = new Dictionary<IntVec3, Color>();
+            Dictionary<IntVec3, Tuple<int, ColorInt, bool>> spawnLights = new Dictionary<IntVec3, Tuple<int, ColorInt, bool>>();
 
             foreach (ShipShape shape in shipDef.parts)
             {
@@ -91,11 +90,7 @@ namespace RimWorld
                 }
                 else if (shape.shapeOrDef == "SoSLightEnabler")
                 {
-                    spawnLights.Add(new IntVec3(c.x - shape.z, 0, c.z + shape.z), shape.color != Color.clear ? shape.color : Color.white);
-                }
-                else if (shape.shapeOrDef == "SoSSunLightEnabler")
-                {
-                    spawnSunLights.Add(new IntVec3(c.x - shape.z, 0, c.z + shape.z), shape.color != Color.clear ? shape.color : Color.white);
+                    spawnLights.Add(new IntVec3(c.x - shape.z, 0, c.z + shape.z), new Tuple<int, ColorInt, bool>(shape.rot.AsInt, ColorIntUtility.AsColorInt(shape.color != Color.clear ? shape.color : Color.white), shape.alt));
                 }
                 else if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
                 {
@@ -110,7 +105,7 @@ namespace RimWorld
                         int adjx = shape.z;
                         if (def.rotatable == true)
                             rota.Rotate(RotationDirection.Counterclockwise);
-                        else if (def.rotatable == false && def.size.z != def.size.x)//skip non rot, non even
+                        else if (def.rotatable == false && def.size.z != def.size.x) //skip non rot, non even
                             continue;
                         //pos
                         if (def.size.z % 2 == 0 && def.size.x % 2 == 0 && rota.AsByte == 0)
@@ -147,9 +142,7 @@ namespace RimWorld
                         }
                         if (thing.def.stackLimit > 1)
                             thing.stackCount = (int)Math.Min(25, thing.def.stackLimit);
-                        if ((thing.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false) && new IntVec3(c.x - adjx, 0, c.z + adjz).GetThingList(map).Any(t => t.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false)) { } //clean multiple hull spawns
-                        else
-                            GenSpawn.Spawn(thing, new IntVec3(c.x - adjx, 0, c.z + adjz), map, rota);
+                        GenSpawn.Spawn(thing, new IntVec3(c.x - adjx, 0, c.z + adjz), map, rota);
                     }
                 }
                 else if (DefDatabase<TerrainDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
@@ -177,10 +170,9 @@ namespace RimWorld
                 if (b is Building_ShipBridge bridge)
                     bridge.ShipName = shipDef.defName;
             }
-            ShipInteriorMod2.SpawnLights(map, spawnLights, false);
-            ShipInteriorMod2.SpawnLights(map, spawnSunLights, true);
-            map.mapDrawer.RegenerateEverythingNow();
+            ShipInteriorMod2.SpawnLights(map, spawnLights);
             map.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
+            map.mapDrawer.RegenerateEverythingNow();
             map.temperatureCache.ResetTemperatureCache();
             if (map.Biome == ResourceBank.BiomeDefOf.OuterSpaceBiome)
             {
