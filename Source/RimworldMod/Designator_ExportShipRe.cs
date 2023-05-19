@@ -199,7 +199,8 @@ namespace RimWorld
                     shape.z = t.Position.z - minZ;
                     shape.rot = new Rot4(partComp.lightRot);
                     shape.alt = partComp.sunLight;
-                    shape.color = partComp.lightColor.ToColor;
+                    if (partComp.lightColor != new ColorInt(Color.white))
+                        shape.color = partComp.lightColor.ToColor;
 
                     if (partComp != null && partComp.Props.canLight && partComp.hasLight)
                     {
