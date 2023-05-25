@@ -104,7 +104,7 @@ namespace RimWorld
                             continue;
                         if (def.MadeFromStuff)
                         {
-                            if (shape.stuff != null)
+                            if (shape.stuff != null && !def.defName.StartsWith("Apparel_SpaceSuit"))
                                 thing = ThingMaker.MakeThing(def, ThingDef.Named(shape.stuff));
                             else
                                 thing = ThingMaker.MakeThing(def, GenStuff.DefaultStuffFor(def));

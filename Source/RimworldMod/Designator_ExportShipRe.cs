@@ -150,7 +150,7 @@ namespace RimWorld
                 else
                 {
                     shape.shapeOrDef = t.def.defName;
-                    if (t.def.MadeFromStuff)
+                    if (t.def.MadeFromStuff && !t.def.defName.StartsWith("Apparel_SpaceSuit"))
                     {
                         shape.stuff = t.Stuff.defName;
                     }
