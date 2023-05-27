@@ -41,6 +41,8 @@ namespace RimWorld
             int combatPoints = 0;
             int randomTurretPoints = 0;
             int ShipMass = 0;
+            int rarityLevel = 0;
+            
             int minX = this.Map.Size.x;
             int minZ = this.Map.Size.z;
             int maxX = 0;
@@ -267,6 +269,7 @@ namespace RimWorld
                     Scribe_Values.Look<int>(ref combatPoints, "combatPoints", 0);
                     Scribe_Values.Look<int>(ref randomTurretPoints, "randomTurretPoints", 0);
                     Scribe_Values.Look<int>(ref cargoPlaceholder, "cargoValue", 0);
+                    Scribe_Values.Look<int>(ref rarityLevel, "rarityLevel", 1);
                     bool temp = false;
                     if (shipCore != null)
                     {

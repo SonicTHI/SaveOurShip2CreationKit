@@ -121,6 +121,7 @@ namespace RimWorld
             threat += mass / 100;
             description = "Class: " + shipDef.label + "\\n[DESCRIPTION HERE]\\n\\n";
             description += "Mass: " + mass + "\\n";
+            description += "Size: " + shipDef.sizeX + " x " + shipDef.sizeZ + "\\n";
             description += "T/W ratio: " + thrust.ToString("F3") + "\\n";
             description += "Combat rating: " + threat + "\\n";
             description += "\\nWeapons: " + "\\n";
@@ -164,7 +165,7 @@ namespace RimWorld
                     Scribe_Values.Look<float>(ref massTemp, "Mass", 0);
                     float flammability = 1;
                     Scribe_Values.Look<float>(ref flammability, "Flammability", 0);*/
-                    int marketValue = 4000;
+                    int marketValue = 2000;
                     Scribe_Values.Look<int>(ref marketValue, "MarketValue", 0);
                     Scribe.ExitNode();
                     Scribe.EnterNode("comps");

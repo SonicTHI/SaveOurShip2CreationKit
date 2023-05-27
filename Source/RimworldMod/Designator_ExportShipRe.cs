@@ -275,13 +275,14 @@ namespace RimWorld
 					Scribe_Values.Look<int>(ref combatPoints, "combatPoints", 0);
 					Scribe_Values.Look<int>(ref randomTurretPoints, "randomTurretPoints", 0);
 					Scribe_Values.Look<int>(ref shipDef.cargoValue, "cargoValue", 0);
+                    if (shipDef.rarityLevel > 1)
+                        Scribe_Values.Look<int>(ref shipDef.rarityLevel, "rarityLevel", 1);
 
                     if (shipCore != null)
                     {
 						Scribe_Values.Look<bool>(ref shipDef.neverRandom, "neverRandom");
 						Scribe_Values.Look<bool>(ref shipDef.neverAttacks, "neverAttacks");
                         Scribe_Values.Look<bool>(ref shipDef.neverWreck, "neverWreck");
-                        Scribe_Values.Look<bool>(ref neverFleet, "neverFleet");
                         Scribe_Values.Look<bool>(ref shipDef.startingShip, "startingShip");
 						Scribe_Values.Look<bool>(ref shipDef.startingDungeon, "startingDungeon");
                         Scribe_Values.Look<bool>(ref shipDef.spaceSite, "spaceSite");
