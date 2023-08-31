@@ -283,6 +283,7 @@
 			<graphicClass>Graphic_Single</graphicClass>
 			<drawSize>(1,2)</drawSize>
 		</graphicData>
+		<defaultPlacingRot>South</defaultPlacingRot>
 		<size>(1,2)</size>
 		<rotatable>true</rotatable>
 	</ThingDef>

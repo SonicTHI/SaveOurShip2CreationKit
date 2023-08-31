@@ -163,7 +163,7 @@ namespace RimWorld
                         shape.radius = t.TryGetComp<CompShipCombatShield>().radiusSet;
                     }
                     var compCol = t.TryGetComp<CompColorable>();
-                    if (compCol != null && compCol.Color != null && compCol.Color != Color.white && !t.def.defName.StartsWith("ShipSpinal"))
+                    if (compCol != null && compCol.Color != null && compCol.Color != Color.white && !t.def.defName.StartsWith("ShipSpinal") && !t.def.defName.StartsWith("Lighting_MURWallLight"))
                     {
                         shape.color = t.TryGetComp<CompColorable>().Color;
                     }
