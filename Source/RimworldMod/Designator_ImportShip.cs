@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using Verse.Noise;
 
 namespace RimWorld
 {
@@ -60,6 +59,7 @@ namespace RimWorld
         public static void GenerateShip(EnemyShipDef shipDef)
         {
             Map map = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
+            map.GetComponent<ShipHeatMapComp>().CacheOff = true;
             map.GetComponent<ShipHeatMapComp>().IsGraveyard = true;
             map.GetComponent<ShipHeatMapComp>().ShipCombatOriginMap = ((MapParent)Find.WorldObjects.AllWorldObjects.Where(ob => ob.def.defName.Equals("ShipOrbiting")).FirstOrDefault()).Map;
             ((WorldObjectOrbitingShip)map.Parent).radius = 150;
@@ -131,9 +131,12 @@ namespace RimWorld
                                 shieldComp.radius = shape.radius;
                             }
                         }
+                        Rot4 rot = shape.rot;
+                        if (!thing.def.rotatable && rot != Rot4.North)
+                            rot = Rot4.North;
                         if (thing.def.stackLimit > 1)
                             thing.stackCount = (int)Math.Min(25, thing.def.stackLimit);
-                        GenSpawn.Spawn(thing, adjPos, map, shape.rot);
+                        GenSpawn.Spawn(thing, adjPos, map, rot);
                     }
                 }
                 else if (DefDatabase<TerrainDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
@@ -165,6 +168,7 @@ namespace RimWorld
             map.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
             map.mapDrawer.RegenerateEverythingNow();
             map.temperatureCache.ResetTemperatureCache();
+            map.GetComponent<ShipHeatMapComp>().RecacheMap();
             if (map.Biome == ResourceBank.BiomeDefOf.OuterSpaceBiome)
             {
                 foreach (Room room in map.regionGrid.allRooms)

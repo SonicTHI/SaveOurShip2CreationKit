@@ -59,6 +59,7 @@ namespace RimWorld
         public static void GenerateShip(EnemyShipDef shipDef)
         {
             Map map = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
+            map.GetComponent<ShipHeatMapComp>().CacheOff = true;
             map.GetComponent<ShipHeatMapComp>().IsGraveyard = true;
             map.GetComponent<ShipHeatMapComp>().ShipCombatOriginMap = ((MapParent)Find.WorldObjects.AllWorldObjects.Where(ob => ob.def.defName.Equals("ShipOrbiting")).FirstOrDefault()).Map;
             ((WorldObjectOrbitingShip)map.Parent).radius = 150;
@@ -174,6 +175,7 @@ namespace RimWorld
             map.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
             map.mapDrawer.RegenerateEverythingNow();
             map.temperatureCache.ResetTemperatureCache();
+            map.GetComponent<ShipHeatMapComp>().RecacheMap();
             if (map.Biome == ResourceBank.BiomeDefOf.OuterSpaceBiome)
             {
                 foreach (Room room in map.regionGrid.allRooms)
