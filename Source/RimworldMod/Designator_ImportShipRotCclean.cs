@@ -61,7 +61,6 @@ namespace RimWorld
             Map map = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
             map.GetComponent<ShipHeatMapComp>().CacheOff = true;
             map.GetComponent<ShipHeatMapComp>().IsGraveyard = true;
-            map.GetComponent<ShipHeatMapComp>().ShipCombatOriginMap = ((MapParent)Find.WorldObjects.AllWorldObjects.Where(ob => ob.def.defName.Equals("ShipOrbiting")).FirstOrDefault()).Map;
             ((WorldObjectOrbitingShip)map.Parent).radius = 150;
             ((WorldObjectOrbitingShip)map.Parent).theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).theta - Rand.RangeInclusive(1,10)* 0.01f;
             IntVec3 c = map.Center;
