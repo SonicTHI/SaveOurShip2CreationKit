@@ -31,7 +31,7 @@ namespace RimWorld
 
         public override void DesignateSingleCell(IntVec3 loc)
         {
-            if (!Find.CurrentMap.IsSpace())
+            if (!Map.IsSpace())
             {
                 Messages.Message("Not on space map", MessageTypeDefOf.RejectInput);
                 return;
@@ -43,7 +43,7 @@ namespace RimWorld
             string description = "error";
             string shipDefName = "error";
 
-            foreach (Building_ShipBridge b in loc.GetThingList(Find.CurrentMap).Where(t => t is Building_ShipBridge))
+            foreach (Building_ShipBridge b in loc.GetThingList(Map).Where(t => t is Building_ShipBridge))
             {
                 if (DefDatabase<EnemyShipDef>.AllDefs.Any(s => s.defName.Equals(b.ShipName)))
                 {
@@ -154,26 +154,34 @@ namespace RimWorld
             SafeSaver.Save(filename, "Defs", () =>
             {
                 Scribe.EnterNode("ThingDef");
+                {
                     Scribe_Values.Look<string>(ref defName, "defName");
                     label = "ship blueprint ([NAME HERE])";
                     Scribe_Values.Look<string>(ref label, "label");
                     Scribe_Values.Look<string>(ref description, "description");
                     Scribe.EnterNode("statBases");
-                    /*int maxHitPoints = 20;
-                    Scribe_Values.Look<int>(ref maxHitPoints, "MaxHitPoints", 0);
-                    float massTemp = 0.05f;
-                    Scribe_Values.Look<float>(ref massTemp, "Mass", 0);
-                    float flammability = 1;
-                    Scribe_Values.Look<float>(ref flammability, "Flammability", 0);*/
-                    int marketValue = 2000;
-                    Scribe_Values.Look<int>(ref marketValue, "MarketValue", 0);
-                    Scribe.ExitNode();
-                    Scribe.EnterNode("comps");
-                        Scribe.EnterNode("li");
-                            Scribe_Values.Look<string>(ref shipDefName, "shipDef");
+                    {
+                        /*int maxHitPoints = 20;
+                        Scribe_Values.Look<int>(ref maxHitPoints, "MaxHitPoints", 0);
+                        float massTemp = 0.05f;
+                        Scribe_Values.Look<float>(ref massTemp, "Mass", 0);
+                        float flammability = 1;
+                        Scribe_Values.Look<float>(ref flammability, "Flammability", 0);*/
+                        int marketValue = 2000;
+                        Scribe_Values.Look<int>(ref marketValue, "MarketValue", 0);
                         Scribe.ExitNode();
+                    }
+                    Scribe.EnterNode("comps");
+                    {
+                        Scribe.EnterNode("li");
+                        {
+                            Scribe_Values.Look<string>(ref shipDefName, "shipDef");
+                            Scribe.ExitNode();
+                        }
+                        Scribe.ExitNode();
+                    }
                     Scribe.ExitNode();
-                Scribe.ExitNode();
+                }
             });
             Messages.Message("Saved bluprint in temp file: blueprintTemp.xml", MessageTypeDefOf.PositiveEvent);
         }
