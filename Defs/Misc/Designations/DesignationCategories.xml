@@ -13,6 +13,7 @@
 			<li>Designator_ExportShipRe</li>
 			<li>Designator_ExportFleet</li>
 			<li>Designator_ExportBlueprint</li>
+			<li>Designator_ReSaveAll</li>
 		</specialDesignatorClasses>
 	</DesignationCategoryDef>
 </Defs>
