@@ -477,21 +477,24 @@ namespace RimworldMod
                 if (b is Building_ShipBridge bridge)
                     core = bridge;
             }
-            if (neverFleet)
+            if (!resave)
             {
-                Messages.Message("Warning: ship not facing west! Can not be used in random fleets!", MessageTypeDefOf.RejectInput);
-            }
-            if (core == null)
-            {
-                Messages.Message("Warning: no ship core found! Tags set to neverAttacks, spaceSite!", MessageTypeDefOf.RejectInput);
-            }
-            else if (ShipUtility.ShipBuildingsAttachedTo(core).Count < Find.CurrentMap.spawnedThings.Where(b => b is Building).Count())
-            {
-                Messages.Message("Warning: found unattached buildings or multiple ships! Only use this file as spaceSite, startingShip or startingDungeon!", MessageTypeDefOf.RejectInput);
-            }
-            else if (core.ShipName == null)
-            {
-                Messages.Message("Warning: no ship name set! You can set it manually in the exported XML", MessageTypeDefOf.RejectInput);
+                if (neverFleet)
+                {
+                    Messages.Message("Warning: ship not facing west! Can not be used in random fleets!", MessageTypeDefOf.RejectInput);
+                }
+                if (core == null)
+                {
+                    Messages.Message("Warning: no ship core found! Tags set to neverAttacks, spaceSite!", MessageTypeDefOf.RejectInput);
+                }
+                else if (ShipUtility.ShipBuildingsAttachedTo(core).Count < Find.CurrentMap.spawnedThings.Where(b => b is Building).Count())
+                {
+                    Messages.Message("Warning: found unattached buildings or multiple ships! Only use this file as spaceSite, startingShip or startingDungeon!", MessageTypeDefOf.RejectInput);
+                }
+                else if (core.ShipName == null)
+                {
+                    Messages.Message("Warning: no ship name set! You can set it manually in the exported XML", MessageTypeDefOf.RejectInput);
+                }
             }
 
             string path = Path.Combine(GenFilePaths.SaveDataFolderPath, "ExportedShips");

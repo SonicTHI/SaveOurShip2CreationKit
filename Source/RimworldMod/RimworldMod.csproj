@@ -47,6 +47,7 @@
     <Compile Include="Designator_ReSaveAll.cs" />
     <Compile Include="Designator_ExportShip.cs" />
     <Compile Include="Designator_ExportShipRe.cs" />
+    <Compile Include="Dialog_NameFactionDef.cs" />
     <Compile Include="Obsolete\Designator_ExportShipReOld.cs" />
     <Compile Include="Obsolete\Designator_ExportShipLegacy.cs" />
     <Compile Include="Designator_ImportShipRotCclean.cs" />
@@ -54,7 +55,7 @@
     <Compile Include="Designator_ImportShip.cs" />
     <Compile Include="Designator_NewShipMap.cs" />
     <Compile Include="Obsolete\Designator_ExportShipOld.cs" />
-    <Compile Include="Dialog_NameBuilding.cs" />
+    <Compile Include="Dialog_NamePawnDef.cs" />
     <Compile Include="SoSBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
