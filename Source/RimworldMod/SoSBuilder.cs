@@ -7,11 +7,6 @@ using UnityEngine;
 using HarmonyLib;
 using SaveOurShip2;
 using System.Linq;
-using RimWorld.Planet;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using Verse.Noise;
-using System.Security.Policy;
-using static UnityEngine.Random;
 
 namespace RimworldMod
 {
@@ -346,12 +341,10 @@ namespace RimworldMod
 
                         if (thing.TryGetComp<CompColorable>() != null && shape.color != Color.clear)
                             thing.SetColor(shape.color);
-                        if (thing.def.CanHaveFaction && thing.def != ResourceBank.ThingDefOf.ShipHullTile)
+                        if (thing.def.CanHaveFaction)
                             thing.SetFaction(Faction.OfPlayer);
-                        if (thing.TryGetComp<CompPowerBattery>() != null)
-                            thing.TryGetComp<CompPowerBattery>().AddEnergy(thing.TryGetComp<CompPowerBattery>().AmountCanAccept);
-                        if (thing.TryGetComp<CompRefuelable>() != null)
-                            thing.TryGetComp<CompRefuelable>().Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
+                        thing.TryGetComp<CompPowerBattery>()?.AddEnergy(thing.TryGetComp<CompPowerBattery>().AmountCanAccept);
+                        thing.TryGetComp<CompRefuelable>()?.Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
                         var shieldComp = thing.TryGetComp<CompShipCombatShield>();
                         if (shieldComp != null)
                         {
