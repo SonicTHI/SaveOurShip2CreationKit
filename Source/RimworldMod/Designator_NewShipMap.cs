@@ -1,12 +1,11 @@
-﻿using RimworldMod;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using SaveOurShip2;
 
 namespace RimWorld
 {
@@ -42,7 +41,7 @@ namespace RimWorld
                     break;
                 }
             }
-            Map BlankSpaceMap = GetOrGenerateMapUtility.GetOrGenerateMap(newTile, DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
+            Map BlankSpaceMap = GetOrGenerateMapUtility.GetOrGenerateMap(newTile, ResourceBank.WorldObjectDefOf.WreckSpace);
             CameraJumper.TryJump(new IntVec3(125, 1, 125), BlankSpaceMap);
         }
     }

@@ -1,10 +1,9 @@
-﻿using RimworldMod;
-using UnityEngine;
+﻿using UnityEngine;
 using Verse;
+using SaveOurShip2;
 
 namespace RimWorld
 {
-
     class Designator_ImportShipRotC : Designator
     {
         public override AcceptanceReport CanDesignateCell(IntVec3 loc)

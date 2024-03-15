@@ -1,18 +1,14 @@
-﻿using RimWorld.Planet;
-using RimworldMod;
-using SaveOurShip2;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
+using SaveOurShip2;
 
 namespace RimWorld
 {
-
     class Designator_ImportShipRotCclean : Designator
     {
         public override AcceptanceReport CanDesignateCell(IntVec3 loc)
@@ -60,9 +56,9 @@ namespace RimWorld
         {
             Map map = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
             map.GetComponent<ShipHeatMapComp>().CacheOff = true;
-            map.GetComponent<ShipHeatMapComp>().IsGraveyard = true;
-            ((WorldObjectOrbitingShip)map.Parent).radius = 150;
-            ((WorldObjectOrbitingShip)map.Parent).theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).theta - Rand.RangeInclusive(1,10)* 0.01f;
+            map.GetComponent<ShipHeatMapComp>().ShipMapState = ShipMapState.isGraveyard;
+            ((WorldObjectOrbitingShip)map.Parent).Radius = 150;
+            ((WorldObjectOrbitingShip)map.Parent).Theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).Theta - Rand.RangeInclusive(1,10)* 0.01f;
             IntVec3 c = map.Center;
             if (shipDef.saveSysVer == 2)
                 c = new IntVec3(map.Size.x - shipDef.offsetZ, 0, shipDef.offsetX);

@@ -5,10 +5,9 @@ using RimWorld;
 using Verse;
 using UnityEngine;
 using HarmonyLib;
-using SaveOurShip2;
 using System.Linq;
 
-namespace RimworldMod
+namespace SaveOurShip2
 {
     public class SoSBuilder : Mod
     {
@@ -47,7 +46,7 @@ namespace RimworldMod
         //cleanup for bad exports + temp for rework
         public static bool ImportToIgnore(ThingDef def)
         {
-            if (def.defName.StartsWith("Lighting_MURWallLight_Glower") || def.defName.Equals("Lighting_MURWallSunLight_Glower") || def.defName.StartsWith("Ship_Beam_Light"))
+            if (def.defName.StartsWith("Lighting_MURWallLight_Glower") || def.defName.Equals("Lighting_MURWallSunLight_Glower"))// || def.defName.StartsWith("Ship_Beam_Light"))
             {
                 return true;
             }
@@ -55,7 +54,7 @@ namespace RimworldMod
         }
         public static bool ExportToIgnore(Thing t, Building_ShipBridge core)
         {
-            if (t is Pawn || t == core || t.def.defName.StartsWith("Lighting_MURWallLight_Glower") || t.def.defName.Equals("Lighting_MURWallSunLight_Glower") || t.def.defName.StartsWith("Ship_Beam_Light"))
+            if (t is Pawn || t == core || t.def.defName.StartsWith("Lighting_MURWallLight_Glower") || t.def.defName.Equals("Lighting_MURWallSunLight_Glower"))// || t.def.defName.StartsWith("Ship_Beam_Light"))
             {
                 return true;
             }
@@ -250,14 +249,13 @@ namespace RimworldMod
             });
             Log.Message("Resaved ship as: " + shipDef.fileName + ".xml");
         }
-
         public static void GenerateShip(EnemyShipDef shipDef, bool rotate = false)
         {
             Map map = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
             map.GetComponent<ShipHeatMapComp>().CacheOff = true;
-            map.GetComponent<ShipHeatMapComp>().IsGraveyard = true;
-            ((WorldObjectOrbitingShip)map.Parent).radius = 150;
-            ((WorldObjectOrbitingShip)map.Parent).theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).theta - Rand.RangeInclusive(1, 10) * 0.01f;
+            map.GetComponent<ShipHeatMapComp>().ShipMapState = ShipMapState.isGraveyard;
+            ((WorldObjectOrbitingShip)map.Parent).Radius = 150;
+            ((WorldObjectOrbitingShip)map.Parent).Theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).Theta - Rand.RangeInclusive(1, 10) * 0.01f;
 
             IntVec3 c = map.Center;
             if (shipDef.saveSysVer == 2)
@@ -404,7 +402,7 @@ namespace RimworldMod
                 if (b is Building_ShipBridge bridge)
                     bridge.ShipName = shipDef.defName;
             }
-            ShipInteriorMod2.SpawnLights(map, spawnLights);
+            //ShipInteriorMod2.SpawnLights(map, spawnLights);
             map.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
             map.mapDrawer.RegenerateEverythingNow();
             map.temperatureCache.ResetTemperatureCache();
@@ -562,7 +560,7 @@ namespace RimworldMod
                 shipStructure.Add(posrot);
             }
 
-            foreach (Thing t in Find.CurrentMap.spawnedThings.Where(b => b is Building)) //save lights
+            /*foreach (Thing t in Find.CurrentMap.spawnedThings.Where(b => b is Building)) //save lights
             {
                 var partComp = t.TryGetComp<CompSoShipLight>();
                 if (partComp != null && partComp.hasLight)
@@ -594,7 +592,7 @@ namespace RimworldMod
                         shipStructure.Add(posrot);
                     }
                 }
-            }
+            }*/
 
             foreach (IntVec3 cell in Find.CurrentMap.AllCells) //save terrain
             {
