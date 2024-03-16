@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{D6ACD814-1171-42A6-B4C0-4D74A8ECACDC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>RimworldMod</RootNamespace>
+    <AssemblyName>SoSBuilder</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <BaseDirectory>..\..\1.5\Assemblies</BaseDirectory>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\1.5\Assemblies</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\1.5\Assemblies</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x64</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="Building_ShipRegion.cs" />
+    <Compile Include="Building_ShipRect.cs" />
+    <Compile Include="Building_ShipCircle.cs" />
+    <Compile Include="CompNameMeShip.cs" />
+    <Compile Include="CompNameMe.cs" />
+    <Compile Include="CompProperties_NameMeShip.cs" />
+    <Compile Include="CompProperties_NameMe.cs" />
+    <Compile Include="Designator_ExportBlueprint.cs" />
+    <Compile Include="Designator_ExportFleet.cs" />
+    <Compile Include="Designator_ReSaveAll.cs" />
+    <Compile Include="Designator_ExportShip.cs" />
+    <Compile Include="Designator_ExportShipRe.cs" />
+    <Compile Include="Dialog_NameFactionDef.cs" />
+    <Compile Include="Obsolete\Designator_ExportShipReOld.cs" />
+    <Compile Include="Obsolete\Designator_ExportShipLegacy.cs" />
+    <Compile Include="Designator_ImportShipRotCclean.cs" />
+    <Compile Include="Designator_ImportShipRotC.cs" />
+    <Compile Include="Designator_ImportShip.cs" />
+    <Compile Include="Designator_NewShipMap.cs" />
+    <Compile Include="Obsolete\Designator_ExportShipOld.cs" />
+    <Compile Include="Dialog_NamePawnDef.cs" />
+    <Compile Include="SoSBuilder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\2009463077 Harmony\Current\Assemblies\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\..\RimWorld15\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="ShipsHaveInsides">
+      <HintPath>..\..\..\SaveOurShip2Experimental\1.5\Assemblies\ShipsHaveInsides.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\..\RimWorld15\RimWorldWin64_Data\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\..\..\RimWorld15\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\..\..\..\..\RimWorld15\RimWorldWin64_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\..\..\..\RimWorld15\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextCoreModule">
+      <HintPath>..\..\..\..\..\RimWorld15\RimWorldWin64_Data\Managed\UnityEngine.TextCoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\..\..\..\RimWorld15\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

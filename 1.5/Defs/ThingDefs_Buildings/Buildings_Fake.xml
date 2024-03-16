@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+	<!-- mech -->
+	<!--DesignatorDropdownGroupDef>
+		<defName>Ship_Beams_Mech</defName>
+	</DesignatorDropdownGroupDef-->
+	<ThingDef ParentName="BuildingBase" Name="ShipFakeBase" Abstract="True">
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<designationCategory>ShipDesign</designationCategory>
+		<passability>Standable</passability>
+		<drawGUIOverlay>True</drawGUIOverlay>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+			<isEdifice>false</isEdifice>
+		</building>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase" Name="ShipFakeBaseEdifice" Abstract="True">
+		<building>
+			<isEdifice>true</isEdifice>
+		</building>
+	</ThingDef>
+	
+	<!-- ship -->
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>ShipPartShip</defName>
+		<label>ship spawner</label>
+		<description>Choose a EnemyShipDef for this to spawn</description>
+		<drawerType>MapMeshAndRealTime</drawerType>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_Start</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+		<comps>
+			<li Class="CompProperties_NameMeShip"/>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="BuildingBase">
+		<defName>ShipPartFake</defName>
+		<label>ship</label>
+		<description>Fleet ship ghost</description>
+		<altitudeLayer>FloorEmplacement</altitudeLayer>
+		<statBases>
+			<WorkToBuild>0</WorkToBuild>
+		</statBases>
+		<scatterableOnMapGen>false</scatterableOnMapGen>
+		<useHitPoints>False</useHitPoints>
+		<graphicData>
+			<texPath>Things/Building/BuildingFrame/Tile</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+		<rotatable>false</rotatable>
+	</ThingDef>
+	<!-- rect -->
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>ShipPartRect</defName>
+		<label>begin rectangle</label>
+		<description>Start drawing a rectangular area of hull.</description>
+		<thingClass>Building_ShipRect</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_Start</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>ShipPartRectUnpEnd</defName>
+		<label>end rectangle (unpowered)</label>
+		<description>Finish drawing a rectangular area of hull.</description>
+		<thingClass>Building_ShipRect</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>ShipPartRectEnd</defName>
+		<label>end rectangle</label>
+		<description>Finish drawing a rectangular area of hull.</description>
+		<thingClass>Building_ShipRect</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>ShipPartRectWreckEnd</defName>
+		<label>end rectangle wreckage</label>
+		<description>Finish drawing a rectangular area of hull.</description>
+		<thingClass>Building_ShipRect</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>MechPartRectUnpEnd</defName>
+		<label>end rectangle mech (unpowered)</label>
+		<description>Finish drawing a rectangular area of mech hull.</description>
+		<thingClass>Building_ShipRect</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>MechPartRectEnd</defName>
+		<label>end rectangle mech</label>
+		<description>Finish drawing a rectangular area of mech hull.</description>
+		<thingClass>Building_ShipRect</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Rect_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<!-- circle -->
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>ShipPartCircle</defName>
+		<label>begin circle</label>
+		<description>Start drawing a circular area of hull.</description>
+		<thingClass>Building_ShipCircle</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Circle_Start</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>ShipPartCircleUnpEnd</defName>
+		<label>end circle (unpowered)</label>
+		<description>Finish drawing a circular area of hull.</description>
+		<thingClass>Building_ShipCircle</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Circle_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>ShipPartCircleEnd</defName>
+		<label>end circle</label>
+		<description>Finish drawing a circular area of hull.</description>
+		<thingClass>Building_ShipCircle</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Circle_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>ShipPartCircleWreckEnd</defName>
+		<label>end circle wreckage</label>
+		<description>Finish drawing a circular area of hull.</description>
+		<thingClass>Building_ShipCircle</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Circle_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>MechPartCircleUnpEnd</defName>
+		<label>end circle mech (unpowered)</label>
+		<description>Finish drawing a circular area of mech hull.</description>
+		<thingClass>Building_ShipCircle</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Circle_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>MechPartCircleEnd</defName>
+		<label>end circle mech</label>
+		<description>Finish drawing a circular area of mech hull.</description>
+		<thingClass>Building_ShipCircle</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Circle_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<!-- cargo -->
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>ShipPartRegion</defName>
+		<label>begin cargo region</label>
+		<description>Start drawing a cargo region.</description>
+		<thingClass>Building_ShipRegion</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Region_Start</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBase">
+		<defName>ShipPartRegionEnd</defName>
+		<label>end cargo region</label>
+		<description>Finish drawing a cargo region.</description>
+		<thingClass>Building_ShipRegion</thingClass>
+		<graphicData>
+			<texPath>Things/Building/Ship/Region_End</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<!-- turrets -->
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>ShipPartTurretSmall</defName>
+		<label>random small turret</label>
+		<description>A small laser, plasma, or kinetic turret</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/TurretRandomSmall</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(2,2)</drawSize>
+		</graphicData>
+		<size>(2,2)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>ShipPartTurretLarge</defName>
+		<label>random large turret</label>
+		<description>A large laser, plasma, or kinetic turret</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/TurretRandom</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(3,3)</drawSize>
+		</graphicData>
+		<size>(3,3)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>ShipPartTurretSpinal</defName>
+		<label>random spinal barrel</label>
+		<description>A laser, plasma, or kinetic spinal gun barrel</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/TurretRandomSpineBarrel</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(5,4)</drawSize>
+		</graphicData>
+		<size>(5,4)</size>
+		<passability>Impassable</passability>
+		<blockWind>true</blockWind>
+		<fillPercent>1</fillPercent>
+		<blockLight>true</blockLight>
+		<rotatable>true</rotatable>
+		<building>
+			<shipPart>true</shipPart>
+		</building>
+	</ThingDef>
+	<!-- pawns -->
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>CasketFilled</defName>
+		<label>occupied cryptosleep casket</label>
+		<description>A pawn in cryptosleep goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/HostilePawnCasket</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,2)</drawSize>
+		</graphicData>
+		<defaultPlacingRot>South</defaultPlacingRot>
+		<size>(1,2)</size>
+		<rotatable>true</rotatable>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>PawnSpawnerGeneric</defName>
+		<label>generic pawn spawner</label>
+		<description>Choose a PawnKindDef for this to spawn</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/PawnKindDef</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+		<comps>
+			<li Class="CompProperties_NameMe"/>
+		</comps>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>SpaceCrew</defName>
+		<label>ship crew</label>
+		<description>A crew member goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/PlacePawnCrew</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>SpaceCrewMarine</defName>
+		<label>ship crew: marine</label>
+		<description>A marine goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/PlacePawnMarine</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>SpaceCrewMarineHeavy</defName>
+		<label>ship crew: heavy marine</label>
+		<description>A heavy marine goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/PlacePawnHeavyMarine</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<!-- mechs -->
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>Mech_CentipedeGunner_SPAWNER</defName>
+		<label>centipede</label>
+		<description>A centipede gunner goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/Centipede</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>Mech_Lancer_SPAWNER</defName>
+		<label>lancer</label>
+		<description>A lancer goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/Lancer</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>Mech_Scyther_SPAWNER</defName>
+		<label>scyther</label>
+		<description>A scyther goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/Scyther</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>Mech_Pikeman_SPAWNER</defName>
+		<label>pikeman</label>
+		<description>A pikeman goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/Pikeman</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>Mech_Random</defName>
+		<label>random mech</label>
+		<description>A random mech goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/RandomMech</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<!-- bugs -->
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>Astromite_SPAWNER</defName>
+		<label>astromite</label>
+		<description>An astromite goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/SmallBug</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>Stellapede_SPAWNER</defName>
+		<label>stellapede</label>
+		<description>A stellapede goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/MediumBug</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>Cosmopillar_SPAWNER</defName>
+		<label>cosmopillar</label>
+		<description>A cosmopillar goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/LargeBug</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>SpaceBug_Random</defName>
+		<label>random space bug</label>
+		<description>A random space insect goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/RandomBug</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+	</ThingDef>
+	<ThingDef ParentName="ShipFakeBaseEdifice">
+		<defName>SpaceHive_SPAWNER</defName>
+		<label>space hive</label>
+		<description>A space hive goes here</description>
+		<graphicData>
+			<texPath>Things/Building/Ship/HiveBug</texPath>
+			<graphicClass>Graphic_Single</graphicClass>
+			<drawSize>(1,1)</drawSize>
+		</graphicData>
+		<size>(1,1)</size>
+		<building>
+			<ai_chillDestination>false</ai_chillDestination>
+		</building>
+	</ThingDef>
+</Defs>
