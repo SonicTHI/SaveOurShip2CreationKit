@@ -256,6 +256,7 @@ namespace SaveOurShip2
             map.GetComponent<ShipHeatMapComp>().ShipMapState = ShipMapState.isGraveyard;
             ((WorldObjectOrbitingShip)map.Parent).Radius = 150;
             ((WorldObjectOrbitingShip)map.Parent).Theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).Theta - Rand.RangeInclusive(1, 10) * 0.01f;
+            GetOrGenerateMapUtility.UnfogMapFromEdge(map);
 
             IntVec3 c = map.Center;
             if (shipDef.saveSysVer == 2)

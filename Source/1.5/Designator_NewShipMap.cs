@@ -41,8 +41,9 @@ namespace RimWorld
                     break;
                 }
             }
-            Map BlankSpaceMap = GetOrGenerateMapUtility.GetOrGenerateMap(newTile, ResourceBank.WorldObjectDefOf.WreckSpace);
-            CameraJumper.TryJump(new IntVec3(125, 1, 125), BlankSpaceMap);
+            Map map = GetOrGenerateMapUtility.GetOrGenerateMap(newTile, ResourceBank.WorldObjectDefOf.WreckSpace);
+            GetOrGenerateMapUtility.UnfogMapFromEdge(map);
+            CameraJumper.TryJump(map.Center, map);
         }
     }
 }
