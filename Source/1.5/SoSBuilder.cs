@@ -46,7 +46,7 @@ namespace SaveOurShip2
         //cleanup for bad exports + temp for rework
         public static bool ImportToIgnore(ThingDef def)
         {
-            if (def.defName.StartsWith("Lighting_MURWallLight_Glower") || def.defName.Equals("Lighting_MURWallSunLight_Glower"))// || def.defName.StartsWith("Ship_Beam_Light"))
+            if (def.defName.StartsWith("Lighting_MURWallLight_Glower") || def.defName.Equals("Lighting_MURWallSunLight_Glower"))
             {
                 return true;
             }
@@ -54,7 +54,7 @@ namespace SaveOurShip2
         }
         public static bool ExportToIgnore(Thing t, Building_ShipBridge core)
         {
-            if (t is Pawn || t == core || t.def.defName.StartsWith("Lighting_MURWallLight_Glower") || t.def.defName.Equals("Lighting_MURWallSunLight_Glower"))// || t.def.defName.StartsWith("Ship_Beam_Light"))
+            if (t is Pawn || t == core || t.def.defName.StartsWith("Lighting_MURWallLight_Glower") || t.def.defName.Equals("Lighting_MURWallSunLight_Glower"))
             {
                 return true;
             }
@@ -302,10 +302,6 @@ namespace SaveOurShip2
                     }
                     GenSpawn.Spawn(thing, adjPos, map);
                 }
-                else if (shape.shapeOrDef == "SoSLightEnabler")
-                {
-                    spawnLights.Add(adjPos, new Tuple<int, ColorInt, bool>(shape.rot.AsInt, ColorIntUtility.AsColorInt(shape.color != Color.clear ? shape.color : Color.white), shape.alt));
-                }
                 else if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
                 {
                     Thing thing;
@@ -338,7 +334,19 @@ namespace SaveOurShip2
                         else
                             thing = ThingMaker.MakeThing(def);
 
-                        if (thing.TryGetComp<CompColorable>() != null && shape.color != Color.clear)
+                        var colorComp = thing.TryGetComp<CompColorable>();
+                        var glowerComp = thing.TryGetComp<CompGlower>();
+                        if (glowerComp != null) //color glow of lights
+                        {
+                            if (shape.color != Color.clear)
+                            {
+                                Color.RGBToHSV(shape.color, out var H, out var S, out var _);
+                                ColorInt glowColor = glowerComp.GlowColor;
+                                glowColor.SetHueSaturation(H, S);
+                                glowerComp.GlowColor = glowColor;
+                            }
+                        }
+                        else if (colorComp != null && shape.color != Color.clear)
                             thing.SetColor(shape.color);
                         if (thing.def.CanHaveFaction)
                             thing.SetFaction(Faction.OfPlayer);
@@ -403,7 +411,6 @@ namespace SaveOurShip2
                 if (b is Building_ShipBridge bridge)
                     bridge.ShipName = shipDef.defName;
             }
-            //ShipInteriorMod2.SpawnLights(map, spawnLights);
             map.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
             map.mapDrawer.RegenerateEverythingNow();
             map.temperatureCache.ResetTemperatureCache();
@@ -535,8 +542,14 @@ namespace SaveOurShip2
                     {
                         shape.radius = t.TryGetComp<CompShipCombatShield>().radiusSet;
                     }
-                    var compCol = t.TryGetComp<CompColorable>();
-                    if (compCol != null && compCol.Color != null && compCol.Color != Color.white && !t.def.defName.StartsWith("ShipSpinal") && !t.def.defName.StartsWith("Lighting_MURWall"))
+                    var colorComp = t.TryGetComp<CompColorable>();
+                    var glowerComp = t.TryGetComp<CompGlower>();
+                    if (glowerComp != null) //color glow of lights
+                    {
+                        if (glowerComp.GlowColor != glowerComp.Props.glowColor)
+                            shape.color = glowerComp.GlowColor.ToColor;
+                    }
+                    else if (colorComp != null && colorComp.Color != null && colorComp.Color != Color.white && !t.def.defName.StartsWith("ShipSpinal") && !t.def.defName.StartsWith("Lighting_MURWall"))
                     {
                         shape.color = t.TryGetComp<CompColorable>().Color;
                     }
@@ -560,40 +573,6 @@ namespace SaveOurShip2
                 posrot.shape = symbolTableBackwards[shape] + "";
                 shipStructure.Add(posrot);
             }
-
-            /*foreach (Thing t in Find.CurrentMap.spawnedThings.Where(b => b is Building)) //save lights
-            {
-                var partComp = t.TryGetComp<CompSoShipLight>();
-                if (partComp != null && partComp.hasLight)
-                {
-                    ShipShape shape = new ShipShape();
-                    shape.shapeOrDef = "SoSLightEnabler";
-                    shape.x = t.Position.x - minX;
-                    shape.z = t.Position.z - minZ;
-                    shape.rot = new Rot4(partComp.lightRot);
-                    shape.alt = partComp.sunLight;
-                    if (partComp.lightColor != new ColorInt(Color.white))
-                        shape.color = partComp.lightColor.ToColor;
-
-                    if (partComp != null && partComp.hasLight)
-                    {
-                        if (!symbolTableBackwards.ContainsKey(shape))
-                        {
-                            symbolTable.Add(charPointer, shape);
-                            symbolTableBackwards.Add(shape, charPointer);
-                            charPointer = (char)(((int)charPointer) + 1);
-                            if (charPointer == '|')
-                                charPointer = (char)(((int)charPointer) + 1);
-                        }
-                        ShipPosRotShape posrot = new ShipPosRotShape();
-                        posrot.x = shape.x;
-                        posrot.z = shape.z;
-                        posrot.rot = shape.rot;
-                        posrot.shape = symbolTableBackwards[shape] + "";
-                        shipStructure.Add(posrot);
-                    }
-                }
-            }*/
 
             foreach (IntVec3 cell in Find.CurrentMap.AllCells) //save terrain
             {
