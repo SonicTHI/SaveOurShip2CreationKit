@@ -256,7 +256,6 @@ namespace SaveOurShip2
             map.GetComponent<ShipHeatMapComp>().ShipMapState = ShipMapState.isGraveyard;
             ((WorldObjectOrbitingShip)map.Parent).Radius = 150;
             ((WorldObjectOrbitingShip)map.Parent).Theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).Theta - Rand.RangeInclusive(1, 10) * 0.01f;
-            GetOrGenerateMapUtility.UnfogMapFromEdge(map);
 
             IntVec3 c = map.Center;
             if (shipDef.saveSysVer == 2)
@@ -324,6 +323,12 @@ namespace SaveOurShip2
                                 adjx += 1;
                             adjPos = new IntVec3(c.x - adjx, 0, c.z + adjz);
                         }
+                        //adjust position based on rotation - rem after resave
+                        /*if (shape.shapeOrDef == "WallLamp" || shape.shapeOrDef == "WallSunLampSoS")
+                        {
+                            adjPos += IntVec3.North.RotatedBy(rota);
+                            rota = rota.Opposite;
+                        }*/
                         if (def.MadeFromStuff)
                         {
                             if (shape.stuff != null && !def.defName.StartsWith("Apparel_SpaceSuit"))
@@ -334,40 +339,52 @@ namespace SaveOurShip2
                         else
                             thing = ThingMaker.MakeThing(def);
 
-                        var colorComp = thing.TryGetComp<CompColorable>();
-                        var glowerComp = thing.TryGetComp<CompGlower>();
-                        if (glowerComp != null) //color glow of lights
-                        {
-                            if (shape.color != Color.clear)
-                            {
-                                Color.RGBToHSV(shape.color, out var H, out var S, out var _);
-                                ColorInt glowColor = glowerComp.GlowColor;
-                                glowColor.SetHueSaturation(H, S);
-                                glowerComp.GlowColor = glowColor;
-                            }
-                        }
-                        else if (colorComp != null && shape.color != Color.clear)
-                            thing.SetColor(shape.color);
-                        if (thing.def.CanHaveFaction)
-                            thing.SetFaction(Faction.OfPlayer);
-                        thing.TryGetComp<CompPowerBattery>()?.AddEnergy(thing.TryGetComp<CompPowerBattery>().AmountCanAccept);
-                        thing.TryGetComp<CompRefuelable>()?.Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
-                        var shieldComp = thing.TryGetComp<CompShipCombatShield>();
-                        if (shieldComp != null)
-                        {
-                            shieldComp.radiusSet = 40;
-                            shieldComp.radius = 40;
-                            if (shape.radius != 0)
-                            {
-                                shieldComp.radiusSet = shape.radius;
-                                shieldComp.radius = shape.radius;
-                            }
-                        }
                         if (!rotate && !thing.def.rotatable && rota != Rot4.North)
                             rota = Rot4.North;
                         if (thing.def.stackLimit > 1)
                             thing.stackCount = (int)Math.Min(25, thing.def.stackLimit);
                         GenSpawn.Spawn(thing, adjPos, map, rota);
+                        if (thing is Building b)
+                        {
+                            var colorComp = thing.TryGetComp<CompColorable>();
+                            var glowerComp = thing.TryGetComp<CompGlower>();
+                            if (glowerComp != null) //color glow of lights
+                            {
+                                if (shape.color != Color.clear)
+                                {
+                                    Color.RGBToHSV(shape.color, out var H, out var S, out var _);
+                                    ColorInt glowColor = glowerComp.GlowColor;
+                                    glowColor.SetHueSaturation(H, S);
+                                    glowerComp.GlowColor = glowColor;
+                                }
+                            }
+                            else if (shape.colorDef != null)
+                            {
+                                b.ChangePaint(DefDatabase<ColorDef>.GetNamedSilentFail(shape.colorDef));
+                            }
+                            //else if (colorComp != null && shape.color != Color.clear)
+                            //    thing.SetColor(shape.color);
+                            if (thing.def.CanHaveFaction)
+                                thing.SetFaction(Faction.OfPlayer);
+                            thing.TryGetComp<CompPowerBattery>()?.AddEnergy(thing.TryGetComp<CompPowerBattery>().AmountCanAccept);
+                            var powerComp = thing.TryGetComp<CompPowerTrader>();
+                            if (powerComp != null)
+                                powerComp.PowerOn = true;
+                            thing.TryGetComp<CompRefuelable>()?.Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
+                            var shieldComp = thing.TryGetComp<CompShipCombatShield>();
+                            if (shieldComp != null)
+                            {
+                                shieldComp.radiusSet = 40;
+                                shieldComp.radius = 40;
+                                if (shape.radius != 0)
+                                {
+                                    shieldComp.radiusSet = shape.radius;
+                                    shieldComp.radius = shape.radius;
+                                }
+                            }
+                            else if (b is Building_ShipBridge shipBridge)
+                                shipBridge.ShipName = shipDef.defName;
+                        }
                     }
                 }
                 else if (DefDatabase<TerrainDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
@@ -385,7 +402,7 @@ namespace SaveOurShip2
             }
             if (!shipDef.core.shapeOrDef.NullOrEmpty())
             {
-                Building core = (Building)ThingMaker.MakeThing(ThingDef.Named(shipDef.core.shapeOrDef));
+                Building_ShipBridge core = (Building_ShipBridge)ThingMaker.MakeThing(ThingDef.Named(shipDef.core.shapeOrDef));
                 core.SetFaction(Faction.OfPlayer);
                 Rot4 corerot;
                 IntVec3 corepos;
@@ -400,27 +417,19 @@ namespace SaveOurShip2
                     corerot = shipDef.core.rot;
                 }
                 GenSpawn.Spawn(core, corepos, map, corerot);
-            }
-            foreach (Building b in map.listerThings.ThingsInGroup(ThingRequestGroup.BuildingArtificial))
-            {
-                CompPowerTrader trader = b.TryGetComp<CompPowerTrader>();
-                if (trader != null)
-                {
-                    trader.PowerOn = true;
-                }
-                if (b is Building_ShipBridge bridge)
-                    bridge.ShipName = shipDef.defName;
+                core.TryGetComp<CompPowerTrader>().PowerOn = true;
+                core.ShipName = shipDef.defName;
             }
             map.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
-            map.mapDrawer.RegenerateEverythingNow();
-            map.temperatureCache.ResetTemperatureCache();
+            map.fogGrid.ClearAllFog();
+            //map.temperatureCache.ResetTemperatureCache();
+            foreach (Room room in map.regionGrid.allRooms.Where(r => !r.TouchesMapEdge))
+                room.Temperature = 21f;
+            //map.mapDrawer.MapMeshDirty(map.Center, MapMeshFlagDefOf.Things | MapMeshFlagDefOf.FogOfWar);
+            //if (Current.ProgramState == ProgramState.Playing)
+            //    map.mapDrawer.RegenerateEverythingNow();
             map.GetComponent<ShipHeatMapComp>().RecacheMap();
-            if (map.Biome == ResourceBank.BiomeDefOf.OuterSpaceBiome)
-            {
-                foreach (Room room in map.regionGrid.allRooms)
-                    room.Temperature = 21f;
-            }
-            CameraJumper.TryJump(c, map);
+            CameraJumper.TryJump(map.Center, map);
         }
         public static void ExportShip(Map map, bool resave = false)
         {
@@ -549,10 +558,14 @@ namespace SaveOurShip2
                         if (glowerComp.GlowColor != glowerComp.Props.glowColor)
                             shape.color = glowerComp.GlowColor.ToColor;
                     }
-                    else if (colorComp != null && colorComp.Color != null && colorComp.Color != Color.white && !t.def.defName.StartsWith("ShipSpinal") && !t.def.defName.StartsWith("Lighting_MURWall"))
+                    else if (t is Building b && b.PaintColorDef != null)
+                    {
+                        shape.colorDef = b.PaintColorDef.defName;
+                    }
+                    /*else if (colorComp != null && colorComp.Color != null && colorComp.Color != Color.white && !t.def.defName.StartsWith("ShipSpinal") && !t.def.defName.StartsWith("Lighting_MURWall"))
                     {
                         shape.color = t.TryGetComp<CompColorable>().Color;
-                    }
+                    }*/
                 }
                 shape.x = t.Position.x - minX;
                 shape.z = t.Position.z - minZ;
