@@ -4,7 +4,7 @@
 		<success>Normal</success>
 		<operations>
 			<li Class="PatchOperationAdd">
-				<xpath>Defs/ThingDef[defName = "Ship_Beam_Wrecked" or defName = "ShipAirlockWrecked" or defName = "ShipHullTileWrecked"]</xpath>
+				<xpath>Defs/ThingDef[defName = "Ship_Beam_Wrecked" or defName = "ShipAirlockWrecked" or defName = "ShipHullTileWrecked" or defName = "Space_Satellite_Core" or defName = "Ship_DamagedReactor" or defName = "Ship_LabConsole" or defName = "Ship_SecurityConsole" or defName = "BlackBoxAI"]</xpath>
 				<value><designationCategory>ShipDesign</designationCategory></value>
 			</li>
 			<!-- add other things here to be buildable with the editor -->

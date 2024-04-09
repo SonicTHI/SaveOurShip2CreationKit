@@ -323,7 +323,7 @@ namespace SaveOurShip2
                                 adjx += 1;
                             adjPos = new IntVec3(c.x - adjx, 0, c.z + adjz);
                         }
-                        //adjust position based on rotation - rem after resave
+                        //adjust position based on rotation - toggle for old defs
                         /*if (shape.shapeOrDef == "WallLamp" || shape.shapeOrDef == "WallSunLampSoS")
                         {
                             adjPos += IntVec3.North.RotatedBy(rota);
