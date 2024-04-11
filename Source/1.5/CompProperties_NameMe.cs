@@ -7,11 +7,11 @@ using Verse;
 
 namespace RimWorld
 {
-    class CompProperties_NameMe : CompProperties
-    {
-        public CompProperties_NameMe()
-        {
-            this.compClass = typeof(CompNameMe);
-        }
-    }
+	class CompProperties_NameMe : CompProperties
+	{
+		public CompProperties_NameMe()
+		{
+			this.compClass = typeof(CompNameMe);
+		}
+	}
 }
