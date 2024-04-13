@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using Verse;
-using SaveOurShip2;
+using RimWorld;
 
-namespace RimWorld
+namespace SaveOurShip2
 {
 	class Designator_NewShipMap : Designator
 	{
@@ -42,7 +42,7 @@ namespace RimWorld
 				}
 			}
 			Map map = GetOrGenerateMapUtility.GetOrGenerateMap(newTile, ResourceBank.WorldObjectDefOf.WreckSpace);
-			map.GetComponent<ShipHeatMapComp>().ShipMapState = ShipMapState.isGraveyard;
+			map.GetComponent<ShipMapComp>().ShipMapState = ShipMapState.isGraveyard;
 			GetOrGenerateMapUtility.UnfogMapFromEdge(map);
 			CameraJumper.TryJump(map.Center, map);
 		}

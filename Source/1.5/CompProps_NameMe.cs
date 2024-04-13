@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
+using RimWorld;
 
-namespace RimWorld
+namespace SaveOurShip2
 {
-	class CompProperties_NameMe : CompProperties
+	class CompProps_NameMe : CompProperties
 	{
-		public CompProperties_NameMe()
+		public CompProps_NameMe()
 		{
 			this.compClass = typeof(CompNameMe);
 		}

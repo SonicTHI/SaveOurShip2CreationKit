@@ -1,4 +1,4 @@
-﻿using SaveOurShip2;
+﻿using RimWorld;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
 
-namespace RimWorld
+namespace SaveOurShip2
 {
 	public class Dialog_NameShip : Dialog_RenameShip
 	{
@@ -16,21 +16,21 @@ namespace RimWorld
 		public Dialog_NameShip(CompNameMeShip comp)
 		{
 			this.comp = comp;
-			curName = comp.enemyShipDef;
+			curName = comp.SpaceShipDef;
 		}
 
 		protected override void SetName(string name)
 		{
-			if (name == comp.enemyShipDef || string.IsNullOrEmpty(name))
+			if (name == comp.SpaceShipDef || string.IsNullOrEmpty(name))
 				return;
-			if (!DefDatabase<EnemyShipDef>.AllDefs.Where(s => s.defName.Equals(name)).Any())
+			if (!DefDatabase<SpaceShipDef>.AllDefs.Where(s => s.defName.Equals(name)).Any())
 			{
-				Messages.Message("ERROR: invalid EnemyShipDef!", MessageTypeDefOf.RejectInput);
+				Messages.Message("ERROR: invalid SpaceShipDef!", MessageTypeDefOf.RejectInput);
 				return;
 			}
 			//spawn ghost
 			bool failed = false;
-			EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.AllDefs.FirstOrDefault(s => s.defName.Equals(name));
+			SpaceShipDef shipDef = DefDatabase<SpaceShipDef>.AllDefs.FirstOrDefault(s => s.defName.Equals(name));
 			foreach (ShipShape shape in shipDef.parts)
 			{
 				if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
@@ -99,12 +99,12 @@ namespace RimWorld
 				Messages.Message("ERROR: ship out of bounds!", MessageTypeDefOf.RejectInput);
 			}
 			else
-				comp.enemyShipDef = name;
+				comp.SpaceShipDef = name;
 		}
 	}
 	public class CompNameMeShip : ThingComp
 	{
-		public string enemyShipDef;
+		public string SpaceShipDef;
 		public List<Thing> parts = new List<Thing>();
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
@@ -118,7 +118,7 @@ namespace RimWorld
 				{
 					Find.WindowStack.Add(new Dialog_NameShip(this));
 				},
-				defaultLabel = "Set enemyShipDef",
+				defaultLabel = "Set SpaceShipDef",
 				defaultDesc = "Select which ship to spawn",
 				icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone")
 			};
@@ -135,12 +135,12 @@ namespace RimWorld
 		}
 		public override string CompInspectStringExtra()
 		{
-			return base.CompInspectStringExtra()+"Shipdef: "+ enemyShipDef + "\nPos: " + this.parent.Position;
+			return base.CompInspectStringExtra()+"Shipdef: "+ SpaceShipDef + "\nPos: " + this.parent.Position;
 		}
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<string>(ref enemyShipDef, "pawnKindDef");
+			Scribe_Values.Look<string>(ref SpaceShipDef, "pawnKindDef");
 		}
 	}
 }

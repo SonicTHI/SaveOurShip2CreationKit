@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Verse;
-using SaveOurShip2;
+using RimWorld;
 
-namespace RimWorld
+namespace SaveOurShip2
 {
 	public class Building_ShipRect : Building
 	{

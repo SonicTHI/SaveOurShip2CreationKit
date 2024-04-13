@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Verse;
 
-namespace RimWorld
+namespace SaveOurShip2
 {
-	class CompProperties_NameMeShip : CompProperties
+	class CompProps_NameMeShip : CompProperties
 	{
-		public CompProperties_NameMeShip()
+		public CompProps_NameMeShip()
 		{
 			this.compClass = typeof(CompNameMeShip);
 		}

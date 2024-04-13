@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using Verse;
-using SaveOurShip2;
+using RimWorld;
 
-namespace RimWorld
+namespace SaveOurShip2
 {
 	class Designator_ImportShipRotCclean : Designator
 	{
@@ -46,17 +46,17 @@ namespace RimWorld
 		{
 			if (name == ship || string.IsNullOrEmpty(name))
 				return;
-			EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.GetNamed(name);
+			SpaceShipDef shipDef = DefDatabase<SpaceShipDef>.GetNamed(name);
 			if (shipDef == null)
 				return;
 			GenerateShip(shipDef);
 		}
 
-		public static void GenerateShip(EnemyShipDef shipDef)
+		public static void GenerateShip(SpaceShipDef shipDef)
 		{
 			Map map = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
-			map.GetComponent<ShipHeatMapComp>().CacheOff = true;
-			map.GetComponent<ShipHeatMapComp>().ShipMapState = ShipMapState.isGraveyard;
+			map.GetComponent<ShipMapComp>().CacheOff = true;
+			map.GetComponent<ShipMapComp>().ShipMapState = ShipMapState.isGraveyard;
 			((WorldObjectOrbitingShip)map.Parent).Radius = 150;
 			((WorldObjectOrbitingShip)map.Parent).Theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).Theta - Rand.RangeInclusive(1,10)* 0.01f;
 			GetOrGenerateMapUtility.UnfogMapFromEdge(map);
@@ -117,7 +117,7 @@ namespace RimWorld
 			map.mapDrawer.RegenerateEverythingNow();
 			map.regionAndRoomUpdater.RebuildAllRegionsAndRooms();
 			map.temperatureCache.ResetTemperatureCache();
-			map.GetComponent<ShipHeatMapComp>().RecacheMap();
+			map.GetComponent<ShipMapComp>().RecacheMap();
 			CameraJumper.TryJump(c, map);
 		}
 	}

@@ -62,12 +62,12 @@ namespace SaveOurShip2
 		}
 		public static void ReSaveAll()
 		{
-			foreach (EnemyShipDef shipDef in DefDatabase<EnemyShipDef>.AllDefs.ToList())
+			foreach (SpaceShipDef shipDef in DefDatabase<SpaceShipDef>.AllDefs.ToList())
 			{
 				ReSave(shipDef);
 			}
 		}
-		public static void ReSave(EnemyShipDef shipDef)
+		public static void ReSave(SpaceShipDef shipDef)
 		{
 			//recalc threat //td
 			int combatPoints = 0;
@@ -184,7 +184,7 @@ namespace SaveOurShip2
 			Building core = (Building)ThingMaker.MakeThing(ThingDef.Named(shipDef.core.shapeOrDef));
 			SafeSaver.Save("test\\" + shipDef.fileName, "Defs", () =>
 			{
-				Scribe.EnterNode("EnemyShipDef");
+				Scribe.EnterNode("SpaceShipDef");
 				{
 					Scribe_Values.Look<string>(ref shipDef.defName, "defName");
 					int saveSysVer = 2;
@@ -249,11 +249,11 @@ namespace SaveOurShip2
 			});
 			Log.Message("Resaved ship as: " + shipDef.fileName + ".xml");
 		}
-		public static void GenerateShip(EnemyShipDef shipDef, bool rotate = false)
+		public static void GenerateShip(SpaceShipDef shipDef, bool rotate = false)
 		{
 			Map map = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
-			map.GetComponent<ShipHeatMapComp>().CacheOff = true;
-			map.GetComponent<ShipHeatMapComp>().ShipMapState = ShipMapState.isGraveyard;
+			map.GetComponent<ShipMapComp>().CacheOff = true;
+			map.GetComponent<ShipMapComp>().ShipMapState = ShipMapState.isGraveyard;
 			((WorldObjectOrbitingShip)map.Parent).Radius = 150;
 			((WorldObjectOrbitingShip)map.Parent).Theta = ((WorldObjectOrbitingShip)Find.CurrentMap.Parent).Theta - Rand.RangeInclusive(1, 10) * 0.01f;
 
@@ -347,7 +347,7 @@ namespace SaveOurShip2
 						if (thing is Building b)
 						{
 							var glowerComp = thing.TryGetComp<CompGlower>();
-							if (glowerComp != null) //color glow of lights
+							if (glowerComp != null && glowerComp.Props.colorPickerEnabled) //color glow of lights
 							{
 								if (shape.colorDef == null)
 								{
@@ -426,7 +426,7 @@ namespace SaveOurShip2
 			//map.mapDrawer.MapMeshDirty(map.Center, MapMeshFlagDefOf.Things | MapMeshFlagDefOf.FogOfWar);
 			//if (Current.ProgramState == ProgramState.Playing)
 			//	map.mapDrawer.RegenerateEverythingNow();
-			map.GetComponent<ShipHeatMapComp>().RecacheMap();
+			map.GetComponent<ShipMapComp>().RecacheMap();
 			CameraJumper.TryJump(map.Center, map);
 		}
 		public static void ExportShip(Map map, bool resave = false)
@@ -456,7 +456,7 @@ namespace SaveOurShip2
 					maxX = b.Position.x;
 				if (b.Position.z > maxZ)
 					maxZ = b.Position.z;
-				if (b.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false)
+				if (b.TryGetComp<CompShipCachePart>()?.Props.isPlating ?? false)
 					ShipMass += 1;
 				else
 				{
@@ -553,7 +553,7 @@ namespace SaveOurShip2
 					var glowerComp = t.TryGetComp<CompGlower>();
 					if (glowerComp != null && glowerComp.Props.colorPickerEnabled) //color glow of lights
 					{
-						if (glowerComp.GlowColor != glowerComp.Props.glowColor)
+						if (!(glowerComp.GlowColor == glowerComp.Props.glowColor || glowerComp.GlowColor != new ColorInt(255,255,255)))
 						{
 							string redHex = glowerComp.GlowColor.r.ToString("X2");
 							string greenHex = glowerComp.GlowColor.g.ToString("X2");
@@ -627,9 +627,9 @@ namespace SaveOurShip2
 			{
 				SafeSaver.Save(filename, "Defs", () =>
 				{
-					Scribe.EnterNode("EnemyShipDef");
+					Scribe.EnterNode("SpaceShipDef");
 					{
-						EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.GetNamed(shipDictionary[map]);
+						SpaceShipDef shipDef = DefDatabase<SpaceShipDef>.GetNamed(shipDictionary[map]);
 						Scribe_Values.Look<string>(ref shipDef.defName, "defName");
 						int saveSysVer = 2;
 						Scribe_Values.Look<int>(ref saveSysVer, "saveSysVer", 1);
@@ -700,7 +700,7 @@ namespace SaveOurShip2
 			{
 				SafeSaver.Save(filename, "Defs", () =>
 				{
-					Scribe.EnterNode("EnemyShipDef");
+					Scribe.EnterNode("SpaceShipDef");
 					{
 						Scribe_Values.Look<string>(ref shipName, "defName");
 						int saveSysVer = 2;

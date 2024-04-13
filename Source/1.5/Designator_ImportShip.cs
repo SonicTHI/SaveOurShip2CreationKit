@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using Verse;
-using SaveOurShip2;
+using RimWorld;
 
-namespace RimWorld
+namespace SaveOurShip2
 {
 
 	class Designator_ImportShip : Designator
@@ -42,7 +42,7 @@ namespace RimWorld
 		{
 			if (name == ship || string.IsNullOrEmpty(name))
 				return;
-			EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.GetNamed(name);
+			SpaceShipDef shipDef = DefDatabase<SpaceShipDef>.GetNamed(name);
 			if (shipDef == null)
 				return;
 			SoSBuilder.GenerateShip(shipDef);

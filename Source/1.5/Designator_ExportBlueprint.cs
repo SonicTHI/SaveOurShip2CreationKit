@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Verse;
-using SaveOurShip2;
+using RimWorld;
 
-namespace RimWorld
+namespace SaveOurShip2
 {
 	class Designator_ExportBlueprint : Designator
 	{
@@ -35,7 +34,7 @@ namespace RimWorld
 				Messages.Message("Not on space map", MessageTypeDefOf.RejectInput);
 				return;
 			}
-			EnemyShipDef shipDef = null;
+			SpaceShipDef shipDef = null;
 			Building_ShipBridge bridge = null;
 			string defName = "error";
 			string label = "error";
@@ -44,9 +43,9 @@ namespace RimWorld
 
 			foreach (Building_ShipBridge b in loc.GetThingList(Map).Where(t => t is Building_ShipBridge))
 			{
-				if (DefDatabase<EnemyShipDef>.AllDefs.Any(s => s.defName.Equals(b.ShipName)))
+				if (DefDatabase<SpaceShipDef>.AllDefs.Any(s => s.defName.Equals(b.ShipName)))
 				{
-					shipDef = DefDatabase<EnemyShipDef>.AllDefs.Where(s => s.defName.Equals(b.ShipName)).FirstOrDefault();
+					shipDef = DefDatabase<SpaceShipDef>.AllDefs.Where(s => s.defName.Equals(b.ShipName)).FirstOrDefault();
 					bridge = b;
 					defName = "Ship" + shipDef.defName;
 					shipDefName = shipDef.defName;
@@ -71,7 +70,7 @@ namespace RimWorld
 			Dictionary<string, int> weaponList = new Dictionary<string, int>();
 			foreach (Building b in cachedShipParts)
 			{
-				if (b.TryGetComp<CompSoShipPart>()?.Props.isPlating ?? false)
+				if (b.TryGetComp<CompShipCachePart>()?.Props.isPlating ?? false)
 					mass += 1;
 				else
 				{

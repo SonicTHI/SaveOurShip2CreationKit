@@ -197,8 +197,8 @@ namespace RimWorld
 
 			SafeSaver.Save(filename, "Defs", () =>
 			{
-				Scribe.EnterNode("EnemyShipDef");
-				EnemyShipDef shipDef = DefDatabase<EnemyShipDef>.GetNamed(SoSBuilder.shipDictionary[m]);
+				Scribe.EnterNode("SpaceShipDef");
+				SpaceShipDef shipDef = DefDatabase<SpaceShipDef>.GetNamed(SoSBuilder.shipDictionary[m]);
 				Scribe_Values.Look<string>(ref shipDef.defName, "defName");
 				Scribe_Values.Look<string>(ref shipDef.label, "label");
 				Scribe_Values.Look<int>(ref combatPoints, "combatPoints", 0);
