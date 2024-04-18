@@ -88,8 +88,8 @@ namespace SaveOurShip2
 								weaponList[b.Label] += 1;
 						}
 					}
-					else if (b.def == ThingDef.Named("ShipSpinalAmplifier"))
-						threat += 5;
+					else if (b.def == ResourceBank.ThingDefOf.ShipSpinalAmplifier)
+						threat += 10;
 					var engine = b.TryGetComp<CompEngineTrail>();
 					if (engine != null)
 					{

@@ -553,12 +553,14 @@ namespace SaveOurShip2
 					var glowerComp = t.TryGetComp<CompGlower>();
 					if (glowerComp != null && glowerComp.Props.colorPickerEnabled) //color glow of lights
 					{
-						if (!(glowerComp.GlowColor == glowerComp.Props.glowColor || glowerComp.GlowColor != new ColorInt(255,255,255)))
+						if (glowerComp.GlowColor != glowerComp.Props.glowColor)
 						{
 							string redHex = glowerComp.GlowColor.r.ToString("X2");
 							string greenHex = glowerComp.GlowColor.g.ToString("X2");
 							string blueHex = glowerComp.GlowColor.b.ToString("X2");
-							shape.colorDef = "#" + redHex + greenHex + blueHex;
+							string colorHex = "#" + redHex + greenHex + blueHex;
+							if (colorHex != "#FFFFFF")
+								shape.colorDef = colorHex;
 						}
 					}
 					else if (t is Building b && b.PaintColorDef != null)
@@ -722,14 +724,13 @@ namespace SaveOurShip2
 							Scribe_Values.Look<bool>(ref temp, "neverRandom", forceSave: true);
 							Scribe_Values.Look<bool>(ref temp, "neverAttacks", forceSave: true);
 							Scribe_Values.Look<bool>(ref temp, "neverWreck", forceSave: true);
-							Scribe_Values.Look<bool>(ref neverFleet, "neverFleet", forceSave: true);
 							Scribe_Values.Look<bool>(ref temp, "startingShip", forceSave: true);
 							Scribe_Values.Look<bool>(ref temp, "startingDungeon", forceSave: true);
 							Scribe_Values.Look<bool>(ref temp, "spaceSite", forceSave: true);
 							Scribe_Values.Look<bool>(ref temp, "tradeShip", forceSave: true);
 							Scribe_Values.Look<bool>(ref temp, "navyExclusive", forceSave: true);
 							Scribe_Values.Look<bool>(ref temp, "customPaintjob", forceSave: true);
-							Scribe_Values.Look<bool>(ref temp, "neverFleet", forceSave: true);
+							Scribe_Values.Look<bool>(ref neverFleet, "neverFleet", forceSave: true);
 							Scribe.EnterNode("core");
 							{
 								Scribe_Values.Look<string>(ref core.def.defName, "shapeOrDef");
