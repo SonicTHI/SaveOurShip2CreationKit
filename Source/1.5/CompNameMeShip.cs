@@ -16,21 +16,21 @@ namespace SaveOurShip2
 		public Dialog_NameShip(CompNameMeShip comp)
 		{
 			this.comp = comp;
-			curName = comp.SpaceShipDef;
+			curName = comp.ShipDef;
 		}
 
 		protected override void SetName(string name)
 		{
-			if (name == comp.SpaceShipDef || string.IsNullOrEmpty(name))
+			if (name == comp.ShipDef || string.IsNullOrEmpty(name))
 				return;
-			if (!DefDatabase<SpaceShipDef>.AllDefs.Where(s => s.defName.Equals(name)).Any())
+			if (!DefDatabase<ShipDef>.AllDefs.Where(s => s.defName.Equals(name)).Any())
 			{
-				Messages.Message("ERROR: invalid SpaceShipDef!", MessageTypeDefOf.RejectInput);
+				Messages.Message("ERROR: invalid ShipDef!", MessageTypeDefOf.RejectInput);
 				return;
 			}
 			//spawn ghost
 			bool failed = false;
-			SpaceShipDef shipDef = DefDatabase<SpaceShipDef>.AllDefs.FirstOrDefault(s => s.defName.Equals(name));
+			ShipDef shipDef = DefDatabase<ShipDef>.AllDefs.FirstOrDefault(s => s.defName.Equals(name));
 			foreach (ShipShape shape in shipDef.parts)
 			{
 				if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
@@ -99,12 +99,12 @@ namespace SaveOurShip2
 				Messages.Message("ERROR: ship out of bounds!", MessageTypeDefOf.RejectInput);
 			}
 			else
-				comp.SpaceShipDef = name;
+				comp.ShipDef = name;
 		}
 	}
 	public class CompNameMeShip : ThingComp
 	{
-		public string SpaceShipDef;
+		public string ShipDef;
 		public List<Thing> parts = new List<Thing>();
 		public override IEnumerable<Gizmo> CompGetGizmosExtra()
 		{
@@ -118,7 +118,7 @@ namespace SaveOurShip2
 				{
 					Find.WindowStack.Add(new Dialog_NameShip(this));
 				},
-				defaultLabel = "Set SpaceShipDef",
+				defaultLabel = "Set ShipDef",
 				defaultDesc = "Select which ship to spawn",
 				icon = ContentFinder<Texture2D>.Get("UI/Commands/RenameZone")
 			};
@@ -135,12 +135,12 @@ namespace SaveOurShip2
 		}
 		public override string CompInspectStringExtra()
 		{
-			return base.CompInspectStringExtra()+"Shipdef: "+ SpaceShipDef + "\nPos: " + this.parent.Position;
+			return base.CompInspectStringExtra()+"Shipdef: "+ ShipDef + "\nPos: " + this.parent.Position;
 		}
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
-			Scribe_Values.Look<string>(ref SpaceShipDef, "pawnKindDef");
+			Scribe_Values.Look<string>(ref ShipDef, "pawnKindDef");
 		}
 	}
 }

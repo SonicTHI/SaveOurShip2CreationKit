@@ -40,10 +40,10 @@ namespace SaveOurShip2
 			{
 				if (b.def.defName.Equals("ShipPartShip"))
 				{
-					SpaceShipDef shipDef = DefDatabase<SpaceShipDef>.AllDefs.Where(s => s.defName.Equals(b.TryGetComp<CompNameMeShip>().SpaceShipDef)).FirstOrDefault();
+					ShipDef shipDef = DefDatabase<ShipDef>.AllDefs.Where(s => s.defName.Equals(b.TryGetComp<CompNameMeShip>().ShipDef)).FirstOrDefault();
 					if (shipDef == null)
 					{
-						Messages.Message("ERROR: invalid SpaceShipDef found, aborting export!", MessageTypeDefOf.RejectInput);
+						Messages.Message("ERROR: invalid ShipDef found, aborting export!", MessageTypeDefOf.RejectInput);
 						return;
 					}
 					combatPoints += shipDef.combatPoints;
@@ -62,7 +62,7 @@ namespace SaveOurShip2
 			}
 			if (ships.NullOrEmpty())
 			{
-				Messages.Message("ERROR: no valid SpaceShipDefs found, aborting export!", MessageTypeDefOf.RejectInput);
+				Messages.Message("ERROR: no valid ShipDefs found, aborting export!", MessageTypeDefOf.RejectInput);
 				return;
 			}
 			string path = Path.Combine(GenFilePaths.SaveDataFolderPath, "ExportedShips");
@@ -75,7 +75,7 @@ namespace SaveOurShip2
 
 			SafeSaver.Save(filename, "Defs", () =>
 			{
-				Scribe.EnterNode("SpaceShipDef");
+				Scribe.EnterNode("ShipDef");
 				Map m = Find.CurrentMap;
 				Scribe_Values.Look<string>(ref newfleet, "defName");
 				string placeholder = "[INSERT IN-GAME NAME HERE]";

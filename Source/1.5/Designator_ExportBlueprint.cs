@@ -34,7 +34,7 @@ namespace SaveOurShip2
 				Messages.Message("Not on space map", MessageTypeDefOf.RejectInput);
 				return;
 			}
-			SpaceShipDef shipDef = null;
+			ShipDef shipDef = null;
 			Building_ShipBridge bridge = null;
 			string defName = "error";
 			string label = "error";
@@ -43,9 +43,9 @@ namespace SaveOurShip2
 
 			foreach (Building_ShipBridge b in loc.GetThingList(Map).Where(t => t is Building_ShipBridge))
 			{
-				if (DefDatabase<SpaceShipDef>.AllDefs.Any(s => s.defName.Equals(b.ShipName)))
+				if (DefDatabase<ShipDef>.AllDefs.Any(s => s.defName.Equals(b.ShipName)))
 				{
-					shipDef = DefDatabase<SpaceShipDef>.AllDefs.Where(s => s.defName.Equals(b.ShipName)).FirstOrDefault();
+					shipDef = DefDatabase<ShipDef>.AllDefs.Where(s => s.defName.Equals(b.ShipName)).FirstOrDefault();
 					bridge = b;
 					defName = "Ship" + shipDef.defName;
 					shipDefName = shipDef.defName;

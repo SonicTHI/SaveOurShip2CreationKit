@@ -191,7 +191,7 @@ namespace RimWorld
 
 			SafeSaver.Save(filename, "Defs", () =>
 			{
-				Scribe.EnterNode("SpaceShipDef");
+				Scribe.EnterNode("ShipDef");
 				Map m = Find.CurrentMap;
 				Scribe_Values.Look<string>(ref shipCore.ShipName, "defName");
 				string placeholder = "[INSERT IN-GAME NAME HERE]";

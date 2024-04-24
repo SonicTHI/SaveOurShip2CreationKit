@@ -46,13 +46,13 @@ namespace SaveOurShip2
 		{
 			if (name == ship || string.IsNullOrEmpty(name))
 				return;
-			SpaceShipDef shipDef = DefDatabase<SpaceShipDef>.GetNamed(name);
+			ShipDef shipDef = DefDatabase<ShipDef>.GetNamed(name);
 			if (shipDef == null)
 				return;
 			GenerateShip(shipDef);
 		}
 
-		public static void GenerateShip(SpaceShipDef shipDef)
+		public static void GenerateShip(ShipDef shipDef)
 		{
 			Map map = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
 			map.GetComponent<ShipMapComp>().CacheOff = true;

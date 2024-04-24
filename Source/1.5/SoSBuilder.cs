@@ -6,6 +6,7 @@ using Verse;
 using UnityEngine;
 using HarmonyLib;
 using System.Linq;
+using Vehicles;
 
 namespace SaveOurShip2
 {
@@ -54,7 +55,7 @@ namespace SaveOurShip2
 		}
 		public static bool ExportToIgnore(Thing t, Building_ShipBridge core)
 		{
-			if (t is Pawn || t == core || t.def.defName.StartsWith("Lighting_MURWallLight_Glower") || t.def.defName.Equals("Lighting_MURWallSunLight_Glower"))
+			if ((t is Pawn && !(t is VehiclePawn)) || t == core || t.def.defName.StartsWith("Lighting_MURWallLight_Glower") || t.def.defName.Equals("Lighting_MURWallSunLight_Glower"))
 			{
 				return true;
 			}
@@ -62,12 +63,12 @@ namespace SaveOurShip2
 		}
 		public static void ReSaveAll()
 		{
-			foreach (SpaceShipDef shipDef in DefDatabase<SpaceShipDef>.AllDefs.ToList())
+			foreach (ShipDef shipDef in DefDatabase<ShipDef>.AllDefs.ToList())
 			{
 				ReSave(shipDef);
 			}
 		}
-		public static void ReSave(SpaceShipDef shipDef)
+		public static void ReSave(ShipDef shipDef)
 		{
 			//recalc threat //td
 			int combatPoints = 0;
@@ -184,7 +185,7 @@ namespace SaveOurShip2
 			Building core = (Building)ThingMaker.MakeThing(ThingDef.Named(shipDef.core.shapeOrDef));
 			SafeSaver.Save("test\\" + shipDef.fileName, "Defs", () =>
 			{
-				Scribe.EnterNode("SpaceShipDef");
+				Scribe.EnterNode("ShipDef");
 				{
 					Scribe_Values.Look<string>(ref shipDef.defName, "defName");
 					int saveSysVer = 2;
@@ -249,9 +250,10 @@ namespace SaveOurShip2
 			});
 			Log.Message("Resaved ship as: " + shipDef.fileName + ".xml");
 		}
-		public static void GenerateShip(SpaceShipDef shipDef, bool rotate = false)
+		public static void GenerateShip(ShipDef shipDef, bool rotate = false)
 		{
 			Map map = GetOrGenerateMapUtility.GetOrGenerateMap(ShipInteriorMod2.FindWorldTile(), new IntVec3(250, 1, 250), DefDatabase<WorldObjectDef>.GetNamed("ShipEnemy"));
+			map.fogGrid.ClearAllFog();
 			map.GetComponent<ShipMapComp>().CacheOff = true;
 			map.GetComponent<ShipMapComp>().ShipMapState = ShipMapState.isGraveyard;
 			((WorldObjectOrbitingShip)map.Parent).Radius = 150;
@@ -300,6 +302,13 @@ namespace SaveOurShip2
 						((Building_ShipRegion)thing).height = shape.height;
 					}
 					GenSpawn.Spawn(thing, adjPos, map);
+				}
+				else if (DefDatabase<VehicleDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
+				{
+					VehicleDef def = DefDatabase<VehicleDef>.GetNamed(shape.shapeOrDef);
+					VehiclePawn vehicle = VehicleSpawner.GenerateVehicle(def, Faction.OfPlayer);
+					vehicle.CompFueledTravel?.Refuel(vehicle.CompFueledTravel.FuelCapacity);
+					GenSpawn.Spawn(vehicle, adjPos, map);
 				}
 				else if (DefDatabase<ThingDef>.GetNamedSilentFail(shape.shapeOrDef) != null)
 				{
@@ -369,7 +378,7 @@ namespace SaveOurShip2
 							if (powerComp != null)
 								powerComp.PowerOn = true;
 							thing.TryGetComp<CompRefuelable>()?.Refuel(thing.TryGetComp<CompRefuelable>().Props.fuelCapacity);
-							var shieldComp = thing.TryGetComp<CompShipCombatShield>();
+							var shieldComp = thing.TryGetComp<CompShipHeatShield>();
 							if (shieldComp != null)
 							{
 								shieldComp.radiusSet = 40;
@@ -545,9 +554,9 @@ namespace SaveOurShip2
 					{
 						shape.stuff = t.TryGetComp<CompNameMe>().pawnKindDef;
 					}
-					else if (t.TryGetComp<CompShipCombatShield>() != null)
+					else if (t.TryGetComp<CompShipHeatShield>() != null)
 					{
-						shape.radius = t.TryGetComp<CompShipCombatShield>().radiusSet;
+						shape.radius = t.TryGetComp<CompShipHeatShield>().radiusSet;
 					}
 					var colorComp = t.TryGetComp<CompColorable>();
 					var glowerComp = t.TryGetComp<CompGlower>();
@@ -559,7 +568,7 @@ namespace SaveOurShip2
 							string greenHex = glowerComp.GlowColor.g.ToString("X2");
 							string blueHex = glowerComp.GlowColor.b.ToString("X2");
 							string colorHex = "#" + redHex + greenHex + blueHex;
-							if (colorHex != "#FFFFFF")
+							if (colorHex != "#FFFFFF" && colorHex != "#D6D6D6")
 								shape.colorDef = colorHex;
 						}
 					}
@@ -629,9 +638,9 @@ namespace SaveOurShip2
 			{
 				SafeSaver.Save(filename, "Defs", () =>
 				{
-					Scribe.EnterNode("SpaceShipDef");
+					Scribe.EnterNode("ShipDef");
 					{
-						SpaceShipDef shipDef = DefDatabase<SpaceShipDef>.GetNamed(shipDictionary[map]);
+						ShipDef shipDef = DefDatabase<ShipDef>.GetNamed(shipDictionary[map]);
 						Scribe_Values.Look<string>(ref shipDef.defName, "defName");
 						int saveSysVer = 2;
 						Scribe_Values.Look<int>(ref saveSysVer, "saveSysVer", 1);
@@ -702,7 +711,7 @@ namespace SaveOurShip2
 			{
 				SafeSaver.Save(filename, "Defs", () =>
 				{
-					Scribe.EnterNode("SpaceShipDef");
+					Scribe.EnterNode("ShipDef");
 					{
 						Scribe_Values.Look<string>(ref shipName, "defName");
 						int saveSysVer = 2;

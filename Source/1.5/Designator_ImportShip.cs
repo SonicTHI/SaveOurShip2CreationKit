@@ -42,7 +42,7 @@ namespace SaveOurShip2
 		{
 			if (name == ship || string.IsNullOrEmpty(name))
 				return;
-			SpaceShipDef shipDef = DefDatabase<SpaceShipDef>.GetNamed(name);
+			ShipDef shipDef = DefDatabase<ShipDef>.GetNamed(name);
 			if (shipDef == null)
 				return;
 			SoSBuilder.GenerateShip(shipDef);

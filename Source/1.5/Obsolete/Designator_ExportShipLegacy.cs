@@ -114,7 +114,7 @@ namespace RimWorld
 			string filename = Path.Combine(path, shipCore.ShipName + ".xml");
 			SafeSaver.Save(filename, "Defs", () =>
 			{
-				Scribe.EnterNode("SpaceShipDef");
+				Scribe.EnterNode("ShipDef");
 				Scribe_Values.Look<string>(ref shipCore.ShipName,"defName");
 				Scribe_Values.Look<int>(ref saveSysVer, "saveSysVer", 1);
 				Scribe_Values.Look<int>(ref minX, "offsetX", 0);
