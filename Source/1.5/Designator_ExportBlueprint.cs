@@ -65,6 +65,8 @@ namespace SaveOurShip2
 			int mass = 0;
 			float thrust = 0;
 			List<Building> cachedShipParts = ShipUtility.ShipBuildingsAttachedTo(bridge);
+			List<ResearchProjectDef> researchListFirst = new List<ResearchProjectDef>();
+			List<ResearchProjectDef> researchListSecond = new List<ResearchProjectDef>();
 			List<ResearchProjectDef> researchList = new List<ResearchProjectDef>();
 			Dictionary<ThingDef, int> costList = new Dictionary<ThingDef, int>();
 			Dictionary<string, int> weaponList = new Dictionary<string, int>();
@@ -90,6 +92,37 @@ namespace SaveOurShip2
 					}
 					else if (b.def == ResourceBank.ThingDefOf.ShipSpinalAmplifier)
 						threat += 10;
+					else if (b.def == ThingDef.Named("ShipPartTurretSmall")) //default to plasma for randoms
+					{
+						threat += 10;
+						if (!weaponList.ContainsKey("ShipTurret_Plasma"))
+						{
+							weaponList.Add("ShipTurret_Plasma", 1);
+						}
+						else
+							weaponList["ShipTurret_Plasma"] += 1;
+					}
+					else if (b.def == ThingDef.Named("ShipPartTurretLarge"))
+					{
+						threat += 30;
+						if (!weaponList.ContainsKey("ShipTurret_Plasma_Large"))
+						{
+							weaponList.Add("ShipTurret_Plasma_Large", 1);
+						}
+						else
+							weaponList["ShipTurret_Plasma_Large"] += 1;
+					}
+					else if (b.def == ThingDef.Named("ShipPartTurretSpinal"))
+					{
+						threat += 100;
+						if (!weaponList.ContainsKey("ShipSpinalBarrelPlasma"))
+						{
+							weaponList.Add("ShipSpinalBarrelPlasma", 1);
+						}
+						else
+							weaponList["ShipSpinalBarrelPlasma"] += 1;
+					}
+
 					var engine = b.TryGetComp<CompEngineTrail>();
 					if (engine != null)
 					{
@@ -115,9 +148,44 @@ namespace SaveOurShip2
 						researchList.Add(res);
 				}
 			}
+
+			researchList.Remove(ResearchProjectDef.Named("ShipBasics"));
+			researchListFirst.Add(ResearchProjectDef.Named("ShipBasics"));
+			if (researchList.Contains(ResearchProjectDef.Named("Electricity")))
+			{
+				researchListFirst.Add(ResearchProjectDef.Named("Electricity"));
+				researchList.Remove(ResearchProjectDef.Named("Electricity"));
+			}
+			if (researchList.Contains(ResearchProjectDef.Named("SolarPanels")))
+			{
+				researchListFirst.Add(ResearchProjectDef.Named("SolarPanels"));
+				researchList.Remove(ResearchProjectDef.Named("SolarPanels"));
+			}
+			if (researchList.Contains(ResearchProjectDef.Named("AirConditioning")))
+			{
+				researchListFirst.Add(ResearchProjectDef.Named("AirConditioning"));
+				researchList.Remove(ResearchProjectDef.Named("AirConditioning"));
+			}
+			if (researchList.Contains(ResearchProjectDef.Named("ShipEngine")))
+			{
+				researchListSecond.Add(ResearchProjectDef.Named("ShipEngine"));
+				researchList.Remove(ResearchProjectDef.Named("ShipEngine"));
+			}
+			if (cachedShipParts.Any(b => b.def.defName.Equals("Ship_Engine_Large")) && researchList.Contains(ResearchProjectDef.Named("ShipReactor")))
+			{
+				researchListSecond.Add(ResearchProjectDef.Named("ShipReactor"));
+				researchList.Remove(ResearchProjectDef.Named("ShipReactor"));
+			}
+			if (researchList.Contains(ResearchProjectDef.Named("SoSJTDrive")))
+			{
+				researchListSecond.Add(ResearchProjectDef.Named("SoSJTDrive"));
+				researchList.Remove(ResearchProjectDef.Named("SoSJTDrive"));
+			}
+
 			thrust *= 500f / Mathf.Pow(cachedShipParts.Count, 1.1f);
 			threat += mass / 100;
-			description = "Class: " + shipDef.label + "\\n[DESCRIPTION HERE]\\n\\n";
+			description = "A three stage reusable blueprint that can be used to build a complete space ship as long as one is capable of constructing the individual parts. Can be customized at any point but the next stage will only place prints when the required parts under them are already built.\\n\\n";
+			description += "Class: " + shipDef.label + "\\n[DESCRIPTION HERE]\\n\\n";
 			description += "Mass: " + mass + "\\n";
 			description += "Size: " + shipDef.sizeX + " x " + shipDef.sizeZ + "\\n";
 			description += "T/W ratio: " + thrust.ToString("F3") + "\\n";
@@ -136,7 +204,21 @@ namespace SaveOurShip2
 			{
 				description += def.label + ": " + costList[def] + "\\n";
 			}
-			description += "\\nRequired research: " + "\\n";
+			description += "\\nRequired research for full construction:\\nFirst stage:\\n";
+			for (int i = 0; i < researchListFirst.Count; i++)
+			{
+				description += researchListFirst[i].label;
+				if (i < researchListFirst.Count - 1)
+					description += ", ";
+			}
+			description += "\\nSecond stage:\\n";
+			for (int i = 0; i < researchListSecond.Count; i++)
+			{
+				description += researchListSecond[i].label;
+				if (i < researchListSecond.Count - 1)
+					description += ", ";
+			}
+			description += "\\nThird stage:\\n";
 			for (int i = 0; i < researchList.Count; i++)
 			{
 				description += researchList[i].label;
@@ -148,13 +230,14 @@ namespace SaveOurShip2
 			DirectoryInfo dir = new DirectoryInfo(path);
 			if (!dir.Exists)
 				dir.Create();
+			string newDefName = "ShipBP" + defName;
 			string filename = Path.Combine(path, "blueprintTemp.xml");
 			SafeSaver.Save(filename, "Defs", () =>
 			{
 				Scribe.EnterNode("ThingDef");
 				{
-					Scribe_Values.Look<string>(ref defName, "defName");
-					label = "ship blueprint ([NAME HERE])";
+					Scribe_Values.Look<string>(ref newDefName, "defName");
+					label = "ship blueprint (" + shipDef.label + ")";
 					Scribe_Values.Look<string>(ref label, "label");
 					Scribe_Values.Look<string>(ref description, "description");
 					Scribe.EnterNode("statBases");

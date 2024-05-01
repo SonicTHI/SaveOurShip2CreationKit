@@ -447,7 +447,6 @@ namespace SaveOurShip2
 			}
 			Building_ShipBridge core = null;
 			int combatPoints = 0;
-			int randomTurretPoints = 0;
 			int ShipMass = 0;
 			int rarityLevel = 0;
 			int minX = map.Size.x;
@@ -472,17 +471,15 @@ namespace SaveOurShip2
 					ShipMass += (b.def.size.x * b.def.size.z) * 3;
 					if (b.TryGetComp<CompShipHeat>() != null)
 						combatPoints += b.TryGetComp<CompShipHeat>().Props.threat;
-					else if (b.def == ThingDef.Named("ShipSpinalAmplifier"))
-						combatPoints += 5;
+					else if (b.def == ResourceBank.ThingDefOf.ShipSpinalAmplifier)
+						combatPoints += 10;
 					else if (b.def == ThingDef.Named("ShipPartTurretSmall"))
 					{
 						combatPoints += 10;
-						randomTurretPoints += 10;
 					}
 					else if (b.def == ThingDef.Named("ShipPartTurretLarge"))
 					{
 						combatPoints += 30;
-						randomTurretPoints += 30;
 					}
 					else if (b.def == ThingDef.Named("ShipPartTurretSpinal"))
 						combatPoints += 100;
@@ -638,7 +635,7 @@ namespace SaveOurShip2
 			{
 				SafeSaver.Save(filename, "Defs", () =>
 				{
-					Scribe.EnterNode("ShipDef");
+					Scribe.EnterNode("SaveOurShip2.ShipDef");
 					{
 						ShipDef shipDef = DefDatabase<ShipDef>.GetNamed(shipDictionary[map]);
 						Scribe_Values.Look<string>(ref shipDef.defName, "defName");
@@ -651,7 +648,6 @@ namespace SaveOurShip2
 						Scribe_Values.Look<string>(ref shipDef.label, "label");
 
 						Scribe_Values.Look<int>(ref combatPoints, "combatPoints", 0);
-						Scribe_Values.Look<int>(ref randomTurretPoints, "randomTurretPoints", 0);
 						Scribe_Values.Look<int>(ref shipDef.cargoValue, "cargoValue", 0);
 						if (shipDef.rarityLevel > 1)
 							Scribe_Values.Look<int>(ref shipDef.rarityLevel, "rarityLevel", 1);
@@ -711,7 +707,7 @@ namespace SaveOurShip2
 			{
 				SafeSaver.Save(filename, "Defs", () =>
 				{
-					Scribe.EnterNode("ShipDef");
+					Scribe.EnterNode("SaveOurShip2.ShipDef");
 					{
 						Scribe_Values.Look<string>(ref shipName, "defName");
 						int saveSysVer = 2;
@@ -724,7 +720,6 @@ namespace SaveOurShip2
 						Scribe_Values.Look<string>(ref placeholder, "label");
 						int cargoPlaceholder = 0;
 						Scribe_Values.Look<int>(ref combatPoints, "combatPoints", 0);
-						Scribe_Values.Look<int>(ref randomTurretPoints, "randomTurretPoints", 0);
 						Scribe_Values.Look<int>(ref cargoPlaceholder, "cargoValue", 0);
 						Scribe_Values.Look<int>(ref rarityLevel, "rarityLevel", 1);
 						bool temp = false;
