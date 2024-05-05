@@ -521,6 +521,15 @@ namespace SaveOurShip2
 			maxX -= minX;
 			maxZ -= minZ;
 			combatPoints += ShipMass / 100;
+			foreach (VehiclePawn veh in map.mapPawns.AllPawnsSpawned.Where(pawn => pawn is VehiclePawn veh && veh.CompVehicleLauncher != null && veh.CompVehicleLauncher.SpaceFlight))
+			{
+				int size = 20;
+				if (veh.GetStatValue(VehicleStatDefOf.CargoCapacity) > 2000) //huge
+					size = 80;
+				else if (veh.GetStatValue(VehicleStatDefOf.CargoCapacity) > 1000) //large
+					size = 40;
+				combatPoints += size;
+			}
 
 			char charPointer = '?';
 			Dictionary<char, ShipShape> symbolTable = new Dictionary<char, ShipShape>();
